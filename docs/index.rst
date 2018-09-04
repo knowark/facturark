@@ -8,9 +8,9 @@ pruebas).
 
 Principalmente, FacturArk tiene como propósito el crear documentos compatibles
 con las especificaciones técnicas de la Dirección de Impuestos y Aduanas
-Nacionales de Colombia (**DIAN**), sin embargo, su arquitectura desacoplada debería
-permitir la generación de otros tipos de factura electrónica, incluso para
-otros países.
+Nacionales de Colombia (**DIAN**), sin embargo, su arquitectura desacoplada
+debería permitir la generación de otros tipos de factura electrónica, incluso
+para otros países.
 
 .. toctree::
    :maxdepth: 2
@@ -18,6 +18,7 @@ otros países.
    readme
    installation
    usage
+   referencias/index
    contributing
    authors
    history
