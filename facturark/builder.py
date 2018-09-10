@@ -6,5 +6,5 @@ class Builder:
     def __init__(self):
         pass
 
-    def build(self, invoice: Invoice):
+    def build(self, invoice):
         return "INVOICE"
