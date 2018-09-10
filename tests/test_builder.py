@@ -1,5 +1,4 @@
 from pytest import fixture
-from facturark.models import Invoice
 from facturark.builder import Builder
 
 
@@ -14,6 +13,6 @@ def test_builder_creation(builder):
 
 
 def test_build(builder):
-    invoice = Invoice()
-    result = builder.build(Invoice)
+    invoice_dict = {}
+    result = builder.build(invoice_dict)
     assert result
