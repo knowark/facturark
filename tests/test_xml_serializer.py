@@ -14,6 +14,10 @@ def serializer():
     return builder
 
 
-def test_xml_serializer_serialize(serializer):
-    invoice = Invoice()
+def test_xml_serializer_serialize(serializer, invoice):
     result = serializer.serialize(invoice)
+
+
+
+
+
