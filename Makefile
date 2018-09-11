@@ -62,8 +62,8 @@ test-all: ## run tests on every Python version with tox
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source facturark -m pytest -s
 	coverage report -m
-	coverage html
-	$(BROWSER) htmlcov/index.html
+	#coverage html
+	#$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/facturark.rst
