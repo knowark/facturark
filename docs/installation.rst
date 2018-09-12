@@ -32,13 +32,13 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/tebanep/facturark
+    $ git clone git://github.com/nubark/facturark
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl  -OL https://github.com/tebanep/facturark/tarball/master
+    $ curl  -OL https://github.com/nubark/facturark/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/tebanep/facturark
-.. _tarball: https://github.com/tebanep/facturark/tarball/master
+.. _Github repo: https://github.com/nubark/facturark
+.. _tarball: https://github.com/nubark/facturark/tarball/master
