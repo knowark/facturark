@@ -9,7 +9,7 @@ from zeep.wsse.username import UsernameToken
 class Client:
 
     def __init__(self, username, password, wsdl_url):
-        nonce = b64encode(str(random()))
+        nonce = b64encode(bytes(random()))
         created = datetime.now().isoformat(sep='T')
 
         self.client = zeep.Client(
@@ -23,8 +23,7 @@ class Client:
         issue_date = datetime.strptime(
             issue_date, '%Y-%m-%dT%H:%M:%S')
 
-        node = self.client.create_message(
-            self.client.service, 'EnvioFacturaElectronica',
+        node = self.client.EnvioFacturaElectronica(
             vat, invoice_number, issue_date, document)
 
         response = None
