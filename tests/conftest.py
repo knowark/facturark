@@ -14,6 +14,7 @@ def invoice():
 @fixture
 def invoice_dict():
     invoice_dict = {
+        "id": "F0001",
         "uuid": "3f7437b3-e473-41fe-9688-46cfba73584f",
         "issue_date": "2018-09-13",
         "issue_time": "00:31:40",
