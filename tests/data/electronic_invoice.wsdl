@@ -1,0 +1,146 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    xmlns:sch="http://www.dian.gov.co/servicios/facturaelectronica/ReportarFactura" 
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:tns="http://www.dian.gov.co/servicios/facturaelectronica/ReportarFactura" targetNamespace="http://www.dian.gov.co/servicios/facturaelectronica/ReportarFactura">
+    <wsdl:types xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" 
+            xmlns:xmime="http://www.w3.org/2005/05/xmlmime" 
+            xmlns:tns="http://www.dian.gov.co/servicios/facturaelectronica/ReportarFactura" elementFormDefault="qualified" targetNamespace="http://www.dian.gov.co/servicios/facturaelectronica/ReportarFactura">
+            <element xmlns="http://www.w3.org/2001/XMLSchema" name="EnvioFacturaElectronicaPeticion" type="tns:EnvioFacturaElectronica"/>
+            <element xmlns="http://www.w3.org/2001/XMLSchema" name="EnvioFacturaElectronicaRespuesta" type="tns:AcuseRecibo"/>
+            <!--  REQUEST  -->
+            <complexType xmlns="http://www.w3.org/2001/XMLSchema" name="EnvioFacturaElectronica">
+                <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                    <documentation xmlns="http://www.w3.org/2001/XMLSchema">
+Envoltorio para recibir facturas electrónicas por medio de web service
+                    </documentation>
+                </annotation>
+                <sequence xmlns="http://www.w3.org/2001/XMLSchema">
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" name="NIT" type="tns:NitType"/>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" name="InvoiceNumber" type="tns:InvoiceNumberType"/>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" name="IssueDate" type="dateTime"/>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" 
+                        xmlns:xmime="http://www.w3.org/2005/05/xmlmime" maxOccurs="1" minOccurs="1" name="Document" type="base64Binary" xmime:expectedContentTypes="*/*">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema">
+Fichero de factura (solo una factura, en formato XML)
+                            </documentation>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <!--  RESPONSE  -->
+            <complexType xmlns="http://www.w3.org/2001/XMLSchema" name="AcuseRecibo">
+                <sequence xmlns="http://www.w3.org/2001/XMLSchema">
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="ReceivedInvoice" type="tns:ReceivedInvoice">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema" xml:lang="es">Relaciona cada factura recibida.</documentation>
+                        </annotation>
+                    </element>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="Version" type="string">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema" xml:lang="es">La versión del formate de acuse de recibo.</documentation>
+                        </annotation>
+                    </element>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="ReceivedDateTime" type="dateTime">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema" xml:lang="es">Fecha y hora en que se recibe el documento.</documentation>
+                        </annotation>
+                    </element>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="ResponseDateTime" type="dateTime">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema" xml:lang="es">Fecha y hora en que se crea el acuse de recibo</documentation>
+                        </annotation>
+                    </element>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="Response" type="int">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema" xml:lang="es">
+El código de respuesta, puede incluir mensajes de error de validación estructural.
+                            </documentation>
+                        </annotation>
+                    </element>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="Comments" type="string">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema" xml:lang="es">Espacio para comentarios</documentation>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <complexType xmlns="http://www.w3.org/2001/XMLSchema" name="ReceivedInvoice">
+                <sequence xmlns="http://www.w3.org/2001/XMLSchema">
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" name="NumeroFactura" type="tns:InvoiceNumberType"/>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="UUID">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema" xml:lang="es">El identificador universal de la factura.</documentation>
+                        </annotation>
+                        <simpleType xmlns="http://www.w3.org/2001/XMLSchema">
+                            <restriction xmlns="http://www.w3.org/2001/XMLSchema" base="string">
+                                <length xmlns="http://www.w3.org/2001/XMLSchema" value="32"/>
+                            </restriction>
+                        </simpleType>
+                    </element>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="1" name="Response" type="int">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema" xml:lang="es">
+El código de respuesta, puede incluir mensajes de error de validación estructural.
+                            </documentation>
+                        </annotation>
+                    </element>
+                    <element xmlns="http://www.w3.org/2001/XMLSchema" maxOccurs="1" minOccurs="0" name="Comments" type="string">
+                        <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                            <documentation xmlns="http://www.w3.org/2001/XMLSchema" xml:lang="es">Espacio para comentarios</documentation>
+                        </annotation>
+                    </element>
+                </sequence>
+            </complexType>
+            <!--  Declaraciones de tipos  -->
+            <simpleType xmlns="http://www.w3.org/2001/XMLSchema" name="InvoiceNumberType">
+                <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                    <documentation xmlns="http://www.w3.org/2001/XMLSchema">Numero de factura</documentation>
+                </annotation>
+                <restriction xmlns="http://www.w3.org/2001/XMLSchema" base="string">
+                    <minLength xmlns="http://www.w3.org/2001/XMLSchema" value="1"/>
+                    <maxLength xmlns="http://www.w3.org/2001/XMLSchema" value="35"/>
+                </restriction>
+            </simpleType>
+            <simpleType xmlns="http://www.w3.org/2001/XMLSchema" name="NitType">
+                <annotation xmlns="http://www.w3.org/2001/XMLSchema">
+                    <documentation xmlns="http://www.w3.org/2001/XMLSchema">NIT</documentation>
+                </annotation>
+                <restriction xmlns="http://www.w3.org/2001/XMLSchema" base="string">
+                    <minLength xmlns="http://www.w3.org/2001/XMLSchema" value="1"/>
+                    <maxLength xmlns="http://www.w3.org/2001/XMLSchema" value="35"/>
+                </restriction>
+            </simpleType>
+        </schema>
+    </wsdl:types>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="EnvioFacturaElectronicaRespuesta">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" element="tns:EnvioFacturaElectronicaRespuesta" name="EnvioFacturaElectronicaRespuesta"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="EnvioFacturaElectronicaPeticion">
+        <wsdl:part xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" element="tns:EnvioFacturaElectronicaPeticion" name="EnvioFacturaElectronicaPeticion"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="facturaElectronicaPortName">
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="EnvioFacturaElectronica">
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" message="tns:EnvioFacturaElectronicaPeticion" name="EnvioFacturaElectronicaPeticion"></wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" message="tns:EnvioFacturaElectronicaRespuesta" name="EnvioFacturaElectronicaRespuesta"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="facturaElectronicaPortNameSoap11" type="tns:facturaElectronicaPortName">
+        <soap:binding xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="EnvioFacturaElectronica">
+            <soap:operation xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" soapAction=""/>
+            <wsdl:input xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="EnvioFacturaElectronicaPeticion">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="EnvioFacturaElectronicaRespuesta">
+                <soap:body xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" name="facturaElectronicaPortNameService">
+        <wsdl:port xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" binding="tns:facturaElectronicaPortNameSoap11" name="facturaElectronicaPortNameSoap11">
+            <soap:address xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" location="http://facturaelectronica.dian.gov.co:80/habilitacion/B2BIntegrationEngine/FacturaElectronica"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
