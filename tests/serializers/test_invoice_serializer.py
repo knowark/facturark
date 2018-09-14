@@ -31,7 +31,4 @@ class TestInvoiceSerializer(XmlTestCase):
     def test_invoice_serialize(self):
         document = self.serializer.serialize(self.invoice_dict)
 
-        print("\n")
-        print(document)
-
         self.assertXmlDocument(document)
