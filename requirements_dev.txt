@@ -13,7 +13,7 @@ coverage==4.5.1
 defusedxml==0.5.0
 docutils==0.14
 funcsigs==1.0.2
-futures==3.2.0
+futures==3.1.1
 idna==2.7
 imagesize==1.1.0
 isodate==0.6.0
