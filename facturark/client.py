@@ -23,12 +23,10 @@ class Client:
         issue_date = datetime.strptime(
             issue_date, '%Y-%m-%dT%H:%M:%S')
 
-        node = self.client.EnvioFacturaElectronica(
+        response = self.client.service.EnvioFacturaElectronica(
             vat, invoice_number, issue_date, document)
 
-        response = None
-
-        return response
+        return tostring(response)
 
     def assemble(self, vat, invoice_number, issue_date, document):
         issue_date = datetime.strptime(

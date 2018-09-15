@@ -25,11 +25,13 @@ def test_client_instantiation(client):
     assert client
 
 
-# def test_client_send(client, request_dict):
-#     response = client.send(**request_dict)
+def test_client_send(client, request_dict):
+    def mock_service(vat, invoice_number, issue_date, document):
+        return fromstring(b"<Response></Response>")
 
-#     print(response)
-#     # assert response
+    client.client.service.EnvioFacturaElectronica = mock_service
+    response = client.send(**request_dict)
+    assert response
 
 
 def test_client_assemble(client, request_dict):
