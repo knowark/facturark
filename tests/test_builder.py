@@ -1,12 +1,12 @@
 from pytest import fixture
 from facturark.builder import Builder
-from facturark.serializers import InvoiceSerializer
+from facturark.composers import InvoiceComposer
 
 
 @fixture
 def builder():
-    invoice_serializer = InvoiceSerializer
-    builder = Builder(invoice_serializer)
+    invoice_composer = InvoiceComposer
+    builder = Builder(invoice_composer)
     return builder
 
 

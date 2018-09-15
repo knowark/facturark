@@ -2,9 +2,9 @@ from lxml.etree import Element, SubElement, QName, tostring
 from .namespaces import NS
 
 
-class InvoiceSerializer:
+class InvoiceComposer:
 
-    def assemble(self, data_dict):
+    def compose(self, data_dict):
         root = Element(
             QName(NS.fe, "Invoice"), nsmap=vars(NS))
 
@@ -18,7 +18,7 @@ class InvoiceSerializer:
         return root
 
     def serialize(self, data_dict):
-        root = self.assemble(data_dict)
+        root = self.compose(data_dict)
         document = tostring(root,
                             method='xml',
                             encoding='utf-8',
