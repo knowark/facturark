@@ -2,7 +2,7 @@
 
 """Top-level package for FacturArk."""
 
-from .api import build
+from .api import build, send
 
 __author__ = """Nubark"""
 __email__ = 'info@nubark.com'
