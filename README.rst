@@ -32,6 +32,11 @@ Features
 
 * TODO
 
+System Dependencies (xmlsec)
+----------------------------
+
+sudo apt install python-dev libxmlsec1-dev pkg-config
+
 Credits
 -------
 
