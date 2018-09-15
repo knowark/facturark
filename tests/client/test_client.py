@@ -34,12 +34,15 @@ def test_client_send(client, request_dict):
     assert response
 
 
-def test_client_assemble(client, request_dict):
-    request = client.assemble(**request_dict)
+def test_client_compose(client, request_dict):
+    request = client.compose(**request_dict)
     assert request is not None
+    assert 'Envelope' in request.tag 
 
 
 def test_invoice_serialize(client, request_dict):
     document = client.serialize(**request_dict)
+    print("DOC")
+    print(document)
     root = fromstring(document)
     assert root is not None

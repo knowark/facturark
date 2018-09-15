@@ -3,7 +3,7 @@ from random import randint
 from base64 import b64encode
 from datetime import datetime
 from lxml.etree import tostring
-from zeep.wsse.username import UsernameToken
+from .username import UsernameToken
 
 
 class Client:
@@ -14,10 +14,7 @@ class Client:
 
         self.client = zeep.Client(
             wsdl_url,
-            wsse=UsernameToken(
-                username, password,
-                use_digest=False,
-                nonce=None, created=None))
+            wsse=UsernameToken(username, password))
 
     def send(self, vat, invoice_number, issue_date, document):
         issue_date = datetime.strptime(
@@ -28,7 +25,7 @@ class Client:
 
         return tostring(response)
 
-    def assemble(self, vat, invoice_number, issue_date, document):
+    def compose(self, vat, invoice_number, issue_date, document):
         issue_date = datetime.strptime(
             issue_date, '%Y-%m-%dT%H:%M:%S')
 
@@ -39,7 +36,7 @@ class Client:
         return root
 
     def serialize(self, vat, invoice_number, issue_date, document):
-        root = self.assemble(vat, invoice_number, issue_date, document)
-        request_document = tostring(root)
+        root = self.compose(vat, invoice_number, issue_date, document)
+        request_document = tostring(root, pretty_print=True)
 
         return request_document
