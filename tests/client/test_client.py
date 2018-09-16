@@ -31,7 +31,7 @@ def test_client_send(client, request_dict):
 
     client.client.service.EnvioFacturaElectronica = mock_service
     response = client.send(**request_dict)
-    assert response
+    assert response is not None
 
 
 def test_client_compose(client, request_dict):

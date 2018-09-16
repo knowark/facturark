@@ -4,6 +4,7 @@ from base64 import b64encode
 from datetime import datetime
 from lxml.etree import tostring
 from .username import UsernameToken
+from .transports import SoapTransport
 
 
 class Client:
@@ -14,7 +15,8 @@ class Client:
 
         self.client = zeep.Client(
             wsdl_url,
-            wsse=UsernameToken(username, password))
+            wsse=UsernameToken(username, password),
+            transport=SoapTransport())
 
     def send(self, vat, invoice_number, issue_date, document):
         issue_date = datetime.strptime(
@@ -23,7 +25,7 @@ class Client:
         response = self.client.service.EnvioFacturaElectronica(
             vat, invoice_number, issue_date, document)
 
-        return tostring(response)
+        return response
 
     def compose(self, vat, invoice_number, issue_date, document):
         issue_date = datetime.strptime(

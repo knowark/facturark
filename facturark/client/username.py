@@ -45,3 +45,6 @@ class UsernameToken:
 
         token.extend(elements)
         return envelope, headers
+
+    def verify(self, envelope):
+        pass
