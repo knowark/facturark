@@ -13,8 +13,7 @@ def make_document_name(vat, invoice_number, prefix='face_f', ext='xml'):
         ext=ext)
 
 
-def make_zip_file_bytes(file_name, document):
-    document_bytes = document.encode('utf-8')
+def make_zip_file_bytes(file_name, document_bytes):
     memory_zip_file = io.BytesIO()
 
     with zipfile.ZipFile(memory_zip_file, 'w') as z:
