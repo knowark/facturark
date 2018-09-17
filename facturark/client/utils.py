@@ -1,5 +1,6 @@
 import io
 import zipfile
+import base64
 
 
 def make_document_name(vat, invoice_number, prefix='face_f', ext='xml'):
@@ -12,11 +13,13 @@ def make_document_name(vat, invoice_number, prefix='face_f', ext='xml'):
         ext=ext)
 
 
-def make_zip_file(file_name, document_bytes):
+def make_zip_file_bytes(file_name, document):
+    document_bytes = document.encode('utf-8')
     memory_zip_file = io.BytesIO()
 
     with zipfile.ZipFile(memory_zip_file, 'w') as z:
         z.writestr(file_name, document_bytes)
 
     memory_zip_file.seek(0)
-    return memory_zip_file
+
+    return memory_zip_file.getvalue()

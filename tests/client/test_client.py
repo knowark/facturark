@@ -15,8 +15,8 @@ def client():
 @fixture
 def request_dict():
     return dict(
-        vat="900XXXYYY",
-        invoice_number="F0001",
+        vat="900555666",
+        invoice_number="0001",
         issue_date="2018-09-14T05:23:31",
         document=b"<XML_DATA></XML_DATA>")
 
