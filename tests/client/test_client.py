@@ -18,7 +18,7 @@ def request_dict():
         vat="900555666",
         invoice_number="0001",
         issue_date="2018-09-14T05:23:31",
-        document=b"<XML_DATA></XML_DATA>")
+        document="<XML_DATA></XML_DATA>")
 
 
 def test_client_instantiation(client):
@@ -27,7 +27,7 @@ def test_client_instantiation(client):
 
 def test_client_send(client, request_dict):
     def mock_service(vat, invoice_number, issue_date, document):
-        return fromstring(b"<Response></Response>")
+        return fromstring("<Response></Response>")
 
     client.client.service.EnvioFacturaElectronica = mock_service
     response = client.send(**request_dict)
