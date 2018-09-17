@@ -6,7 +6,7 @@ from facturark.client.utils import (
 
 def test_make_zip_file_bytes():
     file_name = 'face_f0098765432000000000b.xml'
-    document_bytes = '<Invoice></Invoice>'
+    document_bytes = b'<Invoice></Invoice>'
 
     zip_file = make_zip_file_bytes(file_name, document_bytes)
 
