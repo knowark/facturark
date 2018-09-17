@@ -5,6 +5,8 @@ from datetime import datetime
 from lxml.etree import tostring
 from .username import UsernameToken
 from .transports import SoapTransport
+from .utils import (
+    make_zip_file_bytes, make_document_name)
 
 
 class Client:
@@ -22,8 +24,11 @@ class Client:
         issue_date = datetime.strptime(
             issue_date, '%Y-%m-%dT%H:%M:%S')
 
+        filename = make_document_name(vat, invoice_number)
+        zip_file_bytes = make_zip_file_bytes(filename, document)
+
         response = self.client.service.EnvioFacturaElectronica(
-            vat, invoice_number, issue_date, document)
+            vat, invoice_number, issue_date, zip_file_bytes)
 
         return response
 
