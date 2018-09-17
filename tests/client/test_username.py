@@ -10,7 +10,7 @@ def test_username_token_apply():
     envelope, headers = username.apply(envelope, headers)
 
     assert envelope is not None
-    assert 'USER'in tostring(envelope)
+    assert b'USER' in tostring(envelope)
 
 
 def test_username_token_verify():
