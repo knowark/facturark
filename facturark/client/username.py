@@ -33,7 +33,7 @@ class UsernameToken:
                 self.username
             ),
             utils.WSSE.Password(
-                hashlib.sha256(self.password).hexdigest()
+                hashlib.sha256(self.password.encode('utf-8')).hexdigest()
             ),
             utils.WSSE.Nonce(
                 base64.b64encode(nonce).decode('utf-8')
