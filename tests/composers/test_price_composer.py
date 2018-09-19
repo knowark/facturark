@@ -14,6 +14,7 @@ def composer():
 @fixture
 def data_dict():
     return {
+        '@currency_id': 'COP',
         'price_amount': 777.77,
     }
 
