@@ -1,9 +1,7 @@
 from pytest import fixture
-from lxml.etree import QName
-from xmlunittest import XmlTestCase
-from facturark.composers import PriceComposer
-from facturark.xsd_parser import parse_xsd
+from lxml.etree import QName, fromstring
 from facturark.composers import NS
+from facturark.composers import PriceComposer
 
 
 @fixture
@@ -14,25 +12,20 @@ def composer():
 @fixture
 def data_dict():
     return {
-        '@currency_id': 'COP',
-        'price_amount': 777.77,
+        'price_amount': {
+            '@currency_id': 'COP',
+            '#text':  777.77
+        }
     }
 
 
-class TestPriceComposer(XmlTestCase):
+def test_compose(composer, data_dict, schema):
+    price = composer.compose(data_dict)
 
-    @fixture(autouse=True)
-    def inject_fixtures(self, data_dict, composer):
-        self.data_dict = data_dict
-        self.composer = composer
+    assert price.tag == QName(NS.fe, "Price").text
+    schema.assertValid(price)
 
-    def test_party_compose(self):
-        element = self.composer.compose(self.data_dict)
-        schema = parse_xsd('XSD/DIAN/DIAN_UBL.xsd')
 
-        assert element.tag == QName(NS.fe, "Price").text
-        schema.assertValid(element)
-
-    def test_party_serialize(self):
-        document = self.composer.serialize(self.data_dict)
-        self.assertXmlDocument(document)
+def test_serialize(composer, data_dict):
+    document = composer.serialize(data_dict)
+    assert fromstring(document) is not None
