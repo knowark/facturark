@@ -31,6 +31,4 @@ class PartyComposer:
                             encoding='utf-8',
                             pretty_print=True,
                             xml_declaration=True)
-        print("\nDOC\n")
-        print(document)
         return document
