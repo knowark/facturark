@@ -9,7 +9,8 @@ class PriceComposer:
             QName(NS.fe, "Price"), nsmap=vars(NS))
 
         SubElement(root, QName(
-            NS.cbc, "PriceAmount")).text = str(
+            NS.cbc, "PriceAmount"),
+            currencyID=data_dict['@currency_id']).text = str(
                 float(data_dict['price_amount']))
 
         return root
