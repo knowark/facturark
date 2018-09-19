@@ -10,8 +10,8 @@ class PriceComposer:
 
         SubElement(root, QName(
             NS.cbc, "PriceAmount"),
-            currencyID=data_dict['@currency_id']).text = str(
-                float(data_dict['price_amount']))
+            currencyID=data_dict['price_amount']['@currency_id']).text = str(
+                float(data_dict['price_amount']['#text']))
 
         return root
 

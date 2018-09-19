@@ -1,10 +1,9 @@
 import io
-from pytest import fixture, mark
-from lxml.etree import QName
-from xmlunittest import XmlTestCase
-from facturark.composers import PartyComposer
+from pytest import fixture
+from lxml.etree import QName, fromstring
 from facturark.xsd_parser import parse_xsd
 from facturark.composers import NS
+from facturark.composers import PartyComposer
 
 
 @fixture
@@ -13,37 +12,31 @@ def composer():
 
 
 @fixture
-def party_dict():
+def data_dict():
     return {
         'party_identification': '900555666',
         'party_name': 'Company XYZ S.A.S'
     }
 
 
-class TestPartyComposer(XmlTestCase):
+def test_compose(composer, data_dict, schema):
+    party = composer.compose(data_dict)
 
-    @fixture(autouse=True)
-    def inject_fixtures(self, party_dict, composer):
-        self.party_dict = party_dict
-        self.composer = composer
+    assert party.prefix == "fe"
+    assert party.tag == QName(NS.fe, "Party").text
 
-    def test_party_compose(self):
-        party = self.composer.compose(self.party_dict)
+    party_identification = party.find(
+        QName(NS.cac, "PartyIdentification"))
+    assert party_identification.findtext(
+        QName(NS.cbc, "ID")) == '900555666'
 
-        assert party.prefix == "fe"
-        assert party.tag == QName(NS.fe, "Party").text
+    party_name = party.find(
+        QName(NS.cac, "PartyName"))
+    assert party_name.findtext(
+        QName(NS.cbc, "Name")) == 'Company XYZ S.A.S'
+    # schema.assertValid(party)
 
-        party_identification = party.find(
-            QName(NS.cac, "PartyIdentification"))
-        assert party_identification.findtext(
-            QName(NS.cbc, "ID")) == '900555666'
 
-        party_name = party.find(
-            QName(NS.cac, "PartyName"))
-        assert party_name.findtext(
-            QName(NS.cbc, "Name")) == 'Company XYZ S.A.S'
-
-    def test_party_serialize(self):
-        document = self.composer.serialize(self.party_dict)
-
-        self.assertXmlDocument(document)
+def test_serialize(composer, data_dict):
+    document = composer.serialize(data_dict)
+    assert fromstring(document) is not None
