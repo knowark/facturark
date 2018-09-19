@@ -15,7 +15,7 @@ def invoice():
 def invoice_dict():
     invoice_dict = {
         "id": "F0001",
-        "uuid": "3f7437b3-e473-41fe-9688-46cfba73584f",
+        "uuid": "a3d6c86a71cbc066aaa19fd363c0fe4b5778d4a0",
         "issue_date": "2018-09-13",
         "issue_time": "00:31:40",
     }
