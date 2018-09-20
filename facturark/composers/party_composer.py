@@ -1,12 +1,13 @@
 from lxml.etree import Element, SubElement, QName, tostring
 from .namespaces import NS
+from .composer import Composer
 
 
-class PartyComposer:
+class PartyComposer(Composer):
 
-    def compose(self, data_dict):
-        root = Element(
-            QName(NS.fe, "Party"), nsmap=vars(NS))
+    def compose(self, data_dict, root_name=None):
+        root_name = root_name or self.root_name
+        root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
 
         party_identification = SubElement(
             root, QName(NS.cac, "PartyIdentification"))
@@ -23,12 +24,3 @@ class PartyComposer:
         ).text = data_dict['party_name']
 
         return root
-
-    def serialize(self, data_dict):
-        root = self.compose(data_dict)
-        document = tostring(root,
-                            method='xml',
-                            encoding='utf-8',
-                            pretty_print=True,
-                            xml_declaration=True)
-        return document

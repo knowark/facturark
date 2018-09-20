@@ -24,8 +24,3 @@ def test_compose(composer, data_dict, schema):
 
     assert price.tag == QName(NS.fe, "Price").text
     schema.assertValid(price)
-
-
-def test_serialize(composer, data_dict):
-    document = composer.serialize(data_dict)
-    assert fromstring(document) is not None

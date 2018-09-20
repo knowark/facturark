@@ -37,8 +37,3 @@ def test_compose(composer, data_dict, schema):
     country = address.find(QName(NS.cac, "Country"))
     assert country.findtext(QName(NS.cbc, "IdentificationCode")) == u'CO'
     schema.assertValid(address)
-
-
-def test_serialize(composer, data_dict):
-    document = composer.serialize(data_dict)
-    assert fromstring(document) is not None

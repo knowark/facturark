@@ -1,9 +1,10 @@
 from lxml.etree import Element, SubElement, QName, tostring
 from .namespaces import NS
+from .composer import Composer
 from .utils import make_child
 
 
-class AddressComposer:
+class AddressComposer(Composer):
 
     def compose(self, data_dict, root_name="Address"):
         root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
@@ -28,12 +29,3 @@ class AddressComposer:
                        required=False)
 
         return root
-
-    def serialize(self, data_dict, root_name="Address"):
-        root = self.compose(data_dict, root_name)
-        document = tostring(root,
-                            method='xml',
-                            encoding='utf-8',
-                            pretty_print=True,
-                            xml_declaration=True)
-        return document

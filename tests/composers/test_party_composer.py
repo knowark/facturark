@@ -35,8 +35,3 @@ def test_compose(composer, data_dict, schema):
     assert party_name.findtext(
         QName(NS.cbc, "Name")) == 'Company XYZ S.A.S'
     # schema.assertValid(party)
-
-
-def test_serialize(composer, data_dict):
-    document = composer.serialize(data_dict)
-    assert fromstring(document) is not None
