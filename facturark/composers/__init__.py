@@ -1,4 +1,5 @@
 from .namespaces import NS
+from .composer import Composer
 from .address_composer import AddressComposer
 from .invoice_composer import InvoiceComposer
 from .item_composer import ItemComposer
