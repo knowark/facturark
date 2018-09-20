@@ -5,9 +5,9 @@ from .composer import Composer
 
 class PriceComposer(Composer):
 
-    def compose(self, data_dict, root_name='Price'):
-        root = Element(
-            QName(NS.fe, root_name), nsmap=vars(NS))
+    def compose(self, data_dict, root_name=None):
+        root_name = root_name or self.root_name
+        root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
 
         SubElement(root, QName(
             NS.cbc, "PriceAmount"),
