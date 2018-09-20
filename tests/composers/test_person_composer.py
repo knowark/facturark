@@ -23,8 +23,3 @@ def test_compose(composer, data_dict, schema):
     assert person.findtext(QName(NS.cbc, "FirstName")) == "Gabriel"
     assert person.findtext(QName(NS.cbc, "FamilyName")) == "Echeverry"
     schema.assertValid(person)
-
-
-def test_serialize(composer, data_dict):
-    document = composer.serialize(data_dict)
-    assert fromstring(document) is not None

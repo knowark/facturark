@@ -1,8 +1,9 @@
 from lxml.etree import Element, SubElement, QName, tostring
 from .namespaces import NS
+from .composer import Composer
 
 
-class PriceComposer:
+class PriceComposer(Composer):
 
     def compose(self, data_dict, root_name='Price'):
         root = Element(
@@ -14,12 +15,3 @@ class PriceComposer:
                 float(data_dict['price_amount']['#text']))
 
         return root
-
-    def serialize(self, data_dict, root_name='Price'):
-        root = self.compose(data_dict, root_name)
-        document = tostring(root,
-                            method='xml',
-                            encoding='utf-8',
-                            pretty_print=True,
-                            xml_declaration=True)
-        return document

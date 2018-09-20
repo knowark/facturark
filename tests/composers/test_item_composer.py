@@ -21,8 +21,3 @@ def test_compose(composer, data_dict, schema):
     assert price.tag == QName(NS.fe, "Item").text
     assert price.findtext(QName(NS.cbc, "Description")) == "Line 1"
     schema.assertValid(price)
-
-
-def test_serialize(composer, data_dict):
-    document = composer.serialize(data_dict)
-    assert fromstring(document) is not None

@@ -36,8 +36,3 @@ def test_compose(composer, data_dict, schema):
     assert invoice.findtext(QName(NS.cbc, "InvoiceTypeCode")) == "1"
     assert invoice.findtext(QName(NS.cbc, "DocumentCurrencyCode")) == "COP"
     # schema.assertValid(party)
-
-
-def test_serialize(composer, data_dict):
-    document = composer.serialize(data_dict)
-    assert fromstring(document) is not None

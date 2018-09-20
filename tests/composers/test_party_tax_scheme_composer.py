@@ -22,8 +22,3 @@ def test_compose(composer, data_dict, schema):
     assert party_tax_scheme.findtext(QName(NS.cbc, "TaxLevelCode")) == "0"
     assert party_tax_scheme.find(QName(NS.cac, "TaxScheme")) is not None
     schema.assertValid(party_tax_scheme)
-
-
-def test_serialize(composer, data_dict):
-    document = composer.serialize(data_dict)
-    assert fromstring(document) is not None
