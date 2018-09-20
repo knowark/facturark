@@ -18,7 +18,8 @@ para otros países.
    readme
    installation
    usage
-   referencias/index
+   design/index
+   references/index
    contributing
    authors
    history
