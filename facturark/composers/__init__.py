@@ -2,6 +2,7 @@ from .namespaces import NS
 from .composer import Composer
 from .address_composer import AddressComposer
 from .allowance_charge_composer import AllowanceChargeComposer
+from .delivery_terms_composer import DeliveryTermsComposer
 from .invoice_composer import InvoiceComposer
 from .item_composer import ItemComposer
 from .party_composer import PartyComposer
