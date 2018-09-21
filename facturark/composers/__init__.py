@@ -14,3 +14,4 @@ from .payment_composer import PaymentComposer
 from .person_composer import PersonComposer
 from .price_composer import PriceComposer
 from .tax_subtotal_composer import TaxSubtotalComposer
+from .tax_total_composer import TaxTotalComposer
