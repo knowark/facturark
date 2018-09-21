@@ -4,6 +4,7 @@ from .address_composer import AddressComposer
 from .allowance_charge_composer import AllowanceChargeComposer
 from .delivery_terms_composer import DeliveryTermsComposer
 from .invoice_composer import InvoiceComposer
+from .invoice_line_composer import InvoiceLineComposer
 from .item_composer import ItemComposer
 from .location_composer import LocationComposer
 from .monetary_total_composer import MonetaryTotalComposer
