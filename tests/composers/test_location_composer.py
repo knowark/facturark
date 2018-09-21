@@ -23,7 +23,8 @@ def test_compose(composer, data_dict, schema):
     location = composer.compose(data_dict, 'DeliveryLocation')
 
     assert location.tag == QName(NS.fe, "DeliveryLocation").text
-    # assert location.findtext(QName(NS.cbc, 'Department')) == 'Valle'
-    # assert location.findtext(QName(NS.cbc, 'CityName')) == 'Cali'
+    address = location.find(QName(NS.fe, 'Address'))
+    assert address.findtext(QName(NS.cbc, 'Department')) == 'Valle'
+    assert address.findtext(QName(NS.cbc, 'CityName')) == 'Cali'
 
     schema.assertValid(location)
