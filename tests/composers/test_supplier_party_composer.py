@@ -4,7 +4,7 @@ from lxml.etree import QName, fromstring
 from facturark.xsd_parser import parse_xsd
 from facturark.composers import (
     NS, AddressComposer, PartyTaxSchemeComposer, PartyLegalEntityComposer,
-    CustomerPartyComposer, PartyComposer, PersonComposer, LocationComposer)
+    SupplierPartyComposer, PartyComposer, PersonComposer, LocationComposer)
 
 
 @fixture
@@ -17,7 +17,7 @@ def composer():
     party_composer = PartyComposer(
         party_tax_scheme_composer, party_legal_entity_composer,
         person_composer, location_composer)
-    return CustomerPartyComposer(party_composer)
+    return SupplierPartyComposer(party_composer)
 
 
 @fixture
@@ -56,9 +56,9 @@ def data_dict():
 
 
 def test_compose(composer, data_dict, schema):
-    customer_party = composer.compose(data_dict, 'AccountingCustomerParty')
+    supplier_party = composer.compose(data_dict, 'AccountingSupplierParty')
 
-    assert customer_party.prefix == "fe"
-    assert customer_party.tag == QName(NS.fe, "AccountingCustomerParty").text
+    assert supplier_party.prefix == "fe"
+    assert supplier_party.tag == QName(NS.fe, "AccountingSupplierParty").text
 
-    schema.assertValid(customer_party)
+    schema.assertValid(supplier_party)
