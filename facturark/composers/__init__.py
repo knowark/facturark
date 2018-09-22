@@ -9,6 +9,7 @@ from .item_composer import ItemComposer
 from .location_composer import LocationComposer
 from .monetary_total_composer import MonetaryTotalComposer
 from .party_composer import PartyComposer
+from .party_legal_entity_composer import PartyLegalEntityComposer
 from .party_tax_scheme_composer import PartyTaxSchemeComposer
 from .payment_composer import PaymentComposer
 from .person_composer import PersonComposer
