@@ -17,5 +17,6 @@ from .party_tax_scheme_composer import PartyTaxSchemeComposer
 from .payment_composer import PaymentComposer
 from .person_composer import PersonComposer
 from .price_composer import PriceComposer
+from .supplier_party_composer import SupplierPartyComposer
 from .tax_subtotal_composer import TaxSubtotalComposer
 from .tax_total_composer import TaxTotalComposer
