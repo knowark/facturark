@@ -1,11 +1,12 @@
 from pytest import fixture
 from lxml.etree import QName
-from facturark.composers import NS, CreditNoteLineComposer
+from facturark.composers import NS, AmountComposer, CreditNoteLineComposer
 
 
 @fixture
 def composer():
-    return CreditNoteLineComposer()
+    amount_composer = AmountComposer()
+    return CreditNoteLineComposer(amount_composer)
 
 
 @fixture

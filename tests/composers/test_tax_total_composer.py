@@ -1,30 +1,30 @@
 from pytest import fixture
 from lxml.etree import QName
 from facturark.composers import NS, TaxTotalComposer, TaxSubtotalComposer
+from facturark.resolver import resolve_tax_total_composer
 
 
 @fixture
 def composer():
-    tax_subtotal_composer = TaxSubtotalComposer()
-    return TaxTotalComposer(tax_subtotal_composer)
+    return resolve_tax_total_composer()
 
 
 @fixture
 def data_dict():
     return {
         'tax_amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text': 8934000
         },
         'tax_evidence_indicator': 'false',
         'tax_subtotal': {
             'percent': 19,
             'taxable_amount': {
-                '@currency_id': 'COP',
+                '@attributes': {'currencyID': 'COP'},
                 '#text': 11345892
             },
             'tax_amount': {
-                '@currency_id': 'COP',
+                '@attributes': {'currencyID': 'COP'},
                 '#text': 2155719.48
             },
             'tax_category': {

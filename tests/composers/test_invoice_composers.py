@@ -107,7 +107,7 @@ def data_dict():
                 'id': '1',
                 'invoiced_quantity': '99',
                 'line_extension_amount': {
-                    '@currency_id': 'COP',
+                    '@attributes': {'currencyID': 'COP'},
                     '#text': 9876000
                 },
                 'item': {
@@ -115,7 +115,7 @@ def data_dict():
                 },
                 'price': {
                     'price_amount': {
-                        '@currency_id': 'COP',
+                        '@attributes': {'currencyID': 'COP'},
                         '#text': 567
                     }
                 }

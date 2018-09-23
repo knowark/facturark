@@ -6,7 +6,8 @@ from .utils import make_child
 
 class InvoiceLineComposer(Composer):
 
-    def __init__(self, item_composer, price_composer):
+    def __init__(self, amount_composer, item_composer, price_composer):
+        self.amount_composer = amount_composer
         self.item_composer = item_composer
         self.price_composer = price_composer
 
@@ -18,12 +19,9 @@ class InvoiceLineComposer(Composer):
         make_child(root, QName(NS.cbc, 'InvoicedQuantity'),
                    data_dict['invoiced_quantity'])
 
-        line_extension_amount = data_dict['line_extension_amount']
-        make_child(root, QName(NS.cbc, 'LineExtensionAmount'),
-                   str(float(line_extension_amount['#text'])),
-                   {'currencyID': line_extension_amount['@currency_id']},
-                   required=True)
-
+        root.append(
+            self.amount_composer.compose(data_dict['line_extension_amount'],
+                                         'LineExtensionAmount'))
         root.append(self.item_composer.compose(data_dict['item']))
         root.append(self.price_composer.compose(data_dict['price']))
 

@@ -10,9 +10,11 @@ from facturark.composers import (
 
 
 def resolve_invoice_line_composer():
+    amount_composer = AmountComposer()
     item_composer = ItemComposer()
-    price_composer = PriceComposer()
-    return InvoiceLineComposer(item_composer, price_composer)
+    price_composer = PriceComposer(amount_composer)
+    return InvoiceLineComposer(
+        amount_composer, item_composer, price_composer)
 
 
 def resolve_party_composer():
@@ -63,8 +65,9 @@ def resolve_supplier_party_composer():
 
 
 def resolve_tax_total_composer():
-    tax_subtotal_composer = TaxSubtotalComposer()
-    return TaxTotalComposer(tax_subtotal_composer)
+    amount_composer = AmountComposer()
+    tax_subtotal_composer = TaxSubtotalComposer(amount_composer)
+    return TaxTotalComposer(amount_composer, tax_subtotal_composer)
 
 
 def resolve_invoice_composer():
@@ -87,7 +90,7 @@ def resolve_invoice_composer():
 
 def resolve_credit_note_composer():
     extension_composer = ExtensionComposer()
-    credit_note_line_composer = CreditNoteLineComposer()
+    credit_note_line_composer = CreditNoteLineComposer(AmountComposer())
     monetary_total_composer = MonetaryTotalComposer(AmountComposer())
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()

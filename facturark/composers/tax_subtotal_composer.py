@@ -6,21 +6,18 @@ from .utils import make_child
 
 class TaxSubtotalComposer(Composer):
 
+    def __init__(self, amount_composer):
+        self.amount_composer = amount_composer
+
     def compose(self, data_dict, root_name=None):
         root_name = root_name or self.root_name
         root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
 
-        taxable_amount_dict = data_dict['taxable_amount']
-        make_child(root, QName(NS.cbc, 'TaxableAmount'),
-                   str(float(taxable_amount_dict['#text'])),
-                   {'currencyID': taxable_amount_dict['@currency_id']},
-                   required=True)
+        root.append(self.amount_composer.compose(
+            data_dict['taxable_amount'], 'TaxableAmount'))
 
-        tax_amount_dict = data_dict['tax_amount']
-        make_child(root, QName(NS.cbc, 'TaxAmount'),
-                   str(float(tax_amount_dict['#text'])),
-                   {'currencyID': tax_amount_dict['@currency_id']},
-                   required=True)
+        root.append(self.amount_composer.compose(
+            data_dict['tax_amount'], 'TaxAmount'))
 
         make_child(root, QName(NS.cbc, 'Percent'),
                    str(float(data_dict['percent'])),

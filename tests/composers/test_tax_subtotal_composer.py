@@ -1,12 +1,12 @@
 from pytest import fixture
 from lxml.etree import QName, fromstring
 from facturark.composers import NS
-from facturark.composers import TaxSubtotalComposer
+from facturark.composers import AmountComposer, TaxSubtotalComposer
 
 
 @fixture
 def composer():
-    return TaxSubtotalComposer()
+    return TaxSubtotalComposer(AmountComposer())
 
 
 @fixture
@@ -14,11 +14,11 @@ def data_dict():
     return {
         'percent': 19,
         'taxable_amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text': 11345892
         },
         'tax_amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text': 2155719.48
         },
         'tax_category': {

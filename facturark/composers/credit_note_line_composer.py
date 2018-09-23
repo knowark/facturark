@@ -1,19 +1,18 @@
-from lxml.etree import Element, QName
+from lxml.etree import Element, SubElement, QName, tostring
 from .namespaces import NS
 from .composer import Composer
 from .utils import make_child
 
 
-class PriceComposer(Composer):
+class CreditNoteLineComposer(Composer):
 
     def __init__(self, amount_composer):
         self.amount_composer = amount_composer
 
     def compose(self, data_dict, root_name=None):
         root_name = root_name or self.root_name
-        root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
+        root = Element(QName(NS.cac, root_name), nsmap=vars(NS))
 
-        root.append(self.amount_composer.compose(
-            data_dict['price_amount'], 'PriceAmount'))
+        make_child(root, QName(NS.cbc, "ID"), data_dict['id'])
 
         return root

@@ -1,18 +1,18 @@
 from pytest import fixture
 from lxml.etree import QName
-from facturark.composers import NS, PriceComposer
+from facturark.composers import NS, AmountComposer, PriceComposer
 
 
 @fixture
 def composer():
-    return PriceComposer()
+    return PriceComposer(AmountComposer())
 
 
 @fixture
 def data_dict():
     return {
         'price_amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text':  777.77
         }
     }
