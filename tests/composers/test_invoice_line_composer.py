@@ -2,13 +2,12 @@ from pytest import fixture
 from lxml.etree import QName
 from facturark.composers import (
     NS, InvoiceLineComposer, PriceComposer, ItemComposer)
+from facturark.resolver import resolve_invoice_line_composer
 
 
 @fixture
 def composer():
-    item_composer = ItemComposer()
-    price_composer = PriceComposer()
-    return InvoiceLineComposer(item_composer, price_composer)
+    return resolve_invoice_line_composer()
 
 
 @fixture
@@ -17,7 +16,7 @@ def data_dict():
         'id': '1',
         'invoiced_quantity': '99',
         'line_extension_amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text': 9876000
         },
         'item': {
@@ -25,7 +24,7 @@ def data_dict():
         },
         'price': {
             'price_amount': {
-                '@currency_id': 'COP',
+                '@attributes': {'currencyID': 'COP'},
                 '#text': 567
             }
         }
