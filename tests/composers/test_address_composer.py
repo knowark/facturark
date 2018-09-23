@@ -2,7 +2,6 @@
 import io
 from pytest import fixture
 from lxml.etree import QName, fromstring
-from facturark.xsd_parser import parse_xsd
 from facturark.composers import NS
 from facturark.composers import AddressComposer
 

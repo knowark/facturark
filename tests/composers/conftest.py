@@ -1,5 +1,5 @@
 from pytest import fixture
-from facturark.xsd_parser import parse_xsd
+from facturark.utils import parse_xsd
 
 
 @fixture(scope='session')

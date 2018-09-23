@@ -1,7 +1,6 @@
 import io
 from pytest import fixture, mark
 from lxml.etree import QName, fromstring, tostring
-from facturark.xsd_parser import parse_xsd
 from facturark.composers import NS
 from facturark.composers import InvoiceComposer
 from facturark.resolver import resolve_invoice_composer
