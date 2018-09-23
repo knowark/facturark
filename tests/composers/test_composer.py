@@ -29,4 +29,4 @@ def test_serialize(composer):
 
     document = composer.serialize({})
     assert fromstring(document) is not None
-    assert 'Root' in document
+    assert b'Root' in document
