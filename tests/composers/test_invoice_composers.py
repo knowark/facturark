@@ -127,9 +127,6 @@ def data_dict():
 def test_compose(composer, data_dict, schema):
     invoice = composer.compose(data_dict)
 
-    print("||||||| INVOICE |||||||\n")
-    print(tostring(invoice, pretty_print=True))
-
     assert invoice.prefix == "fe"
     assert invoice.tag == QName(NS.fe, "Invoice").text
     assert invoice.findtext(QName(NS.cbc, "UBLVersionID")) == "UBL 2.0"
