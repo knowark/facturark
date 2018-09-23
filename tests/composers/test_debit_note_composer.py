@@ -113,7 +113,7 @@ def data_dict():
                 },
                 'price': {
                     'price_amount': {
-                        '@currency_id': 'COP',
+                        '@attributes': {'currencyID': 'COP'},
                         '#text': 567
                     }
                 }

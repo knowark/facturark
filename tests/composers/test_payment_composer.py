@@ -1,18 +1,18 @@
 from pytest import fixture
 from lxml.etree import QName
-from facturark.composers import NS, PaymentComposer
+from facturark.composers import NS, AmountComposer, PaymentComposer
 
 
 @fixture
 def composer():
-    return PaymentComposer()
+    return PaymentComposer(AmountComposer())
 
 
 @fixture
 def data_dict():
     return {
         'paid_amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text': 4567
         },
         'paid_date': '2018-09-20'

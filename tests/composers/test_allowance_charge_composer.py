@@ -1,12 +1,12 @@
 from pytest import fixture
 from lxml.etree import QName, fromstring
 from facturark.composers import NS
-from facturark.composers import AllowanceChargeComposer
+from facturark.composers import AmountComposer, AllowanceChargeComposer
 
 
 @fixture
 def composer():
-    return AllowanceChargeComposer()
+    return AllowanceChargeComposer(AmountComposer())
 
 
 @fixture
@@ -15,7 +15,7 @@ def data_dict():
         'charge_indicator': 'false',
         'multiplier_factor_numeric': 19,
         'amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text': 777777
         }
 
