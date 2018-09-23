@@ -1,10 +1,9 @@
 import facturark
 
 
-def test_api_build():
-    invoice_dict = {}
+def test_api_build(invoice_dict):
     result = facturark.build_invoice(invoice_dict)
-    assert result
+    assert result is not None
 
 
 def test_api_send(monkeypatch):
