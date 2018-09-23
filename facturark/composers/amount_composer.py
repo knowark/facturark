@@ -10,10 +10,7 @@ class AmountComposer(Composer):
         root_name = root_name or self.root_name
         root = Element(QName(NS.cbc, root_name), nsmap=vars(NS))
 
-        attributes = data_dict['@attributes']
-        text = str(float(data_dict['#text']))
-
-        root.text = text
-        root.set('currencyID', attributes['currencyID'])
+        root.text = str(float(data_dict['#text']))
+        root.set('currencyID', data_dict['@attributes']['currencyID'])
 
         return root

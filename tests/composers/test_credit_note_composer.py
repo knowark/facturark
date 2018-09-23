@@ -88,17 +88,17 @@ def data_dict():
         },
         "legal_monetary_total": {
             'line_extension_amount': {
-                '@currency_id': 'COP',
+                '@attributes': {'currencyID': 'COP'},
                 '#text': 888888
             },
             'tax_exclusive_amount': {
-                '@currency_id': 'COP',
+                '@attributes': {'currencyID': 'COP'},
                 '#text': 55555
             },
             'payable_amount': {
-                '@currency_id': 'COP',
+                '@attributes': {'currencyID': 'COP'},
                 '#text': 4444
-            },
+            }
         },
         "credit_note_lines": [
             {

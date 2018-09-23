@@ -70,7 +70,7 @@ def resolve_tax_total_composer():
 def resolve_invoice_composer():
     extension_composer = ExtensionComposer()
     invoice_line_composer = resolve_invoice_line_composer()
-    monetary_total_composer = MonetaryTotalComposer()
+    monetary_total_composer = MonetaryTotalComposer(AmountComposer())
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
     payment_composer = PaymentComposer()
@@ -88,7 +88,7 @@ def resolve_invoice_composer():
 def resolve_credit_note_composer():
     extension_composer = ExtensionComposer()
     credit_note_line_composer = CreditNoteLineComposer()
-    monetary_total_composer = MonetaryTotalComposer()
+    monetary_total_composer = MonetaryTotalComposer(AmountComposer())
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
     payment_composer = PaymentComposer()
@@ -102,7 +102,7 @@ def resolve_credit_note_composer():
 def resolve_debit_note_composer():
     extension_composer = ExtensionComposer()
     debit_note_line_composer = DebitNoteLineComposer(AmountComposer())
-    monetary_total_composer = MonetaryTotalComposer()
+    monetary_total_composer = MonetaryTotalComposer(AmountComposer())
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
     payment_composer = PaymentComposer()

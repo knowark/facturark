@@ -1,29 +1,30 @@
 from pytest import fixture
 from lxml.etree import QName, fromstring
 from facturark.composers import NS
-from facturark.composers import MonetaryTotalComposer
+from facturark.composers import AmountComposer, MonetaryTotalComposer
 
 
 @fixture
 def composer():
-    return MonetaryTotalComposer()
+    amount_composer = AmountComposer()
+    return MonetaryTotalComposer(amount_composer)
 
 
 @fixture
 def data_dict():
     return {
         'line_extension_amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text': 888888
         },
         'tax_exclusive_amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text': 55555
         },
         'payable_amount': {
-            '@currency_id': 'COP',
+            '@attributes': {'currencyID': 'COP'},
             '#text': 4444
-        },
+        }
     }
 
 
