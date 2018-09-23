@@ -1,4 +1,3 @@
-from facturark.models import Invoice
 
 
 class InvoiceBuilder:
