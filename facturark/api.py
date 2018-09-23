@@ -1,11 +1,13 @@
 from facturark.builder import InvoiceBuilder
 from facturark.client import Client
 from facturark.resolver import resolve_invoice_composer
+from facturark.validator import Validator
 
 
 def build_invoice(invoice_dict):
     invoice_composer = resolve_invoice_composer()
-    builder = InvoiceBuilder(invoice_composer)
+    validator = Validator()
+    builder = InvoiceBuilder(invoice_composer, validator)
     return builder.build(invoice_dict)
 
 
