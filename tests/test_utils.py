@@ -1,6 +1,6 @@
 import os
 from lxml import etree
-from facturark.xsd_parser import parse_xsd
+from facturark.utils import parse_xsd
 
 
 def test_xsd_parser_parse():
