@@ -1,21 +1,21 @@
 from pytest import fixture
-from facturark.builder import Builder
+from facturark.builder import InvoiceBuilder
 from facturark.composers import InvoiceComposer
 from facturark.resolver import resolve_invoice_composer
 
 
 @fixture
-def builder():
+def invoice_builder():
     invoice_composer = resolve_invoice_composer()
-    builder = Builder(invoice_composer)
+    builder = InvoiceBuilder(invoice_composer)
     return builder
 
 
-def test_builder_creation(builder):
-    assert builder
+def test_invoice_builder_creation(invoice_builder):
+    assert invoice_builder
 
 
-def test_build(builder):
+def test_invoice_builder_build(invoice_builder):
     invoice_dict = {}
-    result = builder.build(invoice_dict)
+    result = invoice_builder.build(invoice_dict)
     assert result

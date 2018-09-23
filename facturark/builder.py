@@ -1,10 +1,10 @@
 from facturark.models import Invoice
 
 
-class Builder:
+class InvoiceBuilder:
 
-    def __init__(self, invoice_serializer):
-        self.invoice_serializer = invoice_serializer
+    def __init__(self, invoice_composer):
+        self.invoice_composer = invoice_composer
 
     def build(self, invoice_dict):
         return "INVOICE"

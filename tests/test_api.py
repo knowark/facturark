@@ -3,7 +3,7 @@ import facturark
 
 def test_api_build():
     invoice_dict = {}
-    result = facturark.build(invoice_dict)
+    result = facturark.build_invoice(invoice_dict)
     assert result
 
 
@@ -22,5 +22,5 @@ def test_api_send(monkeypatch):
             return "<Response></Response>"
 
         m.setattr(facturark.client.Client, "send", mock_send)
-        result = facturark.send(request_dict)
+        result = facturark.send_invoice(request_dict)
         assert result == "<Response></Response>"
