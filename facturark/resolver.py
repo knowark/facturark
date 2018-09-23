@@ -5,7 +5,7 @@ from facturark.composers import (
     CustomerPartyComposer, SupplierPartyComposer, TaxSubtotalComposer,
     TaxTotalComposer, PaymentComposer, AllowanceChargeComposer,
     DeliveryTermsComposer, MonetaryTotalComposer, ExtensionComposer,
-    InvoiceComposer)
+    InvoiceComposer, CreditNoteComposer, CreditNoteLineComposer)
 
 
 def resolve_invoice_line_composer():
@@ -82,3 +82,17 @@ def resolve_invoice_composer():
         delivery_composer, delivery_terms_composer, payment_composer,
         allowance_charge_composer, tax_total_composer, monetary_total_composer,
         invoice_line_composer)
+
+
+def resolve_credit_note_composer():
+    extension_composer = ExtensionComposer()
+    credit_note_line_composer = CreditNoteLineComposer()
+    monetary_total_composer = MonetaryTotalComposer()
+    customer_party_composer = resolve_customer_party_composer()
+    supplier_party_composer = resolve_supplier_party_composer()
+    payment_composer = PaymentComposer()
+    tax_total_composer = resolve_tax_total_composer()
+    return CreditNoteComposer(
+        extension_composer, supplier_party_composer, customer_party_composer,
+        payment_composer, tax_total_composer, monetary_total_composer,
+        credit_note_line_composer)
