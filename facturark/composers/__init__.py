@@ -6,6 +6,7 @@ from .customer_party_composer import CustomerPartyComposer
 from .delivery_composer import DeliveryComposer
 from .delivery_terms_composer import DeliveryTermsComposer
 from .despatch_composer import DespatchComposer
+from .extension_composer import ExtensionComposer
 from .invoice_composer import InvoiceComposer
 from .invoice_line_composer import InvoiceLineComposer
 from .item_composer import ItemComposer
