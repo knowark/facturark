@@ -71,15 +71,16 @@ def resolve_tax_total_composer():
 
 
 def resolve_invoice_composer():
+    amount_composer = AmountComposer()
     extension_composer = ExtensionComposer()
     invoice_line_composer = resolve_invoice_line_composer()
-    monetary_total_composer = MonetaryTotalComposer(AmountComposer())
+    monetary_total_composer = MonetaryTotalComposer(amount_composer)
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
-    payment_composer = PaymentComposer()
+    payment_composer = PaymentComposer(amount_composer)
     tax_total_composer = resolve_tax_total_composer()
     delivery_composer = resolve_delivery_composer()
-    allowance_charge_composer = AllowanceChargeComposer()
+    allowance_charge_composer = AllowanceChargeComposer(amount_composer)
     delivery_terms_composer = DeliveryTermsComposer()
     return InvoiceComposer(
         extension_composer, supplier_party_composer, customer_party_composer,
@@ -89,12 +90,13 @@ def resolve_invoice_composer():
 
 
 def resolve_credit_note_composer():
+    amount_composer = AmountComposer()
     extension_composer = ExtensionComposer()
-    credit_note_line_composer = CreditNoteLineComposer(AmountComposer())
-    monetary_total_composer = MonetaryTotalComposer(AmountComposer())
+    credit_note_line_composer = CreditNoteLineComposer(amount_composer)
+    monetary_total_composer = MonetaryTotalComposer(amount_composer)
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
-    payment_composer = PaymentComposer()
+    payment_composer = PaymentComposer(amount_composer)
     tax_total_composer = resolve_tax_total_composer()
     return CreditNoteComposer(
         extension_composer, supplier_party_composer, customer_party_composer,
@@ -103,12 +105,13 @@ def resolve_credit_note_composer():
 
 
 def resolve_debit_note_composer():
+    amount_composer = AmountComposer()
     extension_composer = ExtensionComposer()
-    debit_note_line_composer = DebitNoteLineComposer(AmountComposer())
-    monetary_total_composer = MonetaryTotalComposer(AmountComposer())
+    debit_note_line_composer = DebitNoteLineComposer(amount_composer)
+    monetary_total_composer = MonetaryTotalComposer(amount_composer)
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
-    payment_composer = PaymentComposer()
+    payment_composer = PaymentComposer(amount_composer)
     tax_total_composer = resolve_tax_total_composer()
     return DebitNoteComposer(
         extension_composer, supplier_party_composer, customer_party_composer,
