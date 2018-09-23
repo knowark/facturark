@@ -1,15 +1,15 @@
-from facturark.builder import Builder
+from facturark.builder import InvoiceBuilder
 from facturark.client import Client
 from facturark.resolver import resolve_invoice_composer
 
 
-def build(invoice_dict):
+def build_invoice(invoice_dict):
     invoice_composer = resolve_invoice_composer()
-    builder = Builder(invoice_composer)
+    builder = InvoiceBuilder(invoice_composer)
     return builder.build(invoice_dict)
 
 
-def send(request_dict):
+def send_invoice(request_dict):
     client = Client(
         request_dict.pop("username"),
         request_dict.pop("password"),
