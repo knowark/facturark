@@ -2,6 +2,8 @@ from .namespaces import NS
 from .composer import Composer
 from .address_composer import AddressComposer
 from .allowance_charge_composer import AllowanceChargeComposer
+from .credit_note_composer import CreditNoteComposer
+from .credit_note_line_composer import CreditNoteLineComposer
 from .customer_party_composer import CustomerPartyComposer
 from .delivery_composer import DeliveryComposer
 from .delivery_terms_composer import DeliveryTermsComposer
