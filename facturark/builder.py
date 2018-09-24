@@ -1,3 +1,4 @@
+from lxml.etree import tostring
 
 
 class InvoiceBuilder:
@@ -9,4 +10,4 @@ class InvoiceBuilder:
     def build(self, invoice_dict):
         invoice = self.invoice_composer.compose(invoice_dict)
         self.validator.validate(invoice)
-        return invoice
+        return tostring(invoice)
