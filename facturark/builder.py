@@ -10,4 +10,4 @@ class InvoiceBuilder:
     def build(self, invoice_dict):
         invoice = self.invoice_composer.compose(invoice_dict)
         self.validator.validate(invoice)
-        return tostring(invoice)
+        return tostring(invoice, pretty_print=True)
