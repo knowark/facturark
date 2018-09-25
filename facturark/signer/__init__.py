@@ -1,2 +1,2 @@
-from .namespaces import NS
+from .canonicalizer import Canonicalizer
 from .signer import Signer
