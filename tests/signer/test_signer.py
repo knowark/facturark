@@ -1,12 +1,13 @@
 from pytest import fixture
-from facturark.signer import Signer
+from facturark.signer import Signer, Canonicalizer
 
 
 @fixture
 def signer():
-    signer = Signer()
+    canonicalizer = Canonicalizer
+    signer = Signer(canonicalizer)
     return signer
 
 
-def test_signer_instantiation():
+def test_signer_instantiation(signer):
     assert signer is not None
