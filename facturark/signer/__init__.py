@@ -3,3 +3,4 @@ from .encoder import Encoder
 from .encrypter import Encrypter
 from .hasher import Hasher
 from .signer import Signer
+from .verifier import Verifier
