@@ -15,7 +15,5 @@ def test_hasher_instantiation(hasher):
 def test_hasher_hash(hasher):
     data = b'<Invoice></Invoice>'
     result = hasher.hash(data)
-    print('HASHHHHH')
-    print(result)
     assert result == (
         b'\xdbK\x0cn\x9f"\xe3}\x8an\x1b\xd6\x19\x11O\xcas\xf1\xf3+')
