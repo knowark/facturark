@@ -117,12 +117,12 @@ class Verifier:
     def _extract_signature_value(self, element):
         path = './/ds:SignatureValue'
         signature_value = element.find(path, namespaces=vars(NS))
-        return signature_value.text
+        return signature_value.text.encode('utf-8')
 
     def _extract_signature_method(self, element):
         path = './/ds:SignatureMethod'
         signature_method = element.find(path, namespaces=vars(NS))
-        return signature_method.attrib.get('Algorithm')
+        return signature_method.attrib.get('Algorithm', "").encode('utf-8')
 
     def _digest_signed_info(self, element, method):
         resource = element.find(
