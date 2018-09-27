@@ -80,8 +80,8 @@ def test_verifier_digest_sha512_signed_properties(
         signed_invoice_sha512, uri, method)
 
     assert resource_digest == (
-        "wDZp1AgLv8VA1C+kenWwqU+Nc4etw/udNXet7zvLXSQEhs081"
-        "DCw3yk5Ir6YxZPp9y7QL4SYTw7ol5B0EkWInA==")
+        b"wDZp1AgLv8VA1C+kenWwqU+Nc4etw/udNXet7zvLXSQEhs081"
+        b"DCw3yk5Ir6YxZPp9y7QL4SYTw7ol5B0EkWInA==")
 
 
 def test_verifier_digest_sha512_keyinfo(
@@ -92,8 +92,8 @@ def test_verifier_digest_sha512_keyinfo(
         signed_invoice_sha512, uri, method)
 
     assert resource_digest == (
-        "4ua9R6NcHUyDwrUMv9/URwx5aomERb8SgEimLkWxb9dQByijPJ"
-        "slLJhmw5q3dyTWSdFRnlQqOv37R0z99lN44A==")
+        b"4ua9R6NcHUyDwrUMv9/URwx5aomERb8SgEimLkWxb9dQByijPJ"
+        b"slLJhmw5q3dyTWSdFRnlQqOv37R0z99lN44A==")
 
 
 def test_verifier_digest_sha512_document(
@@ -104,8 +104,8 @@ def test_verifier_digest_sha512_document(
         signed_invoice_sha512, uri, method)
 
     assert resource_digest == (
-        "zeO2I35ESFbtHIm1y3vG25gm1wa80VTP+JZzHt0HrW1bq1kNpd"
-        "cD0KY+pQVnShAOU/QyN6tNZiAJXm4K3RhWhg==")
+        b"zeO2I35ESFbtHIm1y3vG25gm1wa80VTP+JZzHt0HrW1bq1kNpd"
+        b"cD0KY+pQVnShAOU/QyN6tNZiAJXm4K3RhWhg==")
 
 
 def test_verifier_digest_sha512_signed_info(verifier, signed_invoice_sha512):
