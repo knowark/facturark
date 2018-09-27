@@ -26,4 +26,3 @@ def make_child(parent, tag, text=None, attributes=None,
             child.text = text
 
     return child
-    
