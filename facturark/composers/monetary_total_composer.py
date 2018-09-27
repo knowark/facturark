@@ -1,7 +1,7 @@
 from lxml.etree import Element, QName
+from facturark.utils import make_child
 from .namespaces import NS
 from .composer import Composer
-from .utils import make_child
 
 
 class MonetaryTotalComposer(Composer):
