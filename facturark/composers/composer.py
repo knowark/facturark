@@ -1,6 +1,6 @@
 from lxml.etree import Element, SubElement, QName, tostring
+from facturark.utils import make_child
 from .namespaces import NS
-from .utils import make_child
 
 
 class Composer:

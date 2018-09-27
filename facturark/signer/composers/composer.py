@@ -1,5 +1,5 @@
 from lxml.etree import Element, SubElement, QName, tostring
-from .utils import make_child
+from facturark.utils import make_child
 from .namespaces import NS
 
 
