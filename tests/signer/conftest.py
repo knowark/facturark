@@ -3,7 +3,7 @@ from pytest import fixture
 
 @fixture
 def certificate_pem():
-    certificate = """-----BEGIN CERTIFICATE-----
+    certificate = b"""-----BEGIN CERTIFICATE-----
 MIIGOTCCBCGgAwIBAgIIHEYIuHDx5XwwDQYJKoZIhvcNAQELBQAwgbQxIzAhBgkqhkiG9w0BCQEW
 FGluZm9AYW5kZXNzY2QuY29tLmNvMSMwIQYDVQQDExpDQSBBTkRFUyBTQ0QgUy5BLiBDbGFzZSBJ
 STEwMC4GA1UECxMnRGl2aXNpb24gZGUgY2VydGlmaWNhY2lvbiBlbnRpZGFkIGZpbmFsMRMwEQYD
