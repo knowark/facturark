@@ -109,9 +109,9 @@ class Verifier:
     def _extract_certificate(self, element):
         path = './/ds:X509Certificate'
         certificate = element.find(path, namespaces=vars(NS))
-        certificate_bytes = b"-----BEGIN CERTIFICATE-----"
+        certificate_bytes = "-----BEGIN CERTIFICATE-----"
         certificate_bytes += certificate.text
-        certificate_bytes += b"-----END CERTIFICATE-----"
+        certificate_bytes += "-----END CERTIFICATE-----"
         return certificate_bytes
 
     def _extract_signature_value(self, element):
