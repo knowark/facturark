@@ -11,6 +11,7 @@ class Hasher:
         }
 
     def hash(self, data, algorithm="http://www.w3.org/2001/04/xmlenc#sha256"):
-        hash_name = str(self.algorithms.get(algorithm))
+        hash_name = self.algorithms.get(
+            algorithm, "").encode("utf-8").decode("utf-8")
         hash_function = getattr(hashlib, hash_name)
         return hash_function(data).digest()
