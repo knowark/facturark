@@ -106,3 +106,25 @@ def test_verifier_digest_sha512_document(
     assert resource_digest == (
         "zeO2I35ESFbtHIm1y3vG25gm1wa80VTP+JZzHt0HrW1bq1kNpd"
         "cD0KY+pQVnShAOU/QyN6tNZiAJXm4K3RhWhg==")
+
+
+def test_verifier_digest_sha512_signed_info(verifier, signed_invoice_sha512):
+    method = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+    signed_info_digest = verifier._digest_signed_info(
+        signed_invoice_sha512, method)
+
+    assert signed_info_digest is not None
+
+
+# def test_verifier_create_signature(verifier, signed_invoice_sha512):
+#     source_digest = 'Q4H+bP65Y5RVbzAt3jRE2QdShrimTa4wAmpuZ4YxP1Y='
+
+#     verifier._create_signature(source_digest)
+
+#     expected_signature = (
+#         "fLhaP8kDwoDfMiSZy3xOPjpEQIXaEfFWs+NY/AWIf0kddsra1rhh4A/JeJGufd3hk"
+#         "M2CEjx1p+rk A4QbPtJFzzzagf+td2QlHnpbviho7y2QOHRRy1Ioo/edp4r4+op2/f"
+#         "cPCEv3tgyyjV3AaXljccHc livXKrfEQnrE2N9iQ3BDkKAX2QGmxLSH9KuuHF8lzWW"
+#         "PwoL+XsbTpSuoQQSjBb6A7KLGS8WNTSPb q8xiCvRGyzAEHonirgMK2vIXM9uJHvCoN"
+#         "1XZaxB57++FsuyLBiwn5T4ngb8ephNQMvIdofNsK4IrZXd9YhirV3sZ5bgXtR4Kcn1u"
+#         "ghzLrxj8Y5XqGw==")

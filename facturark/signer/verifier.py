@@ -74,9 +74,17 @@ class Verifier:
             self._remove_signature(resource)
 
         canonical_resource = self.canonicalizer.canonicalize(resource)
-
         resource_hash = self.hasher.hash(canonical_resource, method)
+        base64_digest = self.encoder.base64_encode(resource_hash)
 
+        return base64_digest
+
+    def _digest_signed_info(self, element, method):
+        resource = element.find(
+            self.signature_path + "/ds:SignedInfo", namespaces=vars(NS))
+
+        canonical_resource = self.canonicalizer.canonicalize(resource)
+        resource_hash = self.hasher.hash(canonical_resource, method)
         base64_digest = self.encoder.base64_encode(resource_hash)
 
         return base64_digest
