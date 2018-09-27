@@ -1,7 +1,8 @@
 import os
 from lxml.etree import parse, QName
-from pytest import fixture
-from facturark.signer import Verifier, Canonicalizer, Encoder, Hasher
+from pytest import fixture, raises
+from facturark.signer import (Verifier, Canonicalizer,
+                              Encoder, Hasher, Encrypter)
 from facturark.signer.composers.namespaces import NS
 
 
@@ -10,7 +11,8 @@ def verifier():
     canonicalizer = Canonicalizer()
     encoder = Encoder()
     hasher = Hasher()
-    verifier = Verifier(canonicalizer, encoder, hasher)
+    encrypter = Encrypter()
+    verifier = Verifier(canonicalizer, encoder, hasher, encrypter)
     return verifier
 
 
@@ -35,8 +37,14 @@ def test_verifier_instantiation(verifier):
 
 
 def test_verifier_verify(verifier, signed_invoice):
-    result = verifier.verify(signed_invoice)
-    assert result is not None
+    # This invoice should raise an error as it has been modified (formatted.)
+    with raises(ValueError):
+        result = verifier.verify(signed_invoice)
+
+
+def test_verifier_sha512(verifier, signed_invoice_sha512):
+    result = verifier.verify(signed_invoice_sha512)
+    assert result is True
 
 
 def test_verifier_get_signature(verifier, signed_invoice):
@@ -116,15 +124,37 @@ def test_verifier_digest_sha512_signed_info(verifier, signed_invoice_sha512):
     assert signed_info_digest is not None
 
 
-# def test_verifier_create_signature(verifier, signed_invoice_sha512):
-#     source_digest = 'Q4H+bP65Y5RVbzAt3jRE2QdShrimTa4wAmpuZ4YxP1Y='
+def test_verifier_extract_certificate(verifier, signed_invoice_sha512,
+                                      certificate_pem):
 
-#     verifier._create_signature(source_digest)
+    extracted_certificate = verifier._extract_certificate(
+        signed_invoice_sha512)
 
-#     expected_signature = (
-#         "fLhaP8kDwoDfMiSZy3xOPjpEQIXaEfFWs+NY/AWIf0kddsra1rhh4A/JeJGufd3hk"
-#         "M2CEjx1p+rk A4QbPtJFzzzagf+td2QlHnpbviho7y2QOHRRy1Ioo/edp4r4+op2/f"
-#         "cPCEv3tgyyjV3AaXljccHc livXKrfEQnrE2N9iQ3BDkKAX2QGmxLSH9KuuHF8lzWW"
-#         "PwoL+XsbTpSuoQQSjBb6A7KLGS8WNTSPb q8xiCvRGyzAEHonirgMK2vIXM9uJHvCoN"
-#         "1XZaxB57++FsuyLBiwn5T4ngb8ephNQMvIdofNsK4IrZXd9YhirV3sZ5bgXtR4Kcn1u"
-#         "ghzLrxj8Y5XqGw==")
+    assert extracted_certificate == certificate_pem
+
+
+def test_verifier_extract_signature_value(verifier, signed_invoice_sha512,
+                                          signature_value):
+
+    extracted_signature = verifier._extract_signature_value(
+        signed_invoice_sha512)
+
+    assert extracted_signature == signature_value
+
+
+def test_verifier_extract_signature_method(verifier, signed_invoice_sha512):
+    signature_method = b"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+    extracted_signature = verifier._extract_signature_method(
+        signed_invoice_sha512)
+
+    assert extracted_signature == signature_method
+
+
+def test_verifier_compare_mismatched_digests(verifier):
+    digest_a = ("zeO2I35ESFbtHIm1y3vG25gm1wa80VTP+JZzHt0HrW1bq1kNpdcD0KY+"
+                "pQVnShAOU/QyN6tNZiAJXm4K3RhWhg==")
+    digest_b = ("4ua9R6NcHUyDwrUMv9/URwx5aomERb8SgEimLkWxb9dQByijPJslLJhm"
+                "w5q3dyTWSdFRnlQqOv37R0z99lN44A==")
+
+    with raises(ValueError):
+        verifier._compare_digests(digest_a, digest_b)

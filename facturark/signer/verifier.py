@@ -1,15 +1,42 @@
+from copy import deepcopy
 from lxml.etree import tostring, QName, fromstring
 from .composers.namespaces import NS
 
 
 class Verifier:
-    def __init__(self, canonicalizer, encoder, hasher):
+    def __init__(self, canonicalizer, encoder, hasher, encrypter):
         self.canonicalizer = canonicalizer
         self.encoder = encoder
         self.hasher = hasher
+        self.encrypter = encrypter
         self.signature_path = './/ds:Signature'
 
     def verify(self, element):
+        # Compare Resources Digests
+        reference_dict_list = self._parse_references(element)
+        for reference_dict in reference_dict_list:
+            computed_digest = self._digest_resource(
+                element, reference_dict['uri'],
+                reference_dict['digest_method'])
+            self._compare_digests(
+                computed_digest, reference_dict['digest_value'])
+
+        # Get X509 PEM Certificate
+        certificate = self._extract_certificate(element)
+
+        # Get Signature Value
+        signature_value = self._extract_signature_value(element)
+
+        # Get Hash Method
+        method = self._extract_signature_method(element)
+
+        # Get Signed Info Digest
+        signed_info_digest = self._digest_signed_info(element, method)
+
+        # Verify Encrypted Signature
+        self.encrypter.verify_signature(
+            certificate, signature_value, signed_info_digest)
+
         return True
 
     def _get_signature(self, element):
@@ -65,10 +92,10 @@ class Verifier:
 
     def _digest_resource(self, element, uri, method):
         sanitized_uri = uri.replace("#", "")
-        resource = element
+        resource = deepcopy(element)
 
         if sanitized_uri:
-            path = ".//*[@Id='{}']".format(sanitized_uri)
+            path = '//*[@Id="{}"]'.format(sanitized_uri)
             resource = element.find(path, namespaces=vars(NS))
         else:
             self._remove_signature(resource)
@@ -79,6 +106,24 @@ class Verifier:
 
         return base64_digest
 
+    def _extract_certificate(self, element):
+        path = './/ds:X509Certificate'
+        certificate = element.find(path, namespaces=vars(NS))
+        certificate_bytes = b"-----BEGIN CERTIFICATE-----"
+        certificate_bytes += certificate.text
+        certificate_bytes += b"-----END CERTIFICATE-----"
+        return certificate_bytes
+
+    def _extract_signature_value(self, element):
+        path = './/ds:SignatureValue'
+        signature_value = element.find(path, namespaces=vars(NS))
+        return signature_value.text
+
+    def _extract_signature_method(self, element):
+        path = './/ds:SignatureMethod'
+        signature_method = element.find(path, namespaces=vars(NS))
+        return signature_method.attrib.get('Algorithm')
+
     def _digest_signed_info(self, element, method):
         resource = element.find(
             self.signature_path + "/ds:SignedInfo", namespaces=vars(NS))
@@ -88,3 +133,11 @@ class Verifier:
         base64_digest = self.encoder.base64_encode(resource_hash)
 
         return base64_digest
+
+    def _compare_digests(self, computed_digest, given_digest):
+        decoded_computed_digest = self.encoder.base64_decode(
+            computed_digest)
+        decoded_given_digest = self.encoder.base64_decode(
+            given_digest)
+        if decoded_computed_digest != decoded_given_digest:
+            raise ValueError("Mismatched digest values")
