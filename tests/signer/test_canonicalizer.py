@@ -20,4 +20,4 @@ def test_canonicalizer_instantiation():
 
 def test_canonicalize(canonicalizer, xml_document):
     result = canonicalizer.canonicalize(xml_document)
-    assert result == '<Invoice></Invoice>'
+    assert result == b'<Invoice></Invoice>'
