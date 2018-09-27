@@ -11,11 +11,8 @@ def encrypter():
 
 @fixture
 def certificate_pem():
-    certificate_shell = (
-        "-----BEGIN CERTIFICATE-----\n"
-        "{}\n"
-        "-----END CERTIFICATE-----")
-    public_key = """
+    certificate = b"""
+-----BEGIN CERTIFICATE-----
 MIIGOTCCBCGgAwIBAgIIHEYIuHDx5XwwDQYJKoZIhvcNAQELBQAwgbQxIzAhBgkqhkiG9w0BCQEW
 FGluZm9AYW5kZXNzY2QuY29tLmNvMSMwIQYDVQQDExpDQSBBTkRFUyBTQ0QgUy5BLiBDbGFzZSBJ
 STEwMC4GA1UECxMnRGl2aXNpb24gZGUgY2VydGlmaWNhY2lvbiBlbnRpZGFkIGZpbmFsMRMwEQYD
@@ -45,8 +42,9 @@ U6+FOFmz6//sktE7aFD11W2bQbYGpEUkDgZ6Z62av/bSmxSOrLZMsAn3WUKKt9+EGSsS54qqLKHN
 q9cqewsHs+JkSS93tE2IMLZNa6/QPH+DEqFfzs7OjRKWp2bUmHQSS06Lb96+jLdZ2PC3XZhPs4lb
 ISVn3ush80FSEc2z2NomKWlOGnykLJXcVhTxT1drgnrU6qaAq9+CnqLX+jQfWmfKkQCwSIuLtELb
 CA==
+-----END CERTIFICATE-----
     """
-    return certificate_shell.format(public_key.strip())
+    return certificate
 
 
 def test_encrypter_instantiation(encrypter):
