@@ -1,7 +1,9 @@
 import os
 import io
+from base64 import b64decode, b64encode
 from pytest import fixture
 from lxml.etree import parse
+from OpenSSL import crypto
 from facturark.signer import Signer, Canonicalizer, Hasher
 from facturark.signer.resolver import resolve_signature_composer
 
@@ -42,3 +44,27 @@ def test_signer_instantiation(signer):
 #     certificate, password = pkcs12_certificate
 #     result = signer.sign(unsigned_invoice, certificate, password)
 #     assert result is True
+
+
+def test_signer_parse_certificate(signer, pkcs12_certificate):
+    certificate, password = pkcs12_certificate
+    result = signer._parse_certificate(certificate, password)
+
+    x509_certificate = result.get_certificate()
+    private_key = result.get_privatekey()
+
+    assert isinstance(result, crypto.PKCS12)
+    assert isinstance(x509_certificate, crypto.X509)
+    assert isinstance(private_key, crypto.PKey)
+
+
+def test_signer_serialize_certificate(signer, pkcs12_certificate):
+    certificate, password = pkcs12_certificate
+    certificate_object = signer._parse_certificate(certificate, password)
+    x509_certificate = certificate_object.get_certificate()
+
+    result = signer._serialize_certificate(x509_certificate)
+
+    assert 'BEGIN CERTIFICATE' not in result
+    assert "".join(b64encode(b64decode(result)).split()) == (
+        "".join(result.split()))
