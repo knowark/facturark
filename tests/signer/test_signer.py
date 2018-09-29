@@ -2,9 +2,11 @@ import os
 import io
 from base64 import b64decode, b64encode
 from pytest import fixture
-from lxml.etree import parse
+from lxml.etree import parse, QName
 from OpenSSL import crypto
-from facturark.signer import Signer, Canonicalizer, Hasher
+from facturark.signer.namespaces import NS
+from facturark.signer import Signer, Canonicalizer, Hasher, Encoder
+from facturark.signer.composers import KeyInfoComposer
 from facturark.signer.resolver import resolve_signature_composer
 
 
@@ -12,8 +14,11 @@ from facturark.signer.resolver import resolve_signature_composer
 def signer():
     canonicalizer = Canonicalizer()
     hasher = Hasher()
+    encoder = Encoder()
     signature_composer = resolve_signature_composer()
-    signer = Signer(canonicalizer, hasher, signature_composer)
+    key_info_composer = KeyInfoComposer()
+    signer = Signer(canonicalizer, hasher, encoder,
+                    signature_composer, key_info_composer)
     return signer
 
 
@@ -68,3 +73,14 @@ def test_signer_serialize_certificate(signer, pkcs12_certificate):
     assert 'BEGIN CERTIFICATE' not in result
     assert "".join(b64encode(b64decode(result)).split()) == (
         "".join(result.split()))
+
+
+def test_signer_serialize_prepare_key_info(signer, pkcs12_certificate):
+    certificate, password = pkcs12_certificate
+    certificate_object = signer._parse_certificate(certificate, password)
+    x509_certificate = certificate_object.get_certificate()
+
+    key_info, key_info_digest = signer._prepare_key_info(x509_certificate)
+
+    assert key_info.tag == QName(NS.ds, 'KeyInfo').text
+    assert key_info_digest is not None
