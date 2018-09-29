@@ -2,10 +2,13 @@ from OpenSSL import crypto
 
 
 class Signer:
-    def __init__(self, canonicalizer, hasher, signature_composer):
+    def __init__(self, canonicalizer, hasher, encoder,
+                 signature_composer, key_info_composer):
         self.canonicalizer = canonicalizer
         self.hasher = hasher
+        self.encoder = encoder
         self.signature_composer = signature_composer
+        self.key_info_composer = key_info_composer
 
     def sign(self, element, pkcs12_certificate, pkcs12_password):
 
@@ -26,6 +29,9 @@ class Signer:
         x509_certificate = result.get_certificate()
         private_key = result.get_privatekey()
 
+        # Create KeyInfo Element
+        key_info, key_info_digest = self._prepare_key_info(x509_certificate)
+
         # Digest Complete Document
         # document_digest = self.hasher.hash(hash_method)
 
@@ -40,4 +46,19 @@ class Signer:
             crypto.FILETYPE_PEM, certificate_object)
 
         pem_certificate_list = pem_certificate.splitlines()[1:-1]
-        return '\n'.join(pem_certificate_list)
+        return '\n' + '\n'.join(pem_certificate_list) + '\n'
+
+    def _prepare_key_info(self, certificate_object):
+        serialized_certificate = self._serialize_certificate(
+            certificate_object)
+        key_info_dict = {
+            'X509_data': {
+                'X509_certificate': serialized_certificate
+            }
+        }
+        key_info = self.key_info_composer.compose(key_info_dict)
+        canonicalized_key_info = self.canonicalizer.canonicalize(key_info)
+        key_info_digest = self.encoder.base64_encode(
+            self.hasher.hash(canonicalized_key_info))
+
+        return key_info, key_info_digest
