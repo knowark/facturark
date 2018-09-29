@@ -12,6 +12,8 @@ def composer():
 @fixture
 def data_dict():
     return {
+        '@attributes': {'Id': ('xmldsig-efdc76b2-9896-'
+                               '4c6e-b1ad-6c56b59f8ed6-keyinfo')},
         'X509_data': {
             'X509_certificate': """
 MIIGOTCCBCGgAwIBAgIIHEYIuHDx5XwwDQYJKoZIhvcNAQELBQAwgbQxIzAhBgkqhkiG9w0BCQEW
@@ -55,4 +57,5 @@ def test_compose(composer, data_dict, schema):
     assert key_info.tag == QName(NS.ds, "KeyInfo").text
     assert key_info.find('ds:X509Data/ds:X509Certificate', vars(NS)).text == (
         data_dict['X509_data']['X509_certificate'])
+    assert key_info.attrib['Id'] == data_dict['@attributes']['Id']
     schema.assertValid(key_info)

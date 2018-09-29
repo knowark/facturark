@@ -5,7 +5,7 @@ from pytest import fixture
 from lxml.etree import parse, QName
 from OpenSSL import crypto
 from facturark.signer.namespaces import NS
-from facturark.signer import Signer, Canonicalizer, Hasher, Encoder
+from facturark.signer import Signer, Canonicalizer, Hasher, Encoder, Identifier
 from facturark.signer.composers import KeyInfoComposer
 from facturark.signer.resolver import resolve_signature_composer
 
@@ -15,9 +15,10 @@ def signer():
     canonicalizer = Canonicalizer()
     hasher = Hasher()
     encoder = Encoder()
+    identifier = Identifier()
     signature_composer = resolve_signature_composer()
     key_info_composer = KeyInfoComposer()
-    signer = Signer(canonicalizer, hasher, encoder,
+    signer = Signer(canonicalizer, hasher, encoder, identifier,
                     signature_composer, key_info_composer)
     return signer
 
@@ -80,7 +81,10 @@ def test_signer_serialize_prepare_key_info(signer, pkcs12_certificate):
     certificate_object = signer._parse_certificate(certificate, password)
     x509_certificate = certificate_object.get_certificate()
 
-    key_info, key_info_digest = signer._prepare_key_info(x509_certificate)
+    key_info, key_info_digest, key_info_id = (
+        signer._prepare_key_info(x509_certificate))
 
     assert key_info.tag == QName(NS.ds, 'KeyInfo').text
     assert key_info_digest is not None
+    assert 'keyinfo' in key_info.attrib.get('Id')
+    assert 'keyinfo' in key_info_id
