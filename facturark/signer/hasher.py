@@ -7,6 +7,7 @@ class Hasher:
             "http://www.w3.org/2001/04/xmlenc#sha512": 'sha512',
             "http://www.w3.org/2001/04/xmlenc#sha256": 'sha256',
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256": 'sha256',
+            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512": 'sha512',
             "http://www.w3.org/2000/09/xmldsig#sha1": 'sha1'
         }
 
