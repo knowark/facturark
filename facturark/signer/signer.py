@@ -37,7 +37,13 @@ class Signer:
         key_info, key_info_digest, key_info_id = (
             self._prepare_key_info(x509_certificate))
 
-        # Prepare Object(Xades) Element
+        # Prepare Signed Properties Element
+        signed_properties, signed_properties_digest = (
+            self._prepare_signed_properties(x509_certificate))
+
+        # Prepare Document Element
+        document_element, document_digest = (
+            self._prepare_document(element))
 
         # Digest Complete Document
         # document_digest = self.hasher.hash(hash_method)
@@ -81,3 +87,11 @@ class Signer:
             self.hasher.hash(canonicalized_signed_properties))
 
         return signed_properties, signed_properties_digest
+
+    def _prepare_document(self, document_element):
+        canonicalized_document = self.canonicalizer.canonicalize(
+            document_element)
+        document_digest = self.encoder.base64_encode(self.hasher.hash(
+            canonicalized_document))
+
+        return document_element, document_digest

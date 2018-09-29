@@ -108,3 +108,11 @@ def test_signer_prepare_signed_properties(signer, pkcs12_certificate):
     assert signed_properties.tag == QName(NS.xades, 'SignedProperties').text
     assert signed_properties_digest is not None
     assert 'signedprops' in signed_properties.attrib.get('Id')
+
+
+def test_signer_prepare_document(signer, unsigned_invoice):
+    document_element, document_digest = (
+        signer._prepare_document(unsigned_invoice))
+
+    assert document_element == unsigned_invoice
+    assert document_digest is not None
