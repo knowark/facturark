@@ -6,7 +6,9 @@ from lxml.etree import parse, QName
 from OpenSSL import crypto
 from facturark.signer.namespaces import NS
 from facturark.signer import Signer, Canonicalizer, Hasher, Encoder, Identifier
-from facturark.signer.composers import KeyInfoComposer
+from facturark.signer.composers import KeyInfoComposer, ObjectComposer
+from facturark.signer.composers.xades import (
+    QualifyingPropertiesComposer, SignedPropertiesComposer)
 from facturark.signer.resolver import resolve_signature_composer
 
 
@@ -18,8 +20,12 @@ def signer():
     identifier = Identifier()
     signature_composer = resolve_signature_composer()
     key_info_composer = KeyInfoComposer()
+    object_composer = ObjectComposer()
+    qualifying_properties_composer = QualifyingPropertiesComposer()
+    signed_properties_composer = SignedPropertiesComposer()
     signer = Signer(canonicalizer, hasher, encoder, identifier,
-                    signature_composer, key_info_composer)
+                    signature_composer, key_info_composer, object_composer,
+                    qualifying_properties_composer, signed_properties_composer)
     return signer
 
 
@@ -76,15 +82,29 @@ def test_signer_serialize_certificate(signer, pkcs12_certificate):
         "".join(result.split()))
 
 
-def test_signer_serialize_prepare_key_info(signer, pkcs12_certificate):
+def test_signer_prepare_key_info(signer, pkcs12_certificate):
     certificate, password = pkcs12_certificate
     certificate_object = signer._parse_certificate(certificate, password)
     x509_certificate = certificate_object.get_certificate()
 
-    key_info, key_info_digest, key_info_id = (
-        signer._prepare_key_info(x509_certificate))
+    uid = "xmldsig-8d0c0815-f905-4f6a-9a74-645460917dcc-keyinfo"
+    key_info, key_info_digest = (
+        signer._prepare_key_info(x509_certificate, uid))
 
     assert key_info.tag == QName(NS.ds, 'KeyInfo').text
     assert key_info_digest is not None
     assert 'keyinfo' in key_info.attrib.get('Id')
-    assert 'keyinfo' in key_info_id
+
+
+def test_signer_prepare_signed_properties(signer, pkcs12_certificate):
+    certificate, password = pkcs12_certificate
+    certificate_object = signer._parse_certificate(certificate, password)
+    x509_certificate = certificate_object.get_certificate()
+
+    uid = "xmldsig-a116f9ea-cbfa-4e45-b026-646e43b86df7-signedprops"
+    signed_properties, signed_properties_digest = (
+        signer._prepare_signed_properties(x509_certificate, uid))
+
+    assert signed_properties.tag == QName(NS.xades, 'SignedProperties').text
+    assert signed_properties_digest is not None
+    assert 'signedprops' in signed_properties.attrib.get('Id')

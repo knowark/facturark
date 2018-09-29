@@ -14,7 +14,7 @@ def data_dict():
     return {
         'qualifying_properties': {
             'signed_properties': {
-                'signed_signature_Properties': {
+                'signed_signature_properties': {
 
                 }
             }
