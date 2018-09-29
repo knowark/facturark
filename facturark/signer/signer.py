@@ -2,11 +2,12 @@ from OpenSSL import crypto
 
 
 class Signer:
-    def __init__(self, canonicalizer, hasher, encoder,
+    def __init__(self, canonicalizer, hasher, encoder, identifier,
                  signature_composer, key_info_composer):
         self.canonicalizer = canonicalizer
         self.hasher = hasher
         self.encoder = encoder
+        self.identifier = identifier
         self.signature_composer = signature_composer
         self.key_info_composer = key_info_composer
 
@@ -29,8 +30,9 @@ class Signer:
         x509_certificate = result.get_certificate()
         private_key = result.get_privatekey()
 
-        # Create KeyInfo Element
-        key_info, key_info_digest = self._prepare_key_info(x509_certificate)
+        # Prepare KeyInfo Element
+        key_info, key_info_digest, key_info_id = (
+            self._prepare_key_info(x509_certificate))
 
         # Digest Complete Document
         # document_digest = self.hasher.hash(hash_method)
@@ -51,7 +53,9 @@ class Signer:
     def _prepare_key_info(self, certificate_object):
         serialized_certificate = self._serialize_certificate(
             certificate_object)
+        key_info_id = self.identifier.generate_id(suffix='keyinfo')
         key_info_dict = {
+            '@attributes': {'Id': key_info_id},
             'X509_data': {
                 'X509_certificate': serialized_certificate
             }
@@ -61,4 +65,4 @@ class Signer:
         key_info_digest = self.encoder.base64_encode(
             self.hasher.hash(canonicalized_key_info))
 
-        return key_info, key_info_digest
+        return key_info, key_info_digest, key_info_id
