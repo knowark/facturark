@@ -1,4 +1,5 @@
 from pytest import fixture
+from OpenSSL import crypto
 from cryptography.hazmat.primitives.asymmetric import rsa
 from facturark.signer import Encrypter
 
@@ -40,9 +41,10 @@ def test_encrypter_verify_signature(encrypter, certificate_pem):
 def test_encrypter_create_signature(encrypter, pkcs12_certificate):
     certificate, password = pkcs12_certificate
     certificate = crypto.load_pkcs12(certificate, password)
+    private_key = certificate.get_privatekey()
 
     digest_b64 = 'Q4H+bP65Y5RVbzAt3jRE2QdShrimTa4wAmpuZ4YxP1Y='
 
-    result = encrypter.create_signature(primary_key, digest_b64)
+    result = encrypter.create_signature(private_key, digest_b64)
 
-    assert result is True
+    assert result is not None
