@@ -2,7 +2,7 @@ from OpenSSL import crypto
 
 
 class Signer:
-    def __init__(self, canonicalizer, hasher, encoder, identifier,
+    def __init__(self, canonicalizer, hasher, encoder, identifier, encrypter,
                  signature_composer, key_info_composer, object_composer,
                  qualifying_properties_composer, signed_properties_composer,
                  signed_info_composer):
@@ -10,6 +10,7 @@ class Signer:
         self.hasher = hasher
         self.encoder = encoder
         self.identifier = identifier
+        self.encrypter = encrypter
         self.signature_composer = signature_composer
         self.key_info_composer = key_info_composer
         self.qualifying_properties_composer = qualifying_properties_composer
@@ -36,8 +37,8 @@ class Signer:
         certificate = self._parse_certificate(
             pkcs12_certificate, pkcs12_password)
 
-        x509_certificate = result.get_certificate()
-        private_key = result.get_privatekey()
+        x509_certificate = certificate.get_certificate()
+        private_key = certificate.get_privatekey()
 
         # Prepare KeyInfo Element
         key_info, key_info_digest, key_info_id = (
@@ -146,3 +147,15 @@ class Signer:
             canonicalized_signed_info))
 
         return signed_info, signed_info_digest
+
+    def _create_signature_digest(self, private_key, signed_info_digest):
+        binary_signed_info_digest = self.encoder.base64_decode(
+            signed_info_digest)
+
+        encrypted_signature_value = self.encrypter.create_signature(
+            private_key, signed_info_digest)
+
+        signature_value_digest = self.encoder.base64_encode(
+            encrypted_signature_value)
+
+        return signature_value_digest

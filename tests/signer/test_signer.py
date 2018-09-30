@@ -1,11 +1,11 @@
 import os
-import io
 from base64 import b64decode, b64encode
 from pytest import fixture
 from lxml.etree import parse, QName
 from OpenSSL import crypto
 from facturark.signer.namespaces import NS
-from facturark.signer import Signer, Canonicalizer, Hasher, Encoder, Identifier
+from facturark.signer import (
+    Signer, Canonicalizer, Hasher, Encoder, Identifier, Encrypter)
 from facturark.signer.composers import (
     KeyInfoComposer, ObjectComposer, SignedInfoComposer)
 from facturark.signer.composers.xades import (
@@ -20,13 +20,14 @@ def signer():
     hasher = Hasher()
     encoder = Encoder()
     identifier = Identifier()
+    encrypter = Encrypter()
     signature_composer = resolve_signature_composer()
     key_info_composer = KeyInfoComposer()
     object_composer = ObjectComposer()
     qualifying_properties_composer = QualifyingPropertiesComposer()
     signed_properties_composer = SignedPropertiesComposer()
     signed_info_composer = resolve_signed_info_composer()
-    signer = Signer(canonicalizer, hasher, encoder, identifier,
+    signer = Signer(canonicalizer, hasher, encoder, identifier, encrypter,
                     signature_composer, key_info_composer, object_composer,
                     qualifying_properties_composer, signed_properties_composer,
                     signed_info_composer)
@@ -41,15 +42,15 @@ def unsigned_invoice():
     return element
 
 
-@fixture
-def pkcs12_certificate():
-    filename = 'certificate.p12'
-    directory = os.path.dirname(os.path.realpath(__file__))
-    path = os.path.join(directory, '..', 'data', filename)
-    with io.open(path, 'rb') as f:
-        certificate = f.read()
-    password = 'test'
-    return (certificate, password)
+# @fixture
+# def pkcs12_certificate():
+#     filename = 'certificate.p12'
+#     directory = os.path.dirname(os.path.realpath(__file__))
+#     path = os.path.join(directory, '..', 'data', filename)
+#     with io.open(path, 'rb') as f:
+#         certificate = f.read()
+#     password = 'test'
+#     return (certificate, password)
 
 
 def test_signer_instantiation(signer):
@@ -138,3 +139,18 @@ def test_signer_prepare_signed_info(signer, unsigned_invoice):
 
     assert signed_info.tag == QName(NS.ds, 'SignedInfo').text
     assert signed_info_digest is not None
+
+
+def test_create_signature_diget(signer, pkcs12_certificate):
+    certificate, password = pkcs12_certificate
+    certificate_object = signer._parse_certificate(certificate, password)
+    private_key = certificate_object.get_privatekey()
+    signed_info_digest = (
+        "d4OJpOqB2nxNMMYSFL8ZU0+3p1AGA1wHy7K21pktdRT5+FuVTJosq"
+        "f5sw88VuTyF6Auh4mtu4sE7DpBHCmX95Q==")
+
+    signature_digest = signer._create_signature_digest(
+        private_key, signed_info_digest)
+
+    assert "".join(b64encode(b64decode(signature_digest)).split()) == (
+        "".join(signature_digest.split()))

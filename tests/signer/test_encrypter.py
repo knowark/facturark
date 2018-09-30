@@ -35,3 +35,14 @@ def test_encrypter_verify_signature(encrypter, certificate_pem):
         certificate_pem, signature_b64, digest_b64)
 
     assert result is True
+
+
+def test_encrypter_create_signature(encrypter, pkcs12_certificate):
+    certificate, password = pkcs12_certificate
+    certificate = crypto.load_pkcs12(certificate, password)
+
+    digest_b64 = 'Q4H+bP65Y5RVbzAt3jRE2QdShrimTa4wAmpuZ4YxP1Y='
+
+    result = encrypter.create_signature(primary_key, digest_b64)
+
+    assert result is True
