@@ -1,3 +1,5 @@
+import os
+import io
 from pytest import fixture
 
 
@@ -47,3 +49,14 @@ q8xiCvRGyzAEHonirgMK2vIXM9uJHvCoN1XZaxB57++FsuyLBiwn5T4ngb8ephNQMvIdofNsK4Ir
 ZXd9YhirV3sZ5bgXtR4Kcn1ughzLrxj8Y5XqGw==
 """
     return signature_value
+
+
+@fixture
+def pkcs12_certificate():
+    filename = 'certificate.p12'
+    directory = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(directory, '..', 'data', filename)
+    with io.open(path, 'rb') as f:
+        certificate = f.read()
+    password = 'test'
+    return (certificate, password)
