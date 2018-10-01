@@ -3,7 +3,7 @@ from base64 import b64decode, b64encode
 from pytest import fixture
 from lxml.etree import parse, QName, tostring
 from OpenSSL import crypto
-from facturark.signer.namespaces import NS
+from facturark.signer.composers.namespaces import NS
 from facturark.signer import (
     Signer, Canonicalizer, Hasher, Encoder, Identifier, Encrypter)
 from facturark.signer.composers import (
@@ -16,7 +16,8 @@ from facturark.signer.resolver import (
 
 
 @fixture
-def signer():
+def signer(pkcs12_certificate):
+    certificate, password = pkcs12_certificate
     canonicalizer = Canonicalizer()
     hasher = Hasher()
     encoder = Encoder()
@@ -32,7 +33,8 @@ def signer():
     signer = Signer(canonicalizer, hasher, encoder, identifier, encrypter,
                     signature_composer, key_info_composer, object_composer,
                     qualifying_properties_composer, signed_properties_composer,
-                    signed_info_composer, signature_value_composer)
+                    signed_info_composer, signature_value_composer,
+                    pkcs12_certificate=certificate, pkcs12_password=password)
     return signer
 
 
@@ -158,9 +160,8 @@ def test_create_signature_value_digest(signer, pkcs12_certificate):
         "".join(signature_digest.split()))
 
 
-def test_signer_sign(signer, unsigned_invoice, pkcs12_certificate):
-    certificate, password = pkcs12_certificate
-    signed_document = signer.sign(unsigned_invoice, certificate, password)
+def test_signer_sign(signer, unsigned_invoice):
+    signed_document = signer.sign(unsigned_invoice)
 
     assert 'Invoice' in signed_document.tag
     assert signed_document.find('.//ds:Signature', vars(NS)) is not None

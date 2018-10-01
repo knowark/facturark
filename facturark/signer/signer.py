@@ -5,7 +5,8 @@ class Signer:
     def __init__(self, canonicalizer, hasher, encoder, identifier, encrypter,
                  signature_composer, key_info_composer, object_composer,
                  qualifying_properties_composer, signed_properties_composer,
-                 signed_info_composer, signature_value_composer):
+                 signed_info_composer, signature_value_composer,
+                 pkcs12_certificate, pkcs12_password):
         self.canonicalizer = canonicalizer
         self.hasher = hasher
         self.encoder = encoder
@@ -22,15 +23,17 @@ class Signer:
             "http://www.w3.org/2001/04/xmlenc#sha512")
         self.digest_algorithm = (
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512")
+        self.pkcs12_certificate = pkcs12_certificate
+        self.pkcs12_password = pkcs12_password
 
-    def sign(self, element, pkcs12_certificate, pkcs12_password):
+    def sign(self, element):
 
         # Create Signature ID
         signature_id = self.identifier.generate_id()
 
         # Parse PKCS12 Certificate
         certificate = self._parse_certificate(
-            pkcs12_certificate, pkcs12_password)
+            self.pkcs12_certificate, self.pkcs12_password)
 
         # Prepare KeyInfo Element
         x509_certificate = certificate.get_certificate()
