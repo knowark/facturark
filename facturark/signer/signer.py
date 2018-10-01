@@ -85,7 +85,7 @@ class Signer:
             crypto.FILETYPE_PEM, certificate_object)
 
         pem_certificate_list = pem_certificate.splitlines()[1:-1]
-        return '\n' + '\n'.join(pem_certificate_list) + '\n'
+        return b'\n' + b'\n'.join(pem_certificate_list) + b'\n'
 
     def _create_reference_dict(self, digest_value, transforms=None):
         reference_dict = {

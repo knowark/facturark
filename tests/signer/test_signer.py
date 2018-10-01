@@ -69,9 +69,9 @@ def test_signer_serialize_certificate(signer, pkcs12_certificate):
 
     result = signer._serialize_certificate(x509_certificate)
 
-    assert 'BEGIN CERTIFICATE' not in result
-    assert "".join(b64encode(b64decode(result)).split()) == (
-        "".join(result.split()))
+    assert b'BEGIN CERTIFICATE' not in result
+    assert b"".join(b64encode(b64decode(result)).split()) == (
+        b"".join(result.split()))
 
 
 def test_signer_prepare_key_info(signer, pkcs12_certificate):
