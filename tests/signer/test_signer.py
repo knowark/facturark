@@ -150,14 +150,14 @@ def test_create_signature_value_digest(signer, pkcs12_certificate):
     certificate_object = signer._parse_certificate(certificate, password)
     private_key = certificate_object.get_privatekey()
     signed_info_digest = (
-        "d4OJpOqB2nxNMMYSFL8ZU0+3p1AGA1wHy7K21pktdRT5+FuVTJosq"
-        "f5sw88VuTyF6Auh4mtu4sE7DpBHCmX95Q==")
+        b"d4OJpOqB2nxNMMYSFL8ZU0+3p1AGA1wHy7K21pktdRT5+FuVTJosq"
+        b"f5sw88VuTyF6Auh4mtu4sE7DpBHCmX95Q==")
 
     signature_digest = signer._create_signature_value_digest(
         private_key, signed_info_digest)
 
-    assert "".join(b64encode(b64decode(signature_digest)).split()) == (
-        "".join(signature_digest.split()))
+    assert b"".join(b64encode(b64decode(signature_digest)).split()) == (
+        b"".join(signature_digest.split()))
 
 
 def test_signer_sign(signer, unsigned_invoice):
