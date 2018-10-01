@@ -2,19 +2,22 @@
 from pytest import fixture
 from lxml.etree import QName, fromstring
 from facturark.signer.composers import (
-    NS, SignatureComposer, ReferenceComposer, SignedInfoComposer)
+    NS, SignatureComposer, SignatureValueComposer,
+    ReferenceComposer, SignedInfoComposer)
 
 
 @fixture
 def composer():
     reference_composer = ReferenceComposer()
     signed_info_composer = SignedInfoComposer(reference_composer)
-    return SignatureComposer(signed_info_composer)
+    signature_value_composer = SignatureValueComposer()
+    return SignatureComposer(signed_info_composer, signature_value_composer)
 
 
 @fixture
 def data_dict():
     return {
+        "@attributes": {'Id': "xmldsig-88fbfc45-3be2-4c4a-83ac-0796e1bad4c5"},
         "signed_info": {
             "canonicalization_method": {
                 "@attributes": {

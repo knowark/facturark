@@ -5,7 +5,7 @@ class Signer:
     def __init__(self, canonicalizer, hasher, encoder, identifier, encrypter,
                  signature_composer, key_info_composer, object_composer,
                  qualifying_properties_composer, signed_properties_composer,
-                 signed_info_composer):
+                 signed_info_composer, signature_value_composer):
         self.canonicalizer = canonicalizer
         self.hasher = hasher
         self.encoder = encoder
@@ -13,9 +13,11 @@ class Signer:
         self.encrypter = encrypter
         self.signature_composer = signature_composer
         self.key_info_composer = key_info_composer
+        self.object_composer = object_composer
         self.qualifying_properties_composer = qualifying_properties_composer
         self.signed_properties_composer = signed_properties_composer
         self.signed_info_composer = signed_info_composer
+        self.signature_value_composer = signature_value_composer
         self.signature_algorithm = (
             "http://www.w3.org/2001/04/xmlenc#sha512")
         self.digest_algorithm = (
@@ -23,39 +25,53 @@ class Signer:
 
     def sign(self, element, pkcs12_certificate, pkcs12_password):
 
-        # Canonicalize Document
-        document = self.canonicalizer.canonicalize(element)
-
-        print('DOCCC')
-        print(document)
-
-        # Create Signature Element
-        signature = self.signature_composer.compose({})
-        print(self.canonicalizer.canonicalize(signature))
+        # Create Signature ID
+        signature_id = self.identifier.generate_id()
 
         # Parse PKCS12 Certificate
         certificate = self._parse_certificate(
             pkcs12_certificate, pkcs12_password)
 
-        x509_certificate = certificate.get_certificate()
-        private_key = certificate.get_privatekey()
-
         # Prepare KeyInfo Element
-        key_info, key_info_digest, key_info_id = (
-            self._prepare_key_info(x509_certificate))
+        x509_certificate = certificate.get_certificate()
+        key_info_id = self.identifier.generate_id(suffix='keyinfo')
+        key_info_element, key_info_digest = (
+            self._prepare_key_info(x509_certificate, key_info_id))
 
         # Prepare Signed Properties Element
-        signed_properties, signed_properties_digest = (
-            self._prepare_signed_properties(x509_certificate))
+        signed_properties_id = signature_id + '-signedprops'
+        signed_properties_element, signed_properties_digest = (
+            self._prepare_signed_properties(
+                x509_certificate, signed_properties_id))
 
         # Prepare Document Element
         document_element, document_digest = (
             self._prepare_document(element))
 
-        # Digest Complete Document
-        # document_digest = self.hasher.hash(hash_method)
+        # Prepare Signed Info
+        signed_info_element, signed_info_digest = self._prepare_signed_info(
+            document_digest, key_info_digest, signed_properties_digest)
 
-        return True
+        # Create Encrypted Signature Digest
+        private_key = certificate.get_privatekey()
+        signature_value_digest = self._create_signature_value_digest(
+            private_key, signed_info_digest)
+
+        # Prepare Signature Value Element
+        uid = signature_id + '-sigvalue'
+        signature_value_element = self._prepare_signature_value(
+            signature_value_digest, uid)
+
+        # Create Signature
+        signature_element = self._create_signature(
+            signature_id, signed_info_element, signature_value_element,
+            key_info_element, signed_properties_element)
+
+        # Inject Signature Element In Document Element
+        signed_document_element = self._inject_signature(
+            document_element, signature_element)
+
+        return signed_document_element.getroot()
 
     def _parse_certificate(self, pkcs12_certificate, pkcs12_password):
         certificate = crypto.load_pkcs12(pkcs12_certificate, pkcs12_password)
@@ -116,6 +132,13 @@ class Signer:
 
         return signed_properties, signed_properties_digest
 
+    def _prepare_signature_value(self, value, uid):
+        signature_value = self.signature_value_composer.compose({
+            "@attributes": {"Id": uid},
+            "#text": value})
+
+        return signature_value
+
     def _prepare_signed_info(self, document_digest, key_info_digest,
                              signed_properties_digest):
         signed_info_dict = {
@@ -148,7 +171,7 @@ class Signer:
 
         return signed_info, signed_info_digest
 
-    def _create_signature_digest(self, private_key, signed_info_digest):
+    def _create_signature_value_digest(self, private_key, signed_info_digest):
         binary_signed_info_digest = self.encoder.base64_decode(
             signed_info_digest)
 
@@ -159,3 +182,30 @@ class Signer:
             encrypted_signature_value)
 
         return signature_value_digest
+
+    def _create_signature(self, signature_id, signed_info_element,
+                          signature_value_element, key_info_element,
+                          signed_properties_element):
+
+        signature = self.signature_composer.compose({
+            '@attributes': {'Id': signature_id}})
+        signature_id = signature.attrib.get('Id')
+        signature.append(signed_info_element)
+        signature.append(signature_value_element)
+        signature.append(key_info_element)
+
+        qualifying_properties_element = (
+            self.qualifying_properties_composer.compose({
+                '@attributes': {'Target': '#' + signature_id}}))
+        qualifying_properties_element.append(signed_properties_element)
+        object_element = self.object_composer.compose({})
+        object_element.append(qualifying_properties_element)
+
+        signature.append(object_element)
+
+        return signature
+
+    def _inject_signature(self, document_element, signature_element):
+        signed_document = self.signature_composer.inject_in_document(
+            document_element, signature_element)
+        return signed_document

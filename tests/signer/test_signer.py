@@ -1,13 +1,14 @@
 import os
 from base64 import b64decode, b64encode
 from pytest import fixture
-from lxml.etree import parse, QName
+from lxml.etree import parse, QName, tostring
 from OpenSSL import crypto
 from facturark.signer.namespaces import NS
 from facturark.signer import (
     Signer, Canonicalizer, Hasher, Encoder, Identifier, Encrypter)
 from facturark.signer.composers import (
-    KeyInfoComposer, ObjectComposer, SignedInfoComposer)
+    KeyInfoComposer, ObjectComposer,
+    SignedInfoComposer, SignatureValueComposer)
 from facturark.signer.composers.xades import (
     QualifyingPropertiesComposer, SignedPropertiesComposer)
 from facturark.signer.resolver import (
@@ -27,10 +28,11 @@ def signer():
     qualifying_properties_composer = QualifyingPropertiesComposer()
     signed_properties_composer = SignedPropertiesComposer()
     signed_info_composer = resolve_signed_info_composer()
+    signature_value_composer = SignatureValueComposer()
     signer = Signer(canonicalizer, hasher, encoder, identifier, encrypter,
                     signature_composer, key_info_composer, object_composer,
                     qualifying_properties_composer, signed_properties_composer,
-                    signed_info_composer)
+                    signed_info_composer, signature_value_composer)
     return signer
 
 
@@ -42,25 +44,8 @@ def unsigned_invoice():
     return element
 
 
-# @fixture
-# def pkcs12_certificate():
-#     filename = 'certificate.p12'
-#     directory = os.path.dirname(os.path.realpath(__file__))
-#     path = os.path.join(directory, '..', 'data', filename)
-#     with io.open(path, 'rb') as f:
-#         certificate = f.read()
-#     password = 'test'
-#     return (certificate, password)
-
-
 def test_signer_instantiation(signer):
     assert signer is not None
-
-
-# def test_signer_sign(signer, unsigned_invoice, pkcs12_certificate):
-#     certificate, password = pkcs12_certificate
-#     result = signer.sign(unsigned_invoice, certificate, password)
-#     assert result is True
 
 
 def test_signer_parse_certificate(signer, pkcs12_certificate):
@@ -141,7 +126,24 @@ def test_signer_prepare_signed_info(signer, unsigned_invoice):
     assert signed_info_digest is not None
 
 
-def test_create_signature_diget(signer, pkcs12_certificate):
+def test_signer_prepare_signature_value(signer):
+    value = ("KhSG6Gats5f8HwyjC/3dG+GmkhwIVjIygwcA9SeiJkEtq6OQw5y"
+             "Qb27y8DzmLRJ7tA/IlxzrnC9V 3MFgShGM+5MeazVoWVdr3jAqHV"
+             "2vsm+INKefUvDjm/buCIxqn9HLuIDash9+hKJRTSaR0GZoRKQV f"
+             "f07v4nnbE0uvhTYoaCR8KcCjk/Mrm4VfmgC8PRFKz9usRfmgQxdUp"
+             "VZTXfy2aqSlkt4VpFhisjA WeQzzquDH/MsT/EtCuGMZEtngbMUYY"
+             "ItRIBOgZ5qPJ9SMW1JIoraaBRdosLj0bSIXnsGhnS0nAYZ N0Trmt"
+             "Bn8ypUGxkMK7KFXhPc2bBoINZxPGeIcw==")
+    uid = "xmldsig-a116f9ea-cbfa-4e45-b026-646e43b86df7-signedprops"
+    signature_value = (
+        signer._prepare_signature_value(value, uid))
+
+    assert signature_value.tag == QName(NS.ds, 'SignatureValue').text
+    assert signature_value.text == value
+    assert signature_value.attrib.get('Id') == uid
+
+
+def test_create_signature_value_digest(signer, pkcs12_certificate):
     certificate, password = pkcs12_certificate
     certificate_object = signer._parse_certificate(certificate, password)
     private_key = certificate_object.get_privatekey()
@@ -149,8 +151,16 @@ def test_create_signature_diget(signer, pkcs12_certificate):
         "d4OJpOqB2nxNMMYSFL8ZU0+3p1AGA1wHy7K21pktdRT5+FuVTJosq"
         "f5sw88VuTyF6Auh4mtu4sE7DpBHCmX95Q==")
 
-    signature_digest = signer._create_signature_digest(
+    signature_digest = signer._create_signature_value_digest(
         private_key, signed_info_digest)
 
     assert "".join(b64encode(b64decode(signature_digest)).split()) == (
         "".join(signature_digest.split()))
+
+
+def test_signer_sign(signer, unsigned_invoice, pkcs12_certificate):
+    certificate, password = pkcs12_certificate
+    signed_document = signer.sign(unsigned_invoice, certificate, password)
+
+    assert 'Invoice' in signed_document.tag
+    assert signed_document.find('.//ds:Signature', vars(NS)) is not None
