@@ -20,3 +20,13 @@ def test_invoice_builder_creation(invoice_builder):
 def test_invoice_builder_build(invoice_builder, invoice_dict):
     result = invoice_builder.build(invoice_dict)
     assert result is not None
+
+
+def test_invoice_builder_build_and_sign(invoice_builder, invoice_dict):
+    class MockSigner:
+        def sign(self, element):
+            return element
+
+    invoice_builder.signer = MockSigner()
+    result = invoice_builder.build(invoice_dict)
+    assert result is not None
