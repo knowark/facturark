@@ -1,4 +1,4 @@
-from facturark.composers import (
+from .composers import (
     AmountComposer, ItemComposer, PriceComposer, PartyTaxSchemeComposer,
     PartyLegalEntityComposer, PersonComposer, AddressComposer,
     LocationComposer, PartyComposer, DespatchComposer, DeliveryComposer,
