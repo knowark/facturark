@@ -1,8 +1,8 @@
-from facturark.builder import InvoiceBuilder
-from facturark.client import Client
-from facturark.resolver import resolve_invoice_composer
-from facturark.validator import Validator
-from facturark.signer.resolver import resolve_signer
+from .builder import InvoiceBuilder
+from .client import Client
+from .resolver import resolve_invoice_composer
+from .validator import Validator
+from .signer.resolver import resolve_signer
 
 
 def build_invoice(invoice_dict, pkcs12_certificate=None, pkcs12_password=None):

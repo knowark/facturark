@@ -1,11 +1,11 @@
-from facturark.signer import Signer
-from facturark.signer.composers import (
+from ..signer import Signer
+from ..signer.composers import (
     SignatureComposer, SignatureValueComposer,
     SignedInfoComposer, ReferenceComposer, KeyInfoComposer, ObjectComposer)
-from facturark.signer.composers.xades import (
+from ..signer.composers.xades import (
     QualifyingPropertiesComposer, SignedPropertiesComposer)
-from facturark.signer import (Canonicalizer, Hasher, Encoder, Identifier,
-                              Encrypter)
+from ..signer import (Canonicalizer, Hasher, Encoder, Identifier,
+                      Encrypter)
 
 
 def resolve_signature_composer():
