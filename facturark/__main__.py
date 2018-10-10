@@ -3,6 +3,7 @@ import sys
 import json
 from argparse import ArgumentParser
 from facturark import build_invoice, send_invoice
+from facturark.utils import json_serialize
 
 
 def read_file(file_path):
@@ -38,7 +39,8 @@ def cli_send_invoice(options_dict):
     request_dict['document'] = request_dict.get('document') or document_bytes
 
     response_dict = send_invoice(request_dict)
-    response_json = json.dumps(response_dict).encode('utf-8')
+    response_json = json.dumps(
+        response_dict, default=json_serialize).encode('utf-8')
     output_file = options_dict.get('output_file')
     write_file(output_file, response_json)
 
