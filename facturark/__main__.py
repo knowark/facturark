@@ -19,7 +19,7 @@ def cli(options_dict):
     action = options_dict.get('action')
     if action == 'build':
         invoice_bytes = read_file(options_dict.get('input_file'))
-        invoice_dict = json.loads(invoice_bytes)
+        invoice_dict = json.loads(invoice_bytes.decode('utf-8'))
         certificate = (read_file(options_dict.get('certificate'))
                        if options_dict.get('certificate') else None)
         password = (read_file(options_dict.get('password'))
