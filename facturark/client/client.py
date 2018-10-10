@@ -29,8 +29,8 @@ class Client:
 
         response = self.client.service.EnvioFacturaElectronica(
             vat, invoice_number, issue_date, zip_file_bytes)
-
-        return response
+        
+        return zeep.helpers.serialize_object(response)
 
     def compose(self, vat, invoice_number, issue_date, document):
         issue_date = datetime.strptime(

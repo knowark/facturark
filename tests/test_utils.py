@@ -1,8 +1,10 @@
 import os
+import json
+from datetime import datetime
 from pytest import raises
 from lxml import etree
 from lxml.etree import parse, fromstring, tostring, XMLSchema
-from facturark.utils import parse_xsd, make_child
+from facturark.utils import parse_xsd, make_child, json_serialize
 
 
 def test_xsd_parser_parse():
@@ -63,3 +65,13 @@ def test_make_child_empty_with_values():
 
     with raises(ValueError):
         child = make_child(parent, tag, text, empty=True)
+
+
+def test_json_serial():
+    data_dict = {'datetime': datetime(2020, 5, 17)}
+    result =  json.dumps(data_dict, default=json_serialize)
+    assert '2020-05-17' in result
+    with raises(TypeError):
+        class Data:
+            pass
+        json.dumps(Data(), default=json_serialize)
