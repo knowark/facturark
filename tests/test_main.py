@@ -17,22 +17,23 @@ def test_parse_send():
 
 
 def test_main(monkeypatch):
-    call_dict = None
+    test_dict = {
+        'call_dict': None
+    }
 
     def mock_cli(options_dict):
-        nonlocal call_dict
-        call_dict = options_dict
+        test_dict['call_dict'] = options_dict
     monkeypatch.setattr(facturark.__main__, 'cli', mock_cli)
 
     args = ['build', 'invoice.json', '-o', 'invoice.xml']
     main(args)
 
-    assert isinstance(call_dict, dict)
-    assert call_dict == {'action': 'build',
-                         'input_file': 'invoice.json',
-                         'certificate': None,
-                         'password': None,
-                         'output_file': 'invoice.xml'}
+    assert isinstance(test_dict['call_dict'], dict)
+    assert test_dict['call_dict'] == {'action': 'build',
+                                      'input_file': 'invoice.json',
+                                      'certificate': None,
+                                      'password': None,
+                                      'output_file': 'invoice.xml'}
 
 
 def test_read_file(tmpdir):
@@ -54,9 +55,11 @@ def test_write_file(tmpdir):
 
 
 def test_cli_build(tmpdir, monkeypatch):
-    test_invoice_dict = None
-    test_pkcs12_certificate = None
-    test_pkcs12_password = None
+    test_data = {
+        'test_invoice_dict': None,
+        'test_pkcs12_certificate': None,
+        'test_pkcs12_password': None
+    }
 
     # Load Invoice File
     test_dir = tmpdir.mkdir("cli")
@@ -67,12 +70,9 @@ def test_cli_build(tmpdir, monkeypatch):
                            pkcs12_certificate=None,
                            pkcs12_password=None):
 
-        nonlocal test_invoice_dict
-        test_invoice_dict = invoice_dict
-        nonlocal test_pkcs12_certificate
-        test_pkcs12_certificate = pkcs12_certificate
-        nonlocal test_pkcs12_password
-        test_pkcs12_password = pkcs12_password
+        test_data['test_invoice_dict'] = test_invoice_dict = invoice_dict
+        test_data['test_pkcs12_certificate'] = pkcs12_certificate
+        test_data['test_pkcs12_password'] = pkcs12_password
 
         return b'<Invoice><Id>777</Id><Invoice>'
 
@@ -89,7 +89,7 @@ def test_cli_build(tmpdir, monkeypatch):
     # Call The Cli
     cli(options_dict)
 
-    assert isinstance(test_invoice_dict, dict)
-    assert test_pkcs12_certificate is None
-    assert test_pkcs12_password is None
+    assert isinstance(test_data['test_invoice_dict'], dict)
+    assert test_data['test_pkcs12_certificate'] is None
+    assert test_data['test_pkcs12_password'] is None
     assert output_pathlocal.read('rb') == b'<Invoice><Id>777</Id><Invoice>'
