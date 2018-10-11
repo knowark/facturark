@@ -10,6 +10,31 @@ class DianExtensionsComposer(Composer):
         root_name = root_name or self.root_name
         root = Element(QName(NS.sts, root_name), nsmap=vars(NS))
 
+        invoice_control = make_child(
+            root, QName(NS.sts, "InvoiceControl"), empty=True)
+        make_child(invoice_control, QName(NS.sts, "InvoiceAuthorization"),
+                   data_dict['invoice_control']['invoice_authorization'])
+
+        authorization_period_dict = (
+            data_dict['invoice_control']['authorization_period'])
+        authorization_period = make_child(
+            invoice_control, QName(NS.sts, "AuthorizationPeriod"), empty=True)
+        make_child(authorization_period, QName(NS.cbc, "StartDate"),
+                   authorization_period_dict['start_date'])
+        make_child(authorization_period, QName(NS.cbc, "EndDate"),
+                   authorization_period_dict['end_date'])
+
+        authorized_invoices_dict = (
+            data_dict['invoice_control']['authorized_invoices'])
+        authorized_invoices = make_child(
+            invoice_control, QName(NS.sts, "AuthorizedInvoices"), empty=True)
+        make_child(authorized_invoices, QName(NS.sts, "Prefix"),
+                   authorized_invoices_dict['prefix'])
+        make_child(authorized_invoices, QName(NS.sts, "From"),
+                   authorized_invoices_dict['from'])
+        make_child(authorized_invoices, QName(NS.sts, "To"),
+                   authorized_invoices_dict['to'])
+
         invoice_source = make_child(
             root, QName(NS.sts, "InvoiceSource"), empty=True)
         make_child(invoice_source, QName(NS.cbc, "IdentificationCode"),

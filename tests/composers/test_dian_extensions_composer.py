@@ -14,7 +14,18 @@ def composer():
 @fixture
 def data_dict():
     return {
-
+        'invoice_control': {
+            'invoice_authorization': '9000000500017960',
+            'authorization_period': {
+                'start_date': '2016-07-11',
+                'end_date': '2016-07-11'
+            },
+            'authorized_invoices': {
+                'prefix': 'PRUE',
+                'from': '980000000',
+                'to': '985000000'
+            }
+        },
         'invoice_source': {
             'identification_code': 'CO'
         },
@@ -33,4 +44,18 @@ def test_compose(composer, data_dict, schema):
 
     assert dian_extensions.prefix == "sts"
     assert dian_extensions.tag == QName(NS.sts, "DianExtensions").text
+    
+    invoice_control = dian_extensions.find(QName(NS.sts, "InvoiceControl"))
+    assert invoice_control is not None
+    assert invoice_control.findtext(
+        QName(NS.sts, "InvoiceAuthorization")) == '9000000500017960'
+    
+    authorization_period = invoice_control.find(
+        QName(NS.sts, "AuthorizationPeriod"))
+    assert authorization_period is not None
+
+    authorized_invoices = invoice_control.find(
+        QName(NS.sts, "AuthorizedInvoices"))
+    assert authorized_invoices is not None
+
     schema.assertValid(dian_extensions)
