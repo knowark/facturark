@@ -74,7 +74,7 @@ class Signer:
         signed_document_element = self._inject_signature(
             document_element, signature_element)
 
-        return signed_document_element.getroot()
+        return signed_document_element
 
     def _parse_certificate(self, pkcs12_certificate, pkcs12_password):
         certificate = crypto.load_pkcs12(pkcs12_certificate, pkcs12_password)

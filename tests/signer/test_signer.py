@@ -163,5 +163,5 @@ def test_create_signature_value_digest(signer, pkcs12_certificate):
 def test_signer_sign(signer, unsigned_invoice):
     signed_document = signer.sign(unsigned_invoice)
 
-    assert 'Invoice' in signed_document.tag
+    assert 'Invoice' in signed_document.getroot().tag
     assert signed_document.find('.//ds:Signature', vars(NS)) is not None
