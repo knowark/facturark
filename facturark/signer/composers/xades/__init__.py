@@ -5,3 +5,4 @@ from .signed_signature_properties_composer import (
 from .signer_role_composer import SignerRoleComposer
 from .signature_policy_identifier_composer import (
     SignaturePolicyIdentifierComposer)
+from .signing_certificate_composer import SigningCertificateComposer
