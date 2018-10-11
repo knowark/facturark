@@ -6,7 +6,13 @@ from .composers import (
     TaxTotalComposer, PaymentComposer, AllowanceChargeComposer,
     DeliveryTermsComposer, MonetaryTotalComposer, ExtensionComposer,
     InvoiceComposer, InvoiceLineComposer, CreditNoteComposer,
-    CreditNoteLineComposer, DebitNoteComposer, DebitNoteLineComposer)
+    CreditNoteLineComposer, DebitNoteComposer, DebitNoteLineComposer,
+    DianExtensionsComposer)
+
+
+def resolve_extensions_composer():
+    dian_extensions_composer = DianExtensionsComposer()
+    return ExtensionComposer(dian_extensions_composer)
 
 
 def resolve_invoice_line_composer():
@@ -72,7 +78,7 @@ def resolve_tax_total_composer():
 
 def resolve_invoice_composer():
     amount_composer = AmountComposer()
-    extension_composer = ExtensionComposer()
+    extension_composer = resolve_extensions_composer()
     invoice_line_composer = resolve_invoice_line_composer()
     monetary_total_composer = MonetaryTotalComposer(amount_composer)
     customer_party_composer = resolve_customer_party_composer()
