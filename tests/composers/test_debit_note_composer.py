@@ -50,6 +50,9 @@ def data_dict():
                     'address': {
                         'department': u'Valle',
                         'city_name': u'Cali',
+                        'country': {
+                            'identification_code': 'CO'
+                        }
                     }
                 }
             }
@@ -81,6 +84,9 @@ def data_dict():
                     'address': {
                         'department': u'Valle',
                         'city_name': u'Cali',
+                        'country': {
+                            'identification_code': 'CO'
+                        }
                     }
                 }
             }
