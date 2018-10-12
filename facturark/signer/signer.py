@@ -139,14 +139,10 @@ class Signer:
         digest_algorithm = self.digest_algorithm
         signing_time = datetime.now().isoformat()
 
-        print('COMPONENTS |||||')
-        print(certificate_object.get_issuer().get_components())
-
         issuer_name = b','.join(
             [key + b'=' + value for key, value in
              certificate_object.get_issuer().get_components()])
         serial_number = str(certificate_object.get_serial_number())
-        print('SERIAL ====>>>>', serial_number)
         digest_value = self._get_certificate_digest_value(certificate_object)
         policy_identifier = self._get_policy_identifier()
         policy_hash = self._get_policy_hash()
