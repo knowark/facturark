@@ -4,7 +4,7 @@ from datetime import datetime
 from pytest import raises
 from lxml import etree
 from lxml.etree import parse, fromstring, tostring, XMLSchema
-from facturark.utils import parse_xsd, make_child, json_serialize
+from facturark.utils import parse_xsd, make_child, json_serialize, read_asset
 
 
 def test_xsd_parser_parse():
@@ -17,6 +17,10 @@ def test_xsd_parser_validate_correct_invoice():
     directory = os.path.dirname(os.path.realpath(__file__))
     doc = parse(os.path.join(directory, "data/signed_invoice.xml"))
     assert xschema.validate(doc)
+
+def test_read_asset():
+    policy = read_asset('politicadefirmav2.pdf')
+    assert isinstance(policy, bytes)
 
 
 def test_make_child():
