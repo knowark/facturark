@@ -12,7 +12,9 @@ from facturark.signer.composers import (
 from facturark.signer.composers.xades import (
     QualifyingPropertiesComposer, SignedPropertiesComposer)
 from facturark.signer.resolver import (
-    resolve_signature_composer, resolve_signed_info_composer)
+    resolve_signature_composer, resolve_signed_info_composer,
+    resolve_signed_properties_composer,
+    resolve_qualifying_properties_composer)
 
 
 @fixture
@@ -26,8 +28,8 @@ def signer(pkcs12_certificate):
     signature_composer = resolve_signature_composer()
     key_info_composer = KeyInfoComposer()
     object_composer = ObjectComposer()
-    qualifying_properties_composer = QualifyingPropertiesComposer()
-    signed_properties_composer = SignedPropertiesComposer()
+    qualifying_properties_composer = resolve_qualifying_properties_composer()
+    signed_properties_composer = resolve_signed_properties_composer()
     signed_info_composer = resolve_signed_info_composer()
     signature_value_composer = SignatureValueComposer()
     signer = Signer(canonicalizer, hasher, encoder, identifier, encrypter,

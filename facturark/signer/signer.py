@@ -1,4 +1,5 @@
 from OpenSSL import crypto
+from datetime import datetime
 
 
 class Signer:
@@ -124,10 +125,81 @@ class Signer:
 
         return key_info, key_info_digest
 
+    def _get_certificate_digest_value(self, certificate_object):
+        return '2el6MfWvYsvEaa/TV513a7tVK0g='
+
+    def _get_policy_identifier(self):
+        return ('https://facturaelectronica.dian.gov.co/'
+                'politicadefirma/v1/politicadefirmav1.pdf')
+
+    def _get_policy_hash(self):
+        return '61fInBICBQOCBwuTwlaOZSi9HKc='
+
     def _prepare_signed_properties(self, certificate_object, uid):
-        signed_properties = self.signed_properties_composer.compose({
-            '@attributes': {'Id': uid}
-        })
+        digest_algorithm = self.digest_algorithm
+        signing_time = datetime.now().isoformat()
+
+        print('COMPONENTS |||||')
+        print(certificate_object.get_issuer().get_components())
+
+        issuer_name = b','.join(
+            [key + b'=' + value for key, value in
+             certificate_object.get_issuer().get_components()])
+        serial_number = str(certificate_object.get_serial_number())
+        print('SERIAL ====>>>>', serial_number)
+        digest_value = self._get_certificate_digest_value(certificate_object)
+        policy_identifier = self._get_policy_identifier()
+        policy_hash = self._get_policy_hash()
+
+        certs = [{
+            'cert_digest': {
+                'digest_method': {
+                    '@attributes': {'Algorithm': digest_algorithm}
+                },
+                'digest_value': digest_value
+            },
+            'issuer_serial': {
+                'X509_issuer_name': issuer_name,
+                'X509_serial_number': serial_number
+            }
+        }]
+
+        signature_policy_id_dict = {
+            'sig_policy_id': {
+                'identifier': policy_identifier
+            },
+            'sig_policy_hash': {
+                'digest_method': {
+                    '@attributes': {
+                        'Algorithm': digest_algorithm
+                    }
+                },
+                'digest_value': policy_hash
+            }
+        }
+        claimed_role = 'supplier'
+
+        signed_properties_dict = {
+            '@attributes': {'Id': uid},
+            'signed_signature_properties': {
+                'signing_time': signing_time,
+                'signing_certificate': {
+                    'certs': certs
+                },
+                'signature_policy_identifier': {
+                    'signature_policy_id': signature_policy_id_dict
+                },
+                'signer_role': {
+                    'claimed_roles': [{
+                        'claimed_role': claimed_role
+                    }]
+                }
+            }
+        }
+
+        signed_properties = self.signed_properties_composer.compose(
+            signed_properties_dict)
+
         canonicalized_signed_properties = self.canonicalizer.canonicalize(
             signed_properties)
         signed_properties_digest = self.encoder.base64_encode(
