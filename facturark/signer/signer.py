@@ -1,5 +1,6 @@
 from OpenSSL import crypto
 from datetime import datetime
+from ..utils import read_asset
 
 
 class Signer:
@@ -132,8 +133,15 @@ class Signer:
         return ('https://facturaelectronica.dian.gov.co/'
                 'politicadefirma/v1/politicadefirmav1.pdf')
 
-    def _get_policy_hash(self):
-        return '61fInBICBQOCBwuTwlaOZSi9HKc='
+    def _get_policy_hash(self, policy_path=None, algorithm=None):
+        algorithm = algorithm or self.digest_algorithm
+        path = policy_path or "politicadefirmav2.pdf"
+
+        policy_binary = read_asset(path)
+        policy_hash = self.hasher.hash(policy_binary, algorithm)
+        policy_digest = self.encoder.base64_encode(policy_hash)
+
+        return policy_digest
 
     def _prepare_signed_properties(self, certificate_object, uid):
         digest_algorithm = self.digest_algorithm

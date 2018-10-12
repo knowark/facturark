@@ -1,4 +1,5 @@
 import os
+import io
 from datetime import date, datetime
 from lxml.etree import parse, XMLSchema, SubElement
 
@@ -33,4 +34,11 @@ def json_serialize(object_):
     """JSON serializer for objects not serializable"""
     if isinstance(object_, (datetime, date)):
         return object_.isoformat()
-    raise TypeError ("Type %s not serializable" % type(object_))
+    raise TypeError("Type %s not serializable" % type(object_))
+
+
+def read_asset(path):
+    assets_directory = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), 'assets')
+    with io.open(os.path.join(assets_directory, path), 'rb') as f:
+        return f.read()

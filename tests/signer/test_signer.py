@@ -3,6 +3,7 @@ from base64 import b64decode, b64encode
 from pytest import fixture
 from lxml.etree import parse, QName, tostring
 from OpenSSL import crypto
+from facturark.utils import read_asset
 from facturark.signer.composers.namespaces import NS
 from facturark.signer import (
     Signer, Canonicalizer, Hasher, Encoder, Identifier, Encrypter)
@@ -88,6 +89,13 @@ def test_signer_prepare_key_info(signer, pkcs12_certificate):
     assert key_info.tag == QName(NS.ds, 'KeyInfo').text
     assert key_info_digest is not None
     assert 'keyinfo' in key_info.attrib.get('Id')
+
+
+def test_get_policy_hash(signer):
+    result = signer._get_policy_hash()
+    assert result == (
+        b"Zcjw1Z9nGQn2j6NyGx8kAaLbOfJGd/fJxRTCeirlqA"
+        b"g7zRG27piJkJOpflGu7XACpMj9hC6dVMcCyzqHxxPZeQ==")
 
 
 def test_signer_prepare_signed_properties(signer, pkcs12_certificate):
