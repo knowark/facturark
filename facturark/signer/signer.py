@@ -126,8 +126,20 @@ class Signer:
 
         return key_info, key_info_digest
 
-    def _get_certificate_digest_value(self, certificate_object):
-        return '2el6MfWvYsvEaa/TV513a7tVK0g='
+    def _get_certificate_digest_value(self, certificate_pem, algorithm=None):
+        algorithm = algorithm or self.digest_algorithm
+
+        normalized_certificate = certificate_pem.replace(
+            b'-----BEGIN CERTIFICATE-----', b'')
+        normalized_certificate = normalized_certificate.replace(
+            b'-----END CERTIFICATE-----', b'')
+
+        certificate_binary = self.encoder.base64_decode(
+            normalized_certificate)
+        certificate_hash = self.hasher.hash(certificate_binary, algorithm)
+        certificate_digest = self.encoder.base64_encode(certificate_hash)
+
+        return certificate_digest
 
     def _get_policy_identifier(self):
         return ('https://facturaelectronica.dian.gov.co/'
@@ -151,7 +163,9 @@ class Signer:
             [key + b'=' + value for key, value in
              certificate_object.get_issuer().get_components()])
         serial_number = str(certificate_object.get_serial_number())
-        digest_value = self._get_certificate_digest_value(certificate_object)
+        certificate_pem = crypto.dump_certificate(
+            crypto.FILETYPE_PEM, certificate_object)
+        digest_value = self._get_certificate_digest_value(certificate_pem)
         policy_identifier = self._get_policy_identifier()
         policy_hash = self._get_policy_hash()
 
