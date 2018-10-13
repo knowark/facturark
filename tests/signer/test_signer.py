@@ -91,6 +91,13 @@ def test_signer_prepare_key_info(signer, pkcs12_certificate):
     assert 'keyinfo' in key_info.attrib.get('Id')
 
 
+def test_get_certificate_digest_value(signer, certificate_pem):
+    result = signer._get_certificate_digest_value(certificate_pem)
+    assert result == (
+        b"7HiEC/QH5hTNtrDLWp4jBzSqiEV3zLFOwCqvnTnXmPGe"
+        b"E4uMmJWCDkPs6tkWAE3rbaIb6palIGsPPOjuetlF5Q==")
+
+
 def test_get_policy_hash(signer):
     result = signer._get_policy_hash()
     assert result == (
