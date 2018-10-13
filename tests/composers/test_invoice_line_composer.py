@@ -1,7 +1,8 @@
 from pytest import fixture
 from lxml.etree import QName
+from facturark.namespaces import NS
 from facturark.composers import (
-    NS, InvoiceLineComposer, PriceComposer, ItemComposer)
+    InvoiceLineComposer, PriceComposer, ItemComposer)
 from facturark.resolver import resolve_invoice_line_composer
 
 

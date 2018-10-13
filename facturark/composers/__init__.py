@@ -1,4 +1,3 @@
-from .namespaces import NS
 from .composer import Composer
 from .address_composer import AddressComposer
 from .allowance_charge_composer import AllowanceChargeComposer
