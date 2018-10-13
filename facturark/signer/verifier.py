@@ -1,6 +1,6 @@
 from copy import deepcopy
 from lxml.etree import tostring, QName, fromstring
-from .composers.namespaces import NS
+from ..namespaces import NS
 
 
 class Verifier:

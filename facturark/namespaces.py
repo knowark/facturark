@@ -20,6 +20,9 @@ class NameSpaces:
         self.udt = ("urn:un:unece:uncefact:data:"
                     "specification:UnqualifiedDataTypesSchemaModule:2")
         self.xsi = "http://www.w3.org/2001/XMLSchema-instance"
+        self.ds = "http://www.w3.org/2000/09/xmldsig#"
+        self.xades = "http://uri.etsi.org/01903/v1.3.2#"
+        self.xades141 = "http://uri.etsi.org/01903/v1.4.1#"
 
 
 NS = NameSpaces()

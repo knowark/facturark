@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from pytest import fixture
 from lxml.etree import QName, fromstring, tostring
-from facturark.signer.composers import NS
+from facturark.namespaces import NS
 from facturark.signer.composers.xades import SignerRoleComposer
 
 

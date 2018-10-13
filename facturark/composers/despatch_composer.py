@@ -1,6 +1,6 @@
 from lxml.etree import Element, QName, tostring
 from ..utils import make_child
-from .namespaces import NS
+from ..namespaces import NS
 from .composer import Composer
 
 

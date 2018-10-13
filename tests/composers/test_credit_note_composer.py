@@ -1,7 +1,7 @@
 import io
 from pytest import fixture, mark
 from lxml.etree import QName, fromstring, tostring
-from facturark.composers import NS
+from facturark.namespaces import NS
 from facturark.resolver import resolve_credit_note_composer
 
 

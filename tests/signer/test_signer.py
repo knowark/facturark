@@ -4,7 +4,7 @@ from pytest import fixture
 from lxml.etree import parse, QName, tostring
 from OpenSSL import crypto
 from facturark.utils import read_asset
-from facturark.signer.composers.namespaces import NS
+from facturark.namespaces import NS
 from facturark.signer import (
     Signer, Canonicalizer, Hasher, Encoder, Identifier, Encrypter)
 from facturark.signer.composers import (
