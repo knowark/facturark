@@ -5,9 +5,10 @@ from .validator import Validator, InvoiceUuidGenerator
 from .signer.resolver import resolve_signer
 
 
-def build_invoice(invoice_dict, pkcs12_certificate=None, pkcs12_password=None):
+def build_invoice(invoice_dict, pkcs12_certificate=None,
+                  pkcs12_password=None, technical_key=None):
     invoice_composer = resolve_invoice_composer()
-    validator = Validator(InvoiceUuidGenerator())
+    validator = Validator(InvoiceUuidGenerator(technical_key))
     signer = resolve_signer(pkcs12_certificate, pkcs12_password)
 
     builder = InvoiceBuilder(invoice_composer, validator, signer)

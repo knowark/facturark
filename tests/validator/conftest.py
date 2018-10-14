@@ -6,7 +6,8 @@ from facturark.validator import Validator, InvoiceUuidGenerator
 
 @fixture
 def invoice_uuid_generator():
-    return InvoiceUuidGenerator()
+    technical_key = '693ff6f2a553c3646a063436fd4dd9ded0311471'
+    return InvoiceUuidGenerator(technical_key)
 
 
 @fixture

@@ -8,7 +8,7 @@ from facturark.validator import Validator, InvoiceUuidGenerator
 @fixture
 def invoice_builder():
     invoice_composer = resolve_invoice_composer()
-    validator = Validator(InvoiceUuidGenerator())
+    validator = Validator(InvoiceUuidGenerator(''))
     builder = InvoiceBuilder(invoice_composer, validator)
     return builder
 
