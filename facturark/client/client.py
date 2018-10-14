@@ -11,7 +11,8 @@ from .utils import (
 
 class Client:
 
-    def __init__(self, username, password, wsdl_url):
+    def __init__(self, analyzer, username, password, wsdl_url):
+        self.analyzer = analyzer
         nonce = b64encode(bytes(randint(0, 100000000)))
         created = datetime.now().isoformat(sep='T')
 
@@ -21,6 +22,9 @@ class Client:
             transport=SoapTransport())
 
     def send(self, vat, invoice_number, issue_date, document):
+        vat = self.analyzer.get_supplier_vat(document)
+        invoice_number = self.analyzer.get_document_number(document)
+        issue_date = self.analyzer.get_issue_date(document)
         issue_date = datetime.strptime(
             issue_date, '%Y-%m-%dT%H:%M:%S')
 
@@ -29,7 +33,7 @@ class Client:
 
         response = self.client.service.EnvioFacturaElectronica(
             vat, invoice_number, issue_date, zip_file_bytes)
-        
+
         return zeep.helpers.serialize_object(response)
 
     def compose(self, vat, invoice_number, issue_date, document):
