@@ -12,7 +12,10 @@ def invoice_uuid_generator():
 
 @fixture
 def validator(invoice_uuid_generator):
-    return Validator(invoice_uuid_generator)
+    class MockUuidGenerator:
+        def generate(self, invoice):
+            return invoice, ""
+    return Validator(MockUuidGenerator())
 
 
 @fixture
