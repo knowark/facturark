@@ -7,8 +7,12 @@ from facturark.validator import Validator, InvoiceUuidGenerator
 
 @fixture
 def invoice_builder():
+    class MockUuidGenerator:
+        def generate(self, invoice):
+            return invoice, ""
+
     invoice_composer = resolve_invoice_composer()
-    validator = Validator(InvoiceUuidGenerator(''))
+    validator = Validator(MockUuidGenerator())
     builder = InvoiceBuilder(invoice_composer, validator)
     return builder
 

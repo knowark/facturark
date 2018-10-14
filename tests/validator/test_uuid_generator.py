@@ -1,3 +1,5 @@
+from facturark.namespaces import NS
+from lxml.etree import tostring
 
 
 def test_invoice_uuid_generator_generate(
@@ -8,11 +10,12 @@ def test_invoice_uuid_generator_generate(
     def mock_hash_uuid(uuid_dict):
         expected_dict['invoice_number'] = uuid_dict['invoice_number']
         expected_dict['technical_key'] = uuid_dict['technical_key']
-        return ''
+        return 'ABC'
 
     invoice_uuid_generator._hash_uuid = mock_hash_uuid
-    result = invoice_uuid_generator.generate(invoice)
+    injected_invoice, uuid_hash = invoice_uuid_generator.generate(invoice)
 
+    assert uuid_hash == 'ABC'
     assert expected_dict['invoice_number'] == '980007541'
     assert expected_dict['technical_key'] == (
         invoice_uuid_generator.technical_key)
@@ -40,7 +43,8 @@ def test_invoice_uuid_generator_parse_invoice(
     assert data_dict['customer_vat'] == '123456789.0'
 
 
-def test_get_tax_values(invoice, invoice_uuid_generator):
+def test_invoice_uuid_generator_get_tax_values(
+        invoice, invoice_uuid_generator):
     tax_code_1, tax_value_1 = invoice_uuid_generator._get_tax_values(
         invoice, '01')
 
@@ -60,7 +64,7 @@ def test_get_tax_values(invoice, invoice_uuid_generator):
     assert tax_value_3 == '0.00'
 
 
-def test_hash_uuid(invoice_uuid_generator):
+def test_invoice_uuid_generator_hash_uuid(invoice_uuid_generator):
     uuid_dict = {
         'invoice_number': '323200000129',
         'invoice_date': '20150812061131',
@@ -81,3 +85,13 @@ def test_hash_uuid(invoice_uuid_generator):
     result = invoice_uuid_generator._hash_uuid(uuid_dict)
 
     assert result == '77c35e565a8d8f9178f2c0cb422b067091c1d760'
+
+
+def test_invoice_uuid_generator_inject_uuid_hash(
+        invoice, invoice_uuid_generator):
+    uuid_hash = '77c35e565a8d8f9178f2c0cb422b067091c1d760'
+
+    injected_invoice = invoice_uuid_generator._inject_uuid_hash(
+        invoice, uuid_hash)
+
+    assert injected_invoice.find('//cbc:UUID', vars(NS)).text == uuid_hash

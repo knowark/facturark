@@ -1,5 +1,5 @@
 from hashlib import sha1
-from lxml.etree import fromstring, tostring
+from lxml.etree import fromstring, tostring, Element, QName
 from ..namespaces import NS
 
 
@@ -11,7 +11,9 @@ class InvoiceUuidGenerator:
     def generate(self, invoice):
         uuid_dict = self._parse_invoice(invoice)
         uuid_dict['technical_key'] = self.technical_key
-        return self._hash_uuid(uuid_dict)
+        uuid_hash = self._hash_uuid(uuid_dict)
+        invoice = self._inject_uuid_hash(invoice, uuid_hash)
+        return invoice, uuid_hash
 
     def _parse_invoice(self, invoice):
         invoice_number = invoice.find('//cbc:ID', vars(NS)).text
@@ -74,3 +76,8 @@ class InvoiceUuidGenerator:
         uuid_bytes = bytes("".join(uuid_list).encode('utf-8'))
 
         return sha1(uuid_bytes).hexdigest()
+
+    def _inject_uuid_hash(self, invoice, uuid_hash):
+        uuid_element = invoice.find('cbc:UUID', vars(NS))
+        uuid_element.text = uuid_hash
+        return invoice

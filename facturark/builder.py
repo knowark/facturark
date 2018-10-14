@@ -10,7 +10,7 @@ class InvoiceBuilder:
 
     def build(self, invoice_dict):
         invoice = self.invoice_composer.compose(invoice_dict)
-        self.validator.validate(invoice)
+        invoice, uuid = self.validator.validate(invoice)
         if self.signer:
             invoice = self.signer.sign(invoice)
-        return tostring(invoice, pretty_print=True)
+        return tostring(invoice, pretty_print=True), uuid
