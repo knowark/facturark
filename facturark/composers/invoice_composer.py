@@ -39,7 +39,7 @@ class InvoiceComposer(Composer):
 
         make_child(root, QName(NS.cbc, "ID"), data_dict['id'])
 
-        make_child(root, QName(NS.cbc, "UUID"), data_dict['uuid'])
+        make_child(root, QName(NS.cbc, "UUID"), 'PLACEHOLDER')
 
         make_child(root, QName(NS.cbc, "IssueDate"), data_dict['issue_date'])
 

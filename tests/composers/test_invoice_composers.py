@@ -45,7 +45,6 @@ def data_dict():
             'extension_content': {}
         }],
         "id": "F0001",
-        "uuid": "a3d6c86a71cbc066aaa19fd363c0fe4b5778d4a0",
         "issue_date": "2018-09-13",
         "issue_time": "00:31:40",
         "invoice_type_code": 1,
@@ -162,8 +161,7 @@ def test_compose(composer, data_dict, schema):
     assert invoice.findtext(QName(NS.cbc, "UBLVersionID")) == "UBL 2.0"
     assert invoice.findtext(QName(NS.cbc, "ProfileID")) == "DIAN 1.0"
     assert invoice.findtext(QName(NS.cbc, "ID")) == "F0001"
-    assert invoice.findtext(QName(NS.cbc, "UUID")) == (
-        "a3d6c86a71cbc066aaa19fd363c0fe4b5778d4a0")
+    assert invoice.findtext(QName(NS.cbc, "UUID")) == 'PLACEHOLDER'
     assert invoice.findtext(QName(NS.cbc, "IssueDate")) == "2018-09-13"
     assert invoice.findtext(QName(NS.cbc, "IssueTime")) == "00:31:40"
     assert invoice.findtext(QName(NS.cbc, "InvoiceTypeCode")) == "1"
