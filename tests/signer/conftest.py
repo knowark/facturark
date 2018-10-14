@@ -58,5 +58,5 @@ def pkcs12_certificate():
     path = os.path.join(directory, '..', 'data', filename)
     with io.open(path, 'rb') as f:
         certificate = f.read()
-    password = 'test'
+    password = b'test'
     return (certificate, password)

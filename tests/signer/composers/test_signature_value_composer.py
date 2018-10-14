@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from pytest import fixture
 from lxml.etree import QName, fromstring
-from facturark.signer.composers import NS, SignatureValueComposer
+from facturark.namespaces import NS
+from facturark.signer.composers import SignatureValueComposer
 
 
 @fixture

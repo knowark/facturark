@@ -3,7 +3,8 @@ from base64 import b64decode, b64encode
 from pytest import fixture
 from lxml.etree import parse, QName, tostring
 from OpenSSL import crypto
-from facturark.signer.composers.namespaces import NS
+from facturark.utils import read_asset
+from facturark.namespaces import NS
 from facturark.signer import (
     Signer, Canonicalizer, Hasher, Encoder, Identifier, Encrypter)
 from facturark.signer.composers import (
@@ -12,7 +13,9 @@ from facturark.signer.composers import (
 from facturark.signer.composers.xades import (
     QualifyingPropertiesComposer, SignedPropertiesComposer)
 from facturark.signer.resolver import (
-    resolve_signature_composer, resolve_signed_info_composer)
+    resolve_signature_composer, resolve_signed_info_composer,
+    resolve_signed_properties_composer,
+    resolve_qualifying_properties_composer)
 
 
 @fixture
@@ -26,8 +29,8 @@ def signer(pkcs12_certificate):
     signature_composer = resolve_signature_composer()
     key_info_composer = KeyInfoComposer()
     object_composer = ObjectComposer()
-    qualifying_properties_composer = QualifyingPropertiesComposer()
-    signed_properties_composer = SignedPropertiesComposer()
+    qualifying_properties_composer = resolve_qualifying_properties_composer()
+    signed_properties_composer = resolve_signed_properties_composer()
     signed_info_composer = resolve_signed_info_composer()
     signature_value_composer = SignatureValueComposer()
     signer = Signer(canonicalizer, hasher, encoder, identifier, encrypter,
@@ -86,6 +89,20 @@ def test_signer_prepare_key_info(signer, pkcs12_certificate):
     assert key_info.tag == QName(NS.ds, 'KeyInfo').text
     assert key_info_digest is not None
     assert 'keyinfo' in key_info.attrib.get('Id')
+
+
+def test_get_certificate_digest_value(signer, certificate_pem):
+    result = signer._get_certificate_digest_value(certificate_pem)
+    assert result == (
+        b"7HiEC/QH5hTNtrDLWp4jBzSqiEV3zLFOwCqvnTnXmPGe"
+        b"E4uMmJWCDkPs6tkWAE3rbaIb6palIGsPPOjuetlF5Q==")
+
+
+def test_get_policy_hash(signer):
+    result = signer._get_policy_hash()
+    assert result == (
+        b"Zcjw1Z9nGQn2j6NyGx8kAaLbOfJGd/fJxRTCeirlqA"
+        b"g7zRG27piJkJOpflGu7XACpMj9hC6dVMcCyzqHxxPZeQ==")
 
 
 def test_signer_prepare_signed_properties(signer, pkcs12_certificate):
@@ -163,5 +180,5 @@ def test_create_signature_value_digest(signer, pkcs12_certificate):
 def test_signer_sign(signer, unsigned_invoice):
     signed_document = signer.sign(unsigned_invoice)
 
-    assert 'Invoice' in signed_document.tag
+    assert 'Invoice' in signed_document.getroot().tag
     assert signed_document.find('.//ds:Signature', vars(NS)) is not None

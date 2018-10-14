@@ -3,9 +3,28 @@ from ..signer.composers import (
     SignatureComposer, SignatureValueComposer,
     SignedInfoComposer, ReferenceComposer, KeyInfoComposer, ObjectComposer)
 from ..signer.composers.xades import (
-    QualifyingPropertiesComposer, SignedPropertiesComposer)
+    QualifyingPropertiesComposer, SignedPropertiesComposer,
+    SigningCertificateComposer, SignaturePolicyIdentifierComposer,
+    SignerRoleComposer, SignedSignaturePropertiesComposer)
 from ..signer import (Canonicalizer, Hasher, Encoder, Identifier,
                       Encrypter)
+
+
+def resolve_signed_properties_composer():
+    signing_certificate_composer = SigningCertificateComposer()
+    signature_policy_identifier_composer = (
+        SignaturePolicyIdentifierComposer())
+    signer_role_composer = SignerRoleComposer()
+    signed_signature_properties_composer = SignedSignaturePropertiesComposer(
+        signing_certificate_composer,
+        signature_policy_identifier_composer,
+        signer_role_composer)
+    return SignedPropertiesComposer(signed_signature_properties_composer)
+
+
+def resolve_qualifying_properties_composer():
+    signed_properties_composer = resolve_signed_properties_composer()
+    return QualifyingPropertiesComposer(signed_properties_composer)
 
 
 def resolve_signature_composer():
@@ -30,8 +49,8 @@ def resolve_signer(certificate, password):
     signature_composer = resolve_signature_composer()
     key_info_composer = KeyInfoComposer()
     object_composer = ObjectComposer()
-    qualifying_properties_composer = QualifyingPropertiesComposer()
-    signed_properties_composer = SignedPropertiesComposer()
+    qualifying_properties_composer = resolve_qualifying_properties_composer()
+    signed_properties_composer = resolve_signed_properties_composer()
     signed_info_composer = resolve_signed_info_composer()
     signature_value_composer = SignatureValueComposer()
     signer = Signer(

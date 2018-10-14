@@ -79,7 +79,7 @@ def test_cli_build(tmpdir, monkeypatch):
         test_data['test_pkcs12_certificate'] = pkcs12_certificate
         test_data['test_pkcs12_password'] = pkcs12_password
 
-        return b'<Invoice><Id>777</Id><Invoice>'
+        return b'<Invoice><Id>777</Id><Invoice>', ''
 
     monkeypatch.setattr(
         facturark.__main__, 'build_invoice', mock_build_invoice)

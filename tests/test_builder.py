@@ -2,13 +2,17 @@ from pytest import fixture
 from facturark.builder import InvoiceBuilder
 from facturark.composers import InvoiceComposer
 from facturark.resolver import resolve_invoice_composer
-from facturark.validator import Validator
+from facturark.validator import Validator, InvoiceUuidGenerator
 
 
 @fixture
 def invoice_builder():
+    class MockUuidGenerator:
+        def generate(self, invoice):
+            return invoice, ""
+
     invoice_composer = resolve_invoice_composer()
-    validator = Validator()
+    validator = Validator(MockUuidGenerator())
     builder = InvoiceBuilder(invoice_composer, validator)
     return builder
 

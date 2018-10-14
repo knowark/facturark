@@ -1,6 +1,7 @@
 from pytest import fixture
 from lxml.etree import QName
-from facturark.composers import NS, AmountComposer
+from facturark.namespaces import NS
+from facturark.composers import AmountComposer
 
 
 @fixture
