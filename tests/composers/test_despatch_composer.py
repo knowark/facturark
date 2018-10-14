@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from pytest import fixture
 from lxml.etree import QName
+from facturark.namespaces import NS
 from facturark.composers import (
-    NS, PartyComposer, PartyTaxSchemeComposer, PartyLegalEntityComposer,
+    PartyComposer, PartyTaxSchemeComposer, PartyLegalEntityComposer,
     PersonComposer, LocationComposer, AddressComposer, DespatchComposer)
 
 
@@ -53,6 +54,9 @@ def data_dict():
                 'address': {
                     'department': u'Valle',
                     'city_name': u'Cali',
+                    'country': {
+                        'identification_code': 'CO'
+                    }
                 }
             }
         }

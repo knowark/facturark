@@ -1,7 +1,7 @@
 import io
 from pytest import fixture, mark
 from lxml.etree import QName, fromstring, tostring
-from facturark.composers import NS
+from facturark.namespaces import NS
 from facturark.composers import InvoiceComposer
 from facturark.resolver import resolve_invoice_composer
 
@@ -14,11 +14,36 @@ def composer():
 @fixture
 def data_dict():
     return {
-        'extensions': [
-            {
-                'extension_content': {}
+        'extensions': [{
+            'extension_content': {
+                'dian_extensions': {
+                    'invoice_control': {
+                        'invoice_authorization': '9000000500017960',
+                        'authorization_period': {
+                            'start_date': '2016-07-11',
+                            'end_date': '2016-07-11'
+                        },
+                        'authorized_invoices': {
+                            'prefix': 'PRUE',
+                            'from': '980000000',
+                            'to': '985000000'
+                        }
+                    },
+                    'invoice_source': {
+                        'identification_code': 'CO'
+                    },
+                    'software_provider': {
+                        'provider_id': '900373115',
+                        'software_id': '0d2e2883-eb8d-4237-87fe-28aeb71e961e'
+                    },
+                    'software_security_code': (
+                        "bdaa51c9953e08dcc8f398961f7cd0717cd5fbea356e93766"
+                        "0aa1a8abbe31f4c9b4eb5cf8682eaca4c8523953253dcce")
+                }
             }
-        ],
+        }, {
+            'extension_content': {}
+        }],
         "id": "F0001",
         "uuid": "a3d6c86a71cbc066aaa19fd363c0fe4b5778d4a0",
         "issue_date": "2018-09-13",
@@ -52,6 +77,9 @@ def data_dict():
                     'address': {
                         'department': u'Valle',
                         'city_name': u'Cali',
+                        'country': {
+                            'identification_code': 'CO'
+                        }
                     }
                 }
             }
@@ -83,6 +111,9 @@ def data_dict():
                     'address': {
                         'department': u'Valle',
                         'city_name': u'Cali',
+                        'country': {
+                            'identification_code': 'CO'
+                        }
                     }
                 }
             }

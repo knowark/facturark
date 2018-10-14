@@ -1,4 +1,4 @@
-from .namespaces import NS
+# from ...namespaces import NS
 from .key_info_composer import KeyInfoComposer
 from .object_composer import ObjectComposer
 from .reference_composer import ReferenceComposer

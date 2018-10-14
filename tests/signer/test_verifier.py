@@ -1,9 +1,9 @@
 import os
 from lxml.etree import parse, QName
 from pytest import fixture, raises
+from facturark.namespaces import NS
 from facturark.signer import (Verifier, Canonicalizer,
                               Encoder, Hasher, Encrypter)
-from facturark.signer.composers.namespaces import NS
 
 
 @fixture

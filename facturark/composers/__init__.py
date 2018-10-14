@@ -1,4 +1,3 @@
-from .namespaces import NS
 from .composer import Composer
 from .address_composer import AddressComposer
 from .allowance_charge_composer import AllowanceChargeComposer
@@ -11,6 +10,7 @@ from .debit_note_line_composer import DebitNoteLineComposer
 from .delivery_composer import DeliveryComposer
 from .delivery_terms_composer import DeliveryTermsComposer
 from .despatch_composer import DespatchComposer
+from .dian_extensions_composer import DianExtensionsComposer
 from .extension_composer import ExtensionComposer
 from .invoice_composer import InvoiceComposer
 from .invoice_line_composer import InvoiceLineComposer

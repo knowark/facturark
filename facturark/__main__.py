@@ -3,6 +3,7 @@ import sys
 import json
 from argparse import ArgumentParser
 from facturark import build_invoice, send_invoice
+from facturark.utils import json_serialize
 
 
 def read_file(file_path):
@@ -20,9 +21,8 @@ def cli_build_invoice(options_dict):
     invoice_dict = json.loads(invoice_bytes.decode('utf-8'))
     certificate = (read_file(options_dict.get('certificate'))
                    if options_dict.get('certificate') else None)
-    password = (read_file(options_dict.get('password'))
-                if options_dict.get('password') else None)
-    invoice_xml = build_invoice(invoice_dict, certificate, password)
+    password = options_dict.get('password')
+    invoice_xml, _ = build_invoice(invoice_dict, certificate, password)
     output_file = options_dict.get('output_file')
     write_file(output_file, invoice_xml)
 
@@ -30,7 +30,7 @@ def cli_build_invoice(options_dict):
 def cli_send_invoice(options_dict):
     request_bytes = read_file(options_dict.get('request_file'))
     request_dict = json.loads(request_bytes.decode('utf-8'))
-    
+
     document_bytes = b''
     if options_dict.get('document_file'):
         document_bytes = read_file(options_dict.get('document_file'))
@@ -38,7 +38,8 @@ def cli_send_invoice(options_dict):
     request_dict['document'] = request_dict.get('document') or document_bytes
 
     response_dict = send_invoice(request_dict)
-    response_json = json.dumps(response_dict).encode('utf-8')
+    response_json = json.dumps(
+        response_dict, default=json_serialize).encode('utf-8')
     output_file = options_dict.get('output_file')
     write_file(output_file, response_json)
 

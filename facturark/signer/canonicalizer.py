@@ -1,5 +1,5 @@
 from lxml.etree import tostring
-from .composers.namespaces import NS
+from ..namespaces import NS
 
 
 class Canonicalizer:
