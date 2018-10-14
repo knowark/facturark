@@ -11,6 +11,13 @@ def test_analyzer_get_document_number(analyzer, document):
 
     result = analyzer.get_document_number(document)
 
+    assert result == 'PRUE980007161'
+
+
+def test_analyzer_get_document_number_without_prefix(analyzer, document):
+
+    result = analyzer.get_document_number(document, without_prefix=True)
+
     assert result == '980007161'
 
 

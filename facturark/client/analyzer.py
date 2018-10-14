@@ -11,14 +11,14 @@ class Analyzer:
              'cac:PartyIdentification/cbc:ID'), vars(NS)).text
         return supplier_vat
 
-    def get_document_number(self, document):
+    def get_document_number(self, document, without_prefix=False):
         element = fromstring(document)
         invoice_number = element.find('cbc:ID', vars(NS)).text
         prefix_element = element.find(
             ('.//sts:DianExtensions/sts:InvoiceControl/'
              'sts:AuthorizedInvoices/sts:Prefix'), vars(NS))
         prefix = ''
-        if prefix_element is not None:
+        if without_prefix and prefix_element is not None:
             prefix = prefix_element.text
         invoice_number = invoice_number.replace(prefix, '')
 
