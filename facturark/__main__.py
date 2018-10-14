@@ -22,7 +22,7 @@ def cli_build_invoice(options_dict):
     certificate = (read_file(options_dict.get('certificate'))
                    if options_dict.get('certificate') else None)
     password = options_dict.get('password')
-    invoice_xml = build_invoice(invoice_dict, certificate, password)
+    invoice_xml, _ = build_invoice(invoice_dict, certificate, password)
     output_file = options_dict.get('output_file')
     write_file(output_file, invoice_xml)
 
@@ -30,7 +30,7 @@ def cli_build_invoice(options_dict):
 def cli_send_invoice(options_dict):
     request_bytes = read_file(options_dict.get('request_file'))
     request_dict = json.loads(request_bytes.decode('utf-8'))
-    
+
     document_bytes = b''
     if options_dict.get('document_file'):
         document_bytes = read_file(options_dict.get('document_file'))
