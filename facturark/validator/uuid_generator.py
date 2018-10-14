@@ -16,33 +16,33 @@ class InvoiceUuidGenerator:
         return invoice, uuid_hash
 
     def _parse_invoice(self, invoice):
-        invoice_number = invoice.find('//cbc:ID', vars(NS)).text
+        invoice_number = invoice.find('cbc:ID', vars(NS)).text
 
-        issue_date = invoice.find('//cbc:IssueDate', vars(NS)).text
-        issue_time = invoice.find('//cbc:IssueTime', vars(NS)).text
+        issue_date = invoice.find('cbc:IssueDate', vars(NS)).text
+        issue_time = invoice.find('cbc:IssueTime', vars(NS)).text
         invoice_date = (issue_date + issue_time).replace(
             ':', '').replace('-', '')
 
         invoice_value = invoice.find(
-            '//fe:LegalMonetaryTotal/cbc:LineExtensionAmount', vars(NS)).text
+            'fe:LegalMonetaryTotal/cbc:LineExtensionAmount', vars(NS)).text
 
         tax_code_1, tax_value_1 = self._get_tax_values(invoice, '01')
         tax_code_2, tax_value_2 = self._get_tax_values(invoice, '02')
         tax_code_3, tax_value_3 = self._get_tax_values(invoice, '03')
 
         payable_value = invoice.find(
-            '//fe:LegalMonetaryTotal/cbc:PayableAmount', vars(NS)).text
+            'fe:LegalMonetaryTotal/cbc:PayableAmount', vars(NS)).text
 
         supplier_vat = invoice.find(
-            ('//fe:AccountingSupplierParty/fe:Party/'
+            ('fe:AccountingSupplierParty/fe:Party/'
              'cac:PartyIdentification/cbc:ID'), vars(NS)).text
 
         customer_type = invoice.find(
-            ('//fe:AccountingCustomerParty/fe:Party/'
+            ('fe:AccountingCustomerParty/fe:Party/'
              'cac:PartyIdentification/cbc:ID'), vars(NS)).attrib['schemeID']
 
         customer_vat = invoice.find(
-            ('//fe:AccountingCustomerParty/fe:Party/'
+            ('fe:AccountingCustomerParty/fe:Party/'
              'cac:PartyIdentification/cbc:ID'), vars(NS)).text
 
         return dict(locals())
@@ -51,7 +51,7 @@ class InvoiceUuidGenerator:
         tax_code = code
         tax_value = '0.00'
         tax_element = invoice.xpath(
-            ('//fe:TaxTotal/fe:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/'
+            ('fe:TaxTotal/fe:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/'
              'cbc:ID[text()="{}"]'.format(code)), namespaces=vars(NS))
         if tax_element:
             tax_code = tax_element[0].text
