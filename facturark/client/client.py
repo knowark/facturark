@@ -21,7 +21,7 @@ class Client:
             wsse=UsernameToken(username, password),
             transport=SoapTransport())
 
-    def send(self, vat, invoice_number, issue_date, document):
+    def send(self, document):
         vat = self.analyzer.get_supplier_vat(document)
         invoice_number = self.analyzer.get_document_number(document)
         issue_date = self.analyzer.get_issue_date(document)
@@ -36,7 +36,10 @@ class Client:
 
         return zeep.helpers.serialize_object(response)
 
-    def compose(self, vat, invoice_number, issue_date, document):
+    def compose(self, document):
+        vat = self.analyzer.get_supplier_vat(document)
+        invoice_number = self.analyzer.get_document_number(document)
+        issue_date = self.analyzer.get_issue_date(document)
         issue_date = datetime.strptime(
             issue_date, '%Y-%m-%dT%H:%M:%S')
 
@@ -46,8 +49,12 @@ class Client:
 
         return root
 
-    def serialize(self, vat, invoice_number, issue_date, document):
-        root = self.compose(vat, invoice_number, issue_date, document)
+    def serialize(self, document):
+        vat = self.analyzer.get_supplier_vat(document)
+        invoice_number = self.analyzer.get_document_number(document)
+        issue_date = self.analyzer.get_issue_date(document)
+
+        root = self.compose(document)
         request_document = tostring(root, pretty_print=True)
 
         return request_document

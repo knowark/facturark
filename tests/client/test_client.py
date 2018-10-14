@@ -3,9 +3,6 @@ from pytest import fixture
 from facturark.client import Client
 
 
-
-
-
 def test_client_instantiation(client):
     assert client
 
