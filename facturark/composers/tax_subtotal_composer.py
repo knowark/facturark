@@ -20,7 +20,7 @@ class TaxSubtotalComposer(Composer):
             data_dict['tax_amount'], 'TaxAmount'))
 
         make_child(root, QName(NS.cbc, 'Percent'),
-                   str(float(data_dict['percent'])),
+                   data_dict['percent'],
                    required=True)
 
         tax_category_dict = data_dict['tax_category']

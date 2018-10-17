@@ -13,7 +13,7 @@ def composer():
 def data_dict():
     return {
         '@attributes': {'currencyID': 'COP'},
-        '#text': 999999
+        '#text': "999999.00"
     }
 
 
@@ -21,7 +21,7 @@ def test_compose(composer, data_dict, schema):
     amount = composer.compose(data_dict, 'LineExtensionAmount')
 
     assert amount.tag == QName(NS.cbc, "LineExtensionAmount").text
-    assert float(amount.text) == 999999
+    assert amount.text == "999999.00"
     assert amount.attrib == data_dict['@attributes']
 
     schema.assertValid(amount)

@@ -13,10 +13,10 @@ def composer():
 def data_dict():
     return {
         'charge_indicator': 'false',
-        'multiplier_factor_numeric': 19,
+        'multiplier_factor_numeric': "19.00",
         'amount': {
             '@attributes': {'currencyID': 'COP'},
-            '#text': 777777
+            '#text': "777777.00"
         }
 
     }
@@ -28,9 +28,9 @@ def test_compose(composer, data_dict, schema):
     assert allowance_charge.tag == QName(NS.fe, "AllowanceCharge").text
     assert allowance_charge.findtext(
         QName(NS.cbc, "ChargeIndicator")) == 'false'
-    assert float(allowance_charge.findtext(
-        QName(NS.cbc, "MultiplierFactorNumeric"))) == 19
-    assert float(allowance_charge.findtext(
-        QName(NS.cbc, "Amount"))) == 777777
+    assert allowance_charge.findtext(
+        QName(NS.cbc, "MultiplierFactorNumeric")) == "19.00"
+    assert allowance_charge.findtext(
+        QName(NS.cbc, "Amount")) == "777777.00"
 
     schema.assertValid(allowance_charge)

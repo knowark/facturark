@@ -12,14 +12,14 @@ def composer():
 @fixture
 def data_dict():
     return {
-        'percent': 19,
+        'percent': "19.00",
         'taxable_amount': {
             '@attributes': {'currencyID': 'COP'},
-            '#text': 11345892
+            '#text': "11345892.00"
         },
         'tax_amount': {
             '@attributes': {'currencyID': 'COP'},
-            '#text': 2155719.48
+            '#text': "2155719.48"
         },
         'tax_category': {
             'tax_scheme': {

@@ -13,10 +13,10 @@ def invoice_dict():
         "uuid": "a3d6c86a71cbc066aaa19fd363c0fe4b5778d4a0",
         "issue_date": "2018-09-13",
         "issue_time": "00:31:40",
-        "invoice_type_code": 1,
+        "invoice_type_code": "1",
         "document_currency_code": "COP",
         "accounting_supplier_party": {
-            'additional_account_id': 1,
+            'additional_account_id': "1",
             'party': {
                 'party_identification': {
                     'id': {
@@ -40,8 +40,8 @@ def invoice_dict():
                 },
                 'physical_location': {
                     'address': {
-                        'department': u'Valle',
-                        'city_name': u'Cali',
+                        'department': 'Valle',
+                        'city_name': 'Cali',
                         'country': {
                             'identification_code': 'CO'
                         }
@@ -50,7 +50,7 @@ def invoice_dict():
             }
         },
         "accounting_customer_party": {
-            'additional_account_id': 1,
+            'additional_account_id': "1",
             'party': {
                 'party_identification': {
                     'id': {
@@ -74,8 +74,8 @@ def invoice_dict():
                 },
                 'physical_location': {
                     'address': {
-                        'department': u'Valle',
-                        'city_name': u'Cali',
+                        'department': 'Valle',
+                        'city_name': 'Cali',
                         'country': {
                             'identification_code': 'CO'
                         }
@@ -89,22 +89,22 @@ def invoice_dict():
                     "@attributes": {
                         "currencyID": "COP"
                     },
-                    "#text": 8934000
+                    "#text": "8934000.00"
                 },
                 "tax_evidence_indicator": "false",
                 "tax_subtotal": {
-                    "percent": 19,
+                    "percent": "19.00",
                     "taxable_amount": {
                         "@attributes": {
                             "currencyID": "COP"
                         },
-                        "#text": 11345892
+                        "#text": "11345892.00"
                     },
                     "tax_amount": {
                         "@attributes": {
                             "currencyID": "COP"
                         },
-                        "#text": 2155719.48
+                        "#text": "2155719.48"
                     },
                     "tax_category": {
                         "tax_scheme": {
@@ -117,15 +117,15 @@ def invoice_dict():
         "legal_monetary_total": {
             'line_extension_amount': {
                 '@attributes': {'currencyID': 'COP'},
-                '#text': 888888
+                '#text': "888888.00"
             },
             'tax_exclusive_amount': {
                 '@attributes': {'currencyID': 'COP'},
-                '#text': 55555
+                '#text': "55555.00"
             },
             'payable_amount': {
                 '@attributes': {'currencyID': 'COP'},
-                '#text': 4444
+                '#text': "4444.00"
             }
         },
         "invoice_lines": [
@@ -134,7 +134,7 @@ def invoice_dict():
                 'invoiced_quantity': '99',
                 'line_extension_amount': {
                     '@attributes': {'currencyID': 'COP'},
-                    '#text': 9876000
+                    '#text': "9876000.00"
                 },
                 'item': {
                     'description': "Line 1"
@@ -142,7 +142,7 @@ def invoice_dict():
                 'price': {
                     'price_amount': {
                         '@attributes': {'currencyID': 'COP'},
-                        '#text': 567
+                        '#text': "567.00"
                     }
                 }
             }
