@@ -83,6 +83,37 @@ def invoice_dict():
                 }
             }
         },
+        "tax_totals": [
+            {
+                "tax_amount": {
+                    "@attributes": {
+                        "currencyID": "COP"
+                    },
+                    "#text": 8934000
+                },
+                "tax_evidence_indicator": "false",
+                "tax_subtotal": {
+                    "percent": 19,
+                    "taxable_amount": {
+                        "@attributes": {
+                            "currencyID": "COP"
+                        },
+                        "#text": 11345892
+                    },
+                    "tax_amount": {
+                        "@attributes": {
+                            "currencyID": "COP"
+                        },
+                        "#text": 2155719.48
+                    },
+                    "tax_category": {
+                        "tax_scheme": {
+                            "id": "01"
+                        }
+                    }
+                }
+            }
+        ],
         "legal_monetary_total": {
             'line_extension_amount': {
                 '@attributes': {'currencyID': 'COP'},

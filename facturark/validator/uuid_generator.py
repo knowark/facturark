@@ -72,6 +72,8 @@ class InvoiceUuidGenerator:
             uuid_dict['customer_type'], uuid_dict['customer_vat'],
             uuid_dict['technical_key']
         ]
+        print('CUFE')
+        print(uuid_list)
 
         uuid_bytes = bytes("".join(uuid_list).encode('utf-8'))
 
