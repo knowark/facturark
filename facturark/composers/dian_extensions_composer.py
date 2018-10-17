@@ -29,7 +29,7 @@ class DianExtensionsComposer(Composer):
         authorized_invoices = make_child(
             invoice_control, QName(NS.sts, "AuthorizedInvoices"), empty=True)
         make_child(authorized_invoices, QName(NS.sts, "Prefix"),
-                   authorized_invoices_dict['prefix'])
+                   authorized_invoices_dict.get('prefix'), required=False)
         make_child(authorized_invoices, QName(NS.sts, "From"),
                    authorized_invoices_dict['from'])
         make_child(authorized_invoices, QName(NS.sts, "To"),
