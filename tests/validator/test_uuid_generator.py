@@ -87,6 +87,29 @@ def test_invoice_uuid_generator_hash_uuid(invoice_uuid_generator):
     assert result == '77c35e565a8d8f9178f2c0cb422b067091c1d760'
 
 
+def test_invoice_uuid_generator_hash_uuid_exportation(invoice_uuid_generator):
+    uuid_dict = {
+        'invoice_number': '8110007869',
+        'invoice_date': '20150721000000',
+        'invoice_value': '20320910.90',
+        'tax_code_1': '01',
+        'tax_value_1': '0.00',
+        'tax_code_2': '02',
+        'tax_value_2': '0.00',
+        'tax_code_3': '03',
+        'tax_value_3': '0.00',
+        'payable_value': '20320910.90',
+        'supplier_vat': '900373076',
+        'customer_type': '',
+        'customer_vat': '',
+        'technical_key': '693ff6f2a553c3646a063436fd4dd9ded0311471'
+    }
+
+    result = invoice_uuid_generator._hash_uuid(uuid_dict)
+
+    assert result == 'a356c87627fc074e950011070786d2c635596d4f'
+
+
 def test_invoice_uuid_generator_inject_uuid_hash(
         invoice, invoice_uuid_generator):
     uuid_hash = '77c35e565a8d8f9178f2c0cb422b067091c1d760'
