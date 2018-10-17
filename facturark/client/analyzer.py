@@ -1,5 +1,5 @@
 from lxml.etree import fromstring
-from facturark.namespaces import NS
+from ..namespaces import NS
 
 
 class Analyzer:
