@@ -7,7 +7,7 @@ from ..signer.composers.xades import (
     SigningCertificateComposer, SignaturePolicyIdentifierComposer,
     SignerRoleComposer, SignedSignaturePropertiesComposer)
 from ..signer import (Canonicalizer, Hasher, Encoder, Identifier,
-                      Encrypter)
+                      Encrypter, Verifier)
 
 
 def resolve_signed_properties_composer():
@@ -60,3 +60,12 @@ def resolve_signer(certificate, password):
         signed_info_composer, signature_value_composer,
         pkcs12_certificate=certificate, pkcs12_password=password)
     return signer
+
+
+def resolve_verifier():
+    canonicalizer = Canonicalizer()
+    encoder = Encoder()
+    hasher = Hasher()
+    encrypter = Encrypter()
+    verifier = Verifier(canonicalizer, encoder, hasher, encrypter)
+    return verifier

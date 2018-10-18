@@ -128,21 +128,45 @@ def test_signer_prepare_document(signer, unsigned_invoice):
 
 
 def test_signer_prepare_signed_info(signer, unsigned_invoice):
-    key_info_digest = (
-        "3yWkQi9ul+9zHh4NwnTPk+LGMcp5ZBIb3SYIXWb3E2r9mThxbL"
-        "RXV0s/CR7ERN231Gdu3V7wOkYtbjBye9KO2A==")
     document_digest = (
         "ICVBnSstvgKi5xp7Gmoj0os/BmzS4tAZqvcif5JEmHkLzQPRUT"
         "7sSn3fJYyhr1MT/WCB0zu6mGu3AKp3tcKTKg==")
+    key_info_digest = (
+        "3yWkQi9ul+9zHh4NwnTPk+LGMcp5ZBIb3SYIXWb3E2r9mThxbL"
+        "RXV0s/CR7ERN231Gdu3V7wOkYtbjBye9KO2A==")
     signed_properties_digest = (
         "1G/hxF2uFiArigAVd6E9S6m2/UrZ1xmHJR+mglGvHmT3TlTa/IZ"
         "qtXCB+fHeH8G+rYvWcCRJSjbIsYV3xOzzcA==")
 
+    document_tuple = ('ABC123', '', document_digest)
+    key_info_tuple = (None, 'keyinfo', key_info_digest)
+    signed_properties_tuple = (None, 'signed_props', signed_properties_digest)
+
     signed_info, signed_info_digest = signer._prepare_signed_info(
-        document_digest, key_info_digest, signed_properties_digest)
+        document_tuple, key_info_tuple, signed_properties_tuple)
+    signed_properties_reference_type = (
+            "http://uri.etsi.org/01903#SignedProperties")
+
 
     assert signed_info.tag == QName(NS.ds, 'SignedInfo').text
     assert signed_info_digest is not None
+    
+    document_reference = signed_info.find(
+        './/ds:Reference[@Id="ABC123"]', vars(NS))
+    assert document_reference.attrib['Id'] == 'ABC123'
+    assert document_reference.attrib['URI'] == ''
+    
+    key_info_reference = signed_info.find(
+        './/ds:Reference[@URI="#keyinfo"]', vars(NS))
+    assert key_info_reference.attrib.get('Id') is None
+    assert key_info_reference.attrib['URI'] == '#keyinfo'
+
+    signed_properties_reference = signed_info.find(
+        './/ds:Reference[@URI="#signed_props"]', vars(NS))
+    assert signed_properties_reference.attrib.get('Id') is None
+    assert signed_properties_reference.attrib['Type'] == (
+        signed_properties_reference_type)
+    assert signed_properties_reference.attrib['URI'] == '#signed_props'
 
 
 def test_signer_prepare_signature_value(signer):

@@ -55,7 +55,10 @@ class Signer:
 
         # Prepare Signed Info
         signed_info_element, signed_info_digest = self._prepare_signed_info(
-            document_digest, key_info_digest, signed_properties_digest)
+            (signature_id + '-ref0', '', document_digest),
+            (None, key_info_id, key_info_digest),
+            (None, signed_properties_id, signed_properties_digest)
+        )
 
         # Create Encrypted Signature Digest
         private_key = certificate.get_privatekey()
@@ -89,14 +92,16 @@ class Signer:
         pem_certificate_list = pem_certificate.splitlines()[1:-1]
         return b'\n' + b'\n'.join(pem_certificate_list) + b'\n'
 
-    def _create_reference_dict(self, digest_value, transforms=None):
+    def _create_reference_dict(self, digest_value, attributes,
+                               transforms=None):
         reference_dict = {
+            "@attributes": attributes,
             "digest_method": {
                 "@attributes": {
                     "Algorithm": self.digest_algorithm
                 }
             },
-            "digest_value": "6F5KPfMMBWPbl8ImvaG9z9NFSLE="
+            "digest_value": digest_value
         }
         if transforms:
             reference_dict['transforms'] = transforms
@@ -232,8 +237,17 @@ class Signer:
 
         return signature_value
 
-    def _prepare_signed_info(self, document_digest, key_info_digest,
-                             signed_properties_digest):
+    def _prepare_signed_info(self, document_tuple, key_info_tuple,
+                             signed_properties_tuple):
+        document_reference_id, document_reference_uri, document_digest = (
+            document_tuple)
+        _, key_info_reference_uri, key_info_digest = (
+            key_info_tuple)
+        _, signed_properties_reference_uri, signed_properties_digest = (
+            signed_properties_tuple)
+        signed_properties_reference_type = (
+            "http://uri.etsi.org/01903#SignedProperties")
+
         signed_info_dict = {
             "canonicalization_method": {
                 "@attributes": {
@@ -247,12 +261,21 @@ class Signer:
                 }
             },
             "references": [
-                self._create_reference_dict(document_digest, [{
-                    "@attributes": {"Algorithm": (
+                self._create_reference_dict(
+                    document_digest,
+                    {'Id': document_reference_id,
+                     'URI': document_reference_uri},
+                    [{"@attributes": {"Algorithm": (
                         "http://www.w3.org/2000/09/"
                         "xmldsig#enveloped-signature")}}]),
-                self._create_reference_dict(key_info_digest),
-                self._create_reference_dict(signed_properties_digest)
+
+                self._create_reference_dict(
+                    key_info_digest,
+                    {'URI': "#" + key_info_reference_uri}),
+                self._create_reference_dict(
+                    signed_properties_digest,
+                    {'Type': signed_properties_reference_type,
+                     'URI': "#" + signed_properties_reference_uri})
             ]
         }
 

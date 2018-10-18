@@ -30,7 +30,12 @@ def test_invoice_builder_build_and_sign(invoice_builder, invoice_dict):
     class MockSigner:
         def sign(self, element):
             return element
+    
+    class MockVerifier:
+        def verify(self, element):
+            return True
 
     invoice_builder.signer = MockSigner()
+    invoice_builder.verifier = MockVerifier()
     result = invoice_builder.build(invoice_dict)
     assert result is not None

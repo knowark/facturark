@@ -2,7 +2,7 @@ from .builder import InvoiceBuilder
 from .client import Client, Analyzer
 from .resolver import resolve_invoice_composer
 from .validator import Validator, InvoiceUuidGenerator
-from .signer.resolver import resolve_signer
+from .signer.resolver import resolve_signer, resolve_verifier
 from .validator.resolver import resolve_validator
 
 
@@ -11,8 +11,9 @@ def build_invoice(invoice_dict, pkcs12_certificate=None,
     invoice_composer = resolve_invoice_composer()
     validator = resolve_validator(technical_key)
     signer = resolve_signer(pkcs12_certificate, pkcs12_password)
+    verifier = resolve_verifier()
 
-    builder = InvoiceBuilder(invoice_composer, validator, signer)
+    builder = InvoiceBuilder(invoice_composer, validator, signer, verifier)
     return builder.build(invoice_dict)
 
 

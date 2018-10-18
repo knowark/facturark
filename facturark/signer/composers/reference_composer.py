@@ -8,7 +8,9 @@ class ReferenceComposer(Composer):
 
     def compose(self, data_dict, root_name=None):
         root_name = root_name or self.root_name
-        root = Element(QName(NS.ds, root_name), nsmap=vars(NS))
+        root = Element(QName(NS.ds, root_name),
+                       data_dict.get('@attributes'),
+                       nsmap=vars(NS))
 
         transforms_list = data_dict.get('transforms')
         if transforms_list:

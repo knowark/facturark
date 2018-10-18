@@ -1,9 +1,9 @@
-from facturark.signer import Signer
+from facturark.signer import Signer, Verifier
 from facturark.signer.composers import (
     SignatureComposer, SignedInfoComposer)
 from facturark.signer.resolver import (
     resolve_signature_composer, resolve_signed_info_composer,
-    resolve_signer)
+    resolve_signer, resolve_verifier)
 
 
 def test_resolve_signature_composer():
@@ -22,3 +22,7 @@ def test_resolve_signer(pkcs12_certificate):
 def test_resolve_signer_no_certificate(pkcs12_certificate):
     certificate, password = None, None
     assert resolve_signer(certificate, password) is None
+
+
+def test_resolve_verifier():
+    assert isinstance(resolve_verifier(), Verifier)
