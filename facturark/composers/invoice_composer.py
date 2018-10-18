@@ -39,7 +39,12 @@ class InvoiceComposer(Composer):
 
         make_child(root, QName(NS.cbc, "ID"), data_dict['id'])
 
-        make_child(root, QName(NS.cbc, "UUID"), data_dict['uuid'])
+        make_child(root, QName(NS.cbc, "UUID"), 'PLACEHOLDER', {
+            'schemeID': "CUFE", 'schemeName': "CUFE",
+            'schemeAgencyID': "195",
+            'schemeAgencyName': ("CO, DIAN (Direccion de "
+                                 "Impuestos y Aduanas Nacionales)")
+        })
 
         make_child(root, QName(NS.cbc, "IssueDate"), data_dict['issue_date'])
 
@@ -56,6 +61,11 @@ class InvoiceComposer(Composer):
 
         root.append(self.customer_party_composer.compose(
             data_dict['accounting_customer_party'], 'AccountingCustomerParty'))
+
+        tax_total_list = data_dict['tax_totals']
+        for tax_total_dict in tax_total_list:
+            root.append(self.tax_total_composer.compose(
+                tax_total_dict, "TaxTotal"))
 
         root.append(self.monetary_total_composer.compose(
             data_dict['legal_monetary_total'], 'LegalMonetaryTotal'))

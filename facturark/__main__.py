@@ -22,7 +22,9 @@ def cli_build_invoice(options_dict):
     certificate = (read_file(options_dict.get('certificate'))
                    if options_dict.get('certificate') else None)
     password = options_dict.get('password')
-    invoice_xml, _ = build_invoice(invoice_dict, certificate, password)
+    technical_key = options_dict.get('technical_key')
+    invoice_xml, _ = build_invoice(
+        invoice_dict, certificate, password, technical_key)
     output_file = options_dict.get('output_file')
     write_file(output_file, invoice_xml)
 
@@ -53,6 +55,10 @@ def parse(arg_list):
     build_parser.add_argument('-c', '--certificate')
     build_parser.add_argument('-p', '--password')
     build_parser.add_argument('-o', '--output_file')
+<<<<<<< HEAD
+=======
+    build_parser.add_argument('-t', '--technical_key')
+>>>>>>> 6dfa19e9e6248f4a1e8dd6e1fb044c73e17d376a
     build_parser.set_defaults(func=cli_build_invoice)
 
     send_parser = subparsers.add_parser('send')

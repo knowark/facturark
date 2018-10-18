@@ -45,7 +45,6 @@ def data_dict():
             'extension_content': {}
         }],
         "id": "F0001",
-        "uuid": "a3d6c86a71cbc066aaa19fd363c0fe4b5778d4a0",
         "issue_date": "2018-09-13",
         "issue_time": "00:31:40",
         "invoice_type_code": 1,
@@ -75,8 +74,8 @@ def data_dict():
                 },
                 'physical_location': {
                     'address': {
-                        'department': u'Valle',
-                        'city_name': u'Cali',
+                        'department': 'Valle',
+                        'city_name': 'Cali',
                         'country': {
                             'identification_code': 'CO'
                         }
@@ -85,7 +84,7 @@ def data_dict():
             }
         },
         "accounting_customer_party": {
-            'additional_account_id': 1,
+            'additional_account_id': "1",
             'party': {
                 'party_identification': {
                     'id': {
@@ -109,8 +108,8 @@ def data_dict():
                 },
                 'physical_location': {
                     'address': {
-                        'department': u'Valle',
-                        'city_name': u'Cali',
+                        'department': 'Valle',
+                        'city_name': 'Cali',
                         'country': {
                             'identification_code': 'CO'
                         }
@@ -118,18 +117,49 @@ def data_dict():
                 }
             }
         },
+        "tax_totals": [
+            {
+                "tax_amount": {
+                    "@attributes": {
+                        "currencyID": "COP"
+                    },
+                    "#text": "8934000.00"
+                },
+                "tax_evidence_indicator": "false",
+                "tax_subtotal": {
+                    "percent": "19.00",
+                    "taxable_amount": {
+                        "@attributes": {
+                            "currencyID": "COP"
+                        },
+                        "#text": "11345892.00"
+                    },
+                    "tax_amount": {
+                        "@attributes": {
+                            "currencyID": "COP"
+                        },
+                        "#text": "2155719.48"
+                    },
+                    "tax_category": {
+                        "tax_scheme": {
+                            "id": "01"
+                        }
+                    }
+                }
+            }
+        ],
         "legal_monetary_total": {
             'line_extension_amount': {
                 '@attributes': {'currencyID': 'COP'},
-                '#text': 888888
+                '#text': "888888.00"
             },
             'tax_exclusive_amount': {
                 '@attributes': {'currencyID': 'COP'},
-                '#text': 55555
+                '#text': "55555.00"
             },
             'payable_amount': {
                 '@attributes': {'currencyID': 'COP'},
-                '#text': 4444
+                '#text': "4444.00"
             }
         },
         "invoice_lines": [
@@ -138,7 +168,7 @@ def data_dict():
                 'invoiced_quantity': '99',
                 'line_extension_amount': {
                     '@attributes': {'currencyID': 'COP'},
-                    '#text': 9876000
+                    '#text': "9876000.00"
                 },
                 'item': {
                     'description': "Line 1"
@@ -146,7 +176,7 @@ def data_dict():
                 'price': {
                     'price_amount': {
                         '@attributes': {'currencyID': 'COP'},
-                        '#text': 567
+                        '#text': "567.00"
                     }
                 }
             }
@@ -162,8 +192,7 @@ def test_compose(composer, data_dict, schema):
     assert invoice.findtext(QName(NS.cbc, "UBLVersionID")) == "UBL 2.0"
     assert invoice.findtext(QName(NS.cbc, "ProfileID")) == "DIAN 1.0"
     assert invoice.findtext(QName(NS.cbc, "ID")) == "F0001"
-    assert invoice.findtext(QName(NS.cbc, "UUID")) == (
-        "a3d6c86a71cbc066aaa19fd363c0fe4b5778d4a0")
+    assert invoice.findtext(QName(NS.cbc, "UUID")) == 'PLACEHOLDER'
     assert invoice.findtext(QName(NS.cbc, "IssueDate")) == "2018-09-13"
     assert invoice.findtext(QName(NS.cbc, "IssueTime")) == "00:31:40"
     assert invoice.findtext(QName(NS.cbc, "InvoiceTypeCode")) == "1"

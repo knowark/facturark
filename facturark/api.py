@@ -1,5 +1,5 @@
 from .builder import InvoiceBuilder
-from .client import Client
+from .client import Client, Analyzer
 from .resolver import resolve_invoice_composer
 from .validator import Validator, InvoiceUuidGenerator
 from .signer.resolver import resolve_signer
@@ -18,6 +18,7 @@ def build_invoice(invoice_dict, pkcs12_certificate=None,
 
 def send_invoice(request_dict):
     client = Client(
+        Analyzer(),
         request_dict.pop("username"),
         request_dict.pop("password"),
         request_dict.pop("wsdl_url"))

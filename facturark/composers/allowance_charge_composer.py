@@ -16,7 +16,7 @@ class AllowanceChargeComposer(Composer):
         make_child(root, QName(NS.cbc, 'ChargeIndicator'),
                    data_dict['charge_indicator'])
         make_child(root, QName(NS.cbc, 'MultiplierFactorNumeric'),
-                   str(float(data_dict['multiplier_factor_numeric'])))
+                   data_dict['multiplier_factor_numeric'])
 
         root.append(self.amount_composer.compose(data_dict['amount'],
                                                  'Amount'))

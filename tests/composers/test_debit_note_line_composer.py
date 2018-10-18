@@ -16,7 +16,7 @@ def data_dict():
         'id': '1',
         'line_extension_amount': {
             '@attributes': {'currencyID': 'COP'},
-            '#text': 3456788
+            '#text': "3456788.00"
         }
     }
 

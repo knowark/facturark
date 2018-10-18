@@ -18,7 +18,7 @@ def data_dict():
         'invoiced_quantity': '99',
         'line_extension_amount': {
             '@attributes': {'currencyID': 'COP'},
-            '#text': 9876000
+            '#text': "9876000.00"
         },
         'item': {
             'description': "Line 1"
@@ -26,7 +26,7 @@ def data_dict():
         'price': {
             'price_amount': {
                 '@attributes': {'currencyID': 'COP'},
-                '#text': 567
+                '#text': "567.00"
             }
         }
     }
@@ -41,7 +41,7 @@ def test_compose(composer, data_dict, schema):
 
     line_extension_amount = invoice_line.find(
         QName(NS.cbc, "LineExtensionAmount"))
-    assert float(line_extension_amount.text) == 9876000
+    assert line_extension_amount.text == "9876000.00"
     assert line_extension_amount.attrib['currencyID'] == 'COP'
 
     item = invoice_line.find(QName(NS.fe, 'Item'))
@@ -49,7 +49,7 @@ def test_compose(composer, data_dict, schema):
 
     price = invoice_line.find(QName(NS.fe, 'Price'))
     price_amount = price.find(QName(NS.cbc, "PriceAmount"))
-    assert float(price_amount.text) == 567
+    assert price_amount.text == "567.00"
     assert price_amount.attrib['currencyID'] == 'COP'
 
     schema.assertValid(invoice_line)

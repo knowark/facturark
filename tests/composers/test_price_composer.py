@@ -14,7 +14,7 @@ def data_dict():
     return {
         'price_amount': {
             '@attributes': {'currencyID': 'COP'},
-            '#text':  777.77
+            '#text':  "777.77"
         }
     }
 

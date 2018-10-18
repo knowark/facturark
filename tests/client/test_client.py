@@ -3,24 +3,6 @@ from pytest import fixture
 from facturark.client import Client
 
 
-@fixture
-def client():
-    username = "USER"
-    password = "PASS"
-    test_url = ("tests/data/electronic_invoice.wsdl")
-
-    return Client(username, password, test_url)
-
-
-@fixture
-def request_dict():
-    return dict(
-        vat="900555666",
-        invoice_number="0001",
-        issue_date="2018-09-14T05:23:31",
-        document=b"<XML_DATA></XML_DATA>")
-
-
 def test_client_instantiation(client):
     assert client
 
