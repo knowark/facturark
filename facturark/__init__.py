@@ -2,7 +2,7 @@
 
 """Top-level package for FacturArk."""
 
-from .api import build_invoice, send_invoice
+from .api import build_invoice, send_invoice, verify_document
 
 __author__ = """Nubark"""
 __email__ = 'info@nubark.com'

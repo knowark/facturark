@@ -24,3 +24,8 @@ def send_invoice(request_dict):
         request_dict.pop("password"),
         request_dict.pop("wsdl_url"))
     return client.send(**request_dict)
+
+
+def verify_document(document):
+    verifier = resolve_verifier()
+    return verifier.verify_bytes(document)

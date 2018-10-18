@@ -15,6 +15,11 @@ def test_api_build(invoice_dict, monkeypatch):
         assert result is not None
 
 
+def test_api_verify(signed_document_sha512, monkeypatch):
+    result = facturark.verify_document(signed_document_sha512)
+    assert result is True
+
+
 def test_api_send(monkeypatch):
     request_dict = {
         "username": "USER",

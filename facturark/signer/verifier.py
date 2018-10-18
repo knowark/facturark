@@ -39,6 +39,10 @@ class Verifier:
 
         return True
 
+    def verify_bytes(self, document):
+        element = fromstring(document)
+        return self.verify(element)
+
     def _get_signature(self, element):
         path = self.signature_path
         signature = element.find(path, namespaces=vars(NS))
