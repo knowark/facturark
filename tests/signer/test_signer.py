@@ -92,14 +92,16 @@ def test_signer_prepare_key_info(signer, pkcs12_certificate):
 
 
 def test_get_certificate_digest_value(signer, certificate_pem):
-    result = signer._get_certificate_digest_value(certificate_pem)
+    algorithm = "http://www.w3.org/2001/04/xmlenc#sha512"
+    result = signer._get_certificate_digest_value(certificate_pem, algorithm)
     assert result == (
         b"7HiEC/QH5hTNtrDLWp4jBzSqiEV3zLFOwCqvnTnXmPGe"
         b"E4uMmJWCDkPs6tkWAE3rbaIb6palIGsPPOjuetlF5Q==")
 
 
 def test_get_policy_hash(signer):
-    result = signer._get_policy_hash()
+    algorithm = "http://www.w3.org/2001/04/xmlenc#sha512"
+    result = signer._get_policy_hash(algorithm)
     assert result == (
         b"Zcjw1Z9nGQn2j6NyGx8kAaLbOfJGd/fJxRTCeirlqA"
         b"g7zRG27piJkJOpflGu7XACpMj9hC6dVMcCyzqHxxPZeQ==")

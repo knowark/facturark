@@ -131,8 +131,8 @@ class Signer:
 
         return key_info, key_info_digest
 
-    def _get_certificate_digest_value(self, certificate_pem, algorithm=None):
-        algorithm = algorithm or self.digest_algorithm
+    def _get_certificate_digest_value(self, certificate_pem, algorithm):
+        algorithm = algorithm
 
         normalized_certificate = certificate_pem.replace(
             b'-----BEGIN CERTIFICATE-----', b'')
@@ -150,8 +150,8 @@ class Signer:
         return ('https://facturaelectronica.dian.gov.co/'
                 'politicadefirma/v1/politicadefirmav1.pdf')
 
-    def _get_policy_hash(self, policy_path=None, algorithm=None):
-        algorithm = algorithm or self.digest_algorithm
+    def _get_policy_hash(self, algorithm, policy_path=None):
+        algorithm = algorithm
         path = policy_path or "politicadefirmav2.pdf"
 
         policy_binary = read_asset(path)
@@ -170,9 +170,10 @@ class Signer:
         serial_number = str(certificate_object.get_serial_number())
         certificate_pem = crypto.dump_certificate(
             crypto.FILETYPE_PEM, certificate_object)
-        digest_value = self._get_certificate_digest_value(certificate_pem)
+        digest_value = self._get_certificate_digest_value(certificate_pem,
+                                                          digest_algorithm)
         policy_identifier = self._get_policy_identifier()
-        policy_hash = self._get_policy_hash()
+        policy_hash = self._get_policy_hash(digest_algorithm)
 
         certs = [{
             'cert_digest': {
@@ -226,7 +227,8 @@ class Signer:
         canonicalized_signed_properties = self.canonicalizer.canonicalize(
             signed_properties)
         signed_properties_digest = self.encoder.base64_encode(
-            self.hasher.hash(canonicalized_signed_properties))
+            self.hasher.hash(
+                canonicalized_signed_properties, digest_algorithm))
 
         return signed_properties, signed_properties_digest
 

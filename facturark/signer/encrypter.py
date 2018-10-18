@@ -28,9 +28,8 @@ class Encrypter:
                                 self.algorithms[algorithm][0])
         return signature
 
-    def verify_signature(self, certificate_b64, signature_b64, digest_b64,
-                         algorithm=("http://www.w3.org/2001/04/"
-                                    "xmldsig-more#rsa-sha512")):
+    def verify_signature(self, certificate_b64, signature_b64,
+                         digest_b64, algorithm):
         certificate = self._parse_certificate(certificate_b64)
         certificate = x509.load_pem_x509_certificate(
             certificate_b64, default_backend())
@@ -43,7 +42,7 @@ class Encrypter:
         if hasattr(algorithm, 'encode'):
             algorithm = algorithm.encode('utf8')
         algorithm = algorithm.decode("utf-8")
-        
+
         hash_algorithm = self.algorithms[algorithm][1]()
 
         print("SIGNATURE =======", signature)
