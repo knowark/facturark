@@ -31,9 +31,10 @@ def test_encrypter_verify_signature(encrypter, certificate_pem):
         b"XsbTpSuoQQSjBb6A7KLGS8WNTSPbq8xiCvRGyzAEHonirgMK2vIXM9uJHvCoN1XZaxB"
         b"57++FsuyLBiwn5T4ngb8ephNQMvIdofNsK4IrZXd9YhirV3sZ5bgXtR4Kcn1ughzLrx"
         b"j8Y5XqGw==")
+    algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
 
     result = encrypter.verify_signature(
-        certificate_pem, signature_b64, digest_b64)
+        certificate_pem, signature_b64, digest_b64, algorithm)
 
     assert result is True
 

@@ -35,7 +35,7 @@ class Verifier:
 
         # Verify Encrypted Signature
         self.encrypter.verify_signature(
-            certificate, signature_value, signed_info_digest)
+            certificate, signature_value, signed_info_digest, method)
 
         return True
 
@@ -95,7 +95,7 @@ class Verifier:
         resource = deepcopy(element)
 
         if sanitized_uri:
-            path = '//*[@Id="{}"]'.format(sanitized_uri)
+            path = './/*[@Id="{}"]'.format(sanitized_uri)
             resource = element.find(path, namespaces=vars(NS))
         else:
             self._remove_signature(resource)

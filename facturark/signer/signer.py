@@ -22,9 +22,9 @@ class Signer:
         self.signed_info_composer = signed_info_composer
         self.signature_value_composer = signature_value_composer
         self.signature_algorithm = (
-            "http://www.w3.org/2001/04/xmlenc#sha512")
-        self.digest_algorithm = (
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512")
+        self.digest_algorithm = (
+            "http://www.w3.org/2001/04/xmlenc#sha512")
         self.pkcs12_certificate = pkcs12_certificate
         self.pkcs12_password = pkcs12_password
 
@@ -292,7 +292,7 @@ class Signer:
             signed_info_digest)
 
         encrypted_signature_value = self.encrypter.create_signature(
-            private_key, signed_info_digest)
+            private_key, signed_info_digest, self.signature_algorithm)
 
         signature_value_digest = self.encoder.base64_encode(
             encrypted_signature_value)
