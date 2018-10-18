@@ -44,7 +44,11 @@ def test_compose(composer, data_dict, schema):
 
     tax_amount = tax_total.find(
         QName(NS.cbc, "TaxAmount"))
+<<<<<<< HEAD
+    assert float(tax_amount.text) == 8934000
+=======
     assert tax_amount.text == "8934000.00"
+>>>>>>> 6dfa19e9e6248f4a1e8dd6e1fb044c73e17d376a
     assert tax_amount.attrib['currencyID'] == 'COP'
 
     assert tax_total.findtext(QName(NS.cbc, 'TaxEvidenceIndicator')) == 'false'
