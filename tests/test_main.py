@@ -67,12 +67,8 @@ def test_cli_build(tmpdir, monkeypatch):
     test_data = {
         'test_invoice_dict': None,
         'test_pkcs12_certificate': None,
-<<<<<<< HEAD
-        'test_pkcs12_password': None
-=======
         'test_pkcs12_password': None,
         'test_technical_key': None
->>>>>>> 6dfa19e9e6248f4a1e8dd6e1fb044c73e17d376a
     }
 
     # Load Invoice File
@@ -82,13 +78,6 @@ def test_cli_build(tmpdir, monkeypatch):
 
     def mock_build_invoice(invoice_dict,
                            pkcs12_certificate=None,
-<<<<<<< HEAD
-                           pkcs12_password=None):
-
-        test_data['test_invoice_dict'] = test_invoice_dict = invoice_dict
-        test_data['test_pkcs12_certificate'] = pkcs12_certificate
-        test_data['test_pkcs12_password'] = pkcs12_password
-=======
                            pkcs12_password=None,
                            technical_key=None):
 
@@ -96,7 +85,6 @@ def test_cli_build(tmpdir, monkeypatch):
         test_data['test_pkcs12_certificate'] = pkcs12_certificate
         test_data['test_pkcs12_password'] = pkcs12_password
         test_data['test_tecnical_key'] = technical_key
->>>>>>> 6dfa19e9e6248f4a1e8dd6e1fb044c73e17d376a
 
         return b'<Invoice><Id>777</Id><Invoice>', ''
 
@@ -116,10 +104,7 @@ def test_cli_build(tmpdir, monkeypatch):
     assert isinstance(test_data['test_invoice_dict'], dict)
     assert test_data['test_pkcs12_certificate'] is None
     assert test_data['test_pkcs12_password'] is None
-<<<<<<< HEAD
-=======
     assert test_data['test_technical_key'] is None
->>>>>>> 6dfa19e9e6248f4a1e8dd6e1fb044c73e17d376a
     assert output_pathlocal.read('rb') == b'<Invoice><Id>777</Id><Invoice>'
 
 
