@@ -16,4 +16,4 @@ class InvoiceBuilder:
         if self.signer and self.verifier:
             invoice = self.signer.sign(invoice)
             self.verifier.verify(invoice)
-        return tostring(invoice, pretty_print=True), uuid
+        return tostring(invoice), uuid

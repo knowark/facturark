@@ -113,9 +113,9 @@ class Verifier:
     def _extract_certificate(self, element):
         path = './/ds:X509Certificate'
         certificate = element.find(path, namespaces=vars(NS))
-        certificate_bytes = b"-----BEGIN CERTIFICATE-----"
-        certificate_bytes += certificate.text.encode('utf-8')
-        certificate_bytes += b"-----END CERTIFICATE-----"
+        certificate_bytes = b"-----BEGIN CERTIFICATE-----\n"
+        certificate_bytes += certificate.text.encode('utf-8').strip()
+        certificate_bytes += b"\n-----END CERTIFICATE-----"
         return certificate_bytes
 
     def _extract_signature_value(self, element):
@@ -143,5 +143,6 @@ class Verifier:
             computed_digest)
         decoded_given_digest = self.encoder.base64_decode(
             given_digest)
+
         if decoded_computed_digest != decoded_given_digest:
             raise ValueError("Mismatched digest values")

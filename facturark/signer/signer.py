@@ -1,5 +1,5 @@
 from OpenSSL import crypto
-from datetime import datetime
+from datetime import datetime, timedelta, tzinfo
 from ..utils import read_asset
 
 
@@ -22,9 +22,9 @@ class Signer:
         self.signed_info_composer = signed_info_composer
         self.signature_value_composer = signature_value_composer
         self.signature_algorithm = (
-            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512")
+            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")
         self.digest_algorithm = (
-            "http://www.w3.org/2001/04/xmlenc#sha512")
+            "http://www.w3.org/2001/04/xmlenc#sha256")
         self.pkcs12_certificate = pkcs12_certificate
         self.pkcs12_password = pkcs12_password
 
@@ -61,7 +61,7 @@ class Signer:
         )
 
         # Create Encrypted Signature Digest
-        private_key = certificate.get_privatekey()
+        private_key = certificate.get_privatekey().to_cryptography_key()
         signature_value_digest = self._create_signature_value_digest(
             private_key, signed_info_digest)
 
@@ -148,7 +148,7 @@ class Signer:
 
     def _get_policy_identifier(self):
         return ('https://facturaelectronica.dian.gov.co/'
-                'politicadefirma/v1/politicadefirmav1.pdf')
+                'politicadefirma/v2/politicadefirmav2.pdf')
 
     def _get_policy_hash(self, algorithm, policy_path=None):
         algorithm = algorithm
@@ -160,9 +160,28 @@ class Signer:
 
         return policy_digest
 
+    def _get_local_time(self):
+        class EST(tzinfo):
+            def utcoffset(self, dt):
+                return timedelta(hours=-5)
+
+            def tzname(self, dt):
+                return ""
+
+            def dst(self, dt):
+                return timedelta(0)
+
+        now = datetime.now(tz=EST())
+
+        datetime_format = '%Y-%m-%dT%H:%M:%S.%f%Z%z'
+        serialized_now = now.strftime(datetime_format)
+        timezone_suffix = serialized_now[-6:]
+        local_time = serialized_now[:-9] + timezone_suffix
+        return local_time
+
     def _prepare_signed_properties(self, certificate_object, uid):
         digest_algorithm = self.digest_algorithm
-        signing_time = datetime.now().isoformat()
+        signing_time = self._get_local_time()
 
         issuer_name = b','.join(
             [key + b'=' + value for key, value in
@@ -290,9 +309,6 @@ class Signer:
         return signed_info, signed_info_digest
 
     def _create_signature_value_digest(self, private_key, signed_info_digest):
-        binary_signed_info_digest = self.encoder.base64_decode(
-            signed_info_digest)
-
         encrypted_signature_value = self.encrypter.create_signature(
             private_key, signed_info_digest, self.signature_algorithm)
 

@@ -17,6 +17,6 @@ class KeyInfoComposer(Composer):
         X509_data_dict = data_dict['X509_data']
         X509_data = make_child(root, QName(NS.ds, 'X509Data'), empty=True)
         make_child(X509_data, QName(NS.ds, 'X509Certificate'),
-                   X509_data_dict['X509_certificate'])
+                   X509_data_dict['X509_certificate'].strip())
 
         return root

@@ -1,6 +1,6 @@
 import facturark.__main__
 from facturark.__main__ import (
-    main, cli_build_invoice, cli_send_invoice,
+    main, cli_build_invoice, cli_send_invoice, cli_verify_document,
     parse, read_file, write_file)
 
 
@@ -20,6 +20,12 @@ def test_parse_send():
     args = parse(arg_list)
     assert args.request_file == 'request.json'
     assert args.output_file == 'response.json'
+
+
+def test_parse_verify():
+    arg_list = ['verify', './invoice.xml']
+    args = parse(arg_list)
+    assert args.document_file == './invoice.xml'
 
 
 def test_main(monkeypatch):
@@ -152,3 +158,21 @@ def test_cli_send(tmpdir, monkeypatch):
     assert isinstance(test_data['test_request_dict'], dict)
     assert test_data['test_request_dict']['username'] == 'USER'
     assert output_pathlocal.read('rb') == b'{"response": "success"}'
+
+
+def test_cli_verify_document(tmpdir, monkeypatch):
+    monkeypatch.setattr(
+        facturark.__main__, 'verify_document', lambda document: True)
+
+    # Load Document File
+    test_dir = tmpdir.mkdir("cli")
+    document_pathlocal = test_dir.join("invoice.xml")
+    document_pathlocal.write(b'<Invoice></Invoice>')
+
+    options_dict = {'action': 'verify',
+                    'document_file': str(document_pathlocal)}
+
+    # Call The Cli
+    result = cli_verify_document(options_dict)
+
+    assert result is True

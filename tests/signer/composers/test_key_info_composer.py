@@ -57,6 +57,6 @@ def test_compose(composer, data_dict, schema):
     assert key_info.prefix == "ds"
     assert key_info.tag == QName(NS.ds, "KeyInfo").text
     assert key_info.find('ds:X509Data/ds:X509Certificate', vars(NS)).text == (
-        data_dict['X509_data']['X509_certificate'])
+        data_dict['X509_data']['X509_certificate']).strip()
     assert key_info.attrib['Id'] == data_dict['@attributes']['Id']
     schema.assertValid(key_info)

@@ -2,7 +2,7 @@ import io
 import sys
 import json
 from argparse import ArgumentParser
-from facturark import build_invoice, send_invoice
+from facturark import build_invoice, send_invoice, verify_document
 from facturark.utils import json_serialize
 
 
@@ -46,6 +46,12 @@ def cli_send_invoice(options_dict):
     write_file(output_file, response_json)
 
 
+def cli_verify_document(options_dict):
+    document_path = options_dict.get('document_file')
+    document_bytes = read_file(document_path)
+    return verify_document(document_bytes)
+
+
 def parse(arg_list):
     parser = ArgumentParser(prog='Facturark')
     subparsers = parser.add_subparsers(dest='action')
@@ -63,6 +69,10 @@ def parse(arg_list):
     send_parser.add_argument('-d', '--document_file')
     send_parser.add_argument('-o', '--output_file')
     send_parser.set_defaults(func=cli_send_invoice)
+
+    verify_parser = subparsers.add_parser('verify')
+    verify_parser.add_argument('document_file')
+    verify_parser.set_defaults(func=cli_verify_document)
 
     args = parser.parse_args(arg_list)
     return args

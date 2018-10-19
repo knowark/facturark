@@ -73,9 +73,6 @@ class InvoiceUuidGenerator:
             uuid_dict['technical_key']
         ]
 
-        print('CUFE LIST')
-        print(uuid_list)
-
         uuid_bytes = bytes("".join(uuid_list).encode('utf-8'))
 
         return sha1(uuid_bytes).hexdigest()

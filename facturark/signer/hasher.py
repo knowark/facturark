@@ -11,7 +11,7 @@ class Hasher:
             "http://www.w3.org/2000/09/xmldsig#sha1": 'sha1'
         }
 
-    def hash(self, data, algorithm="http://www.w3.org/2001/04/xmlenc#sha512"):
+    def hash(self, data, algorithm="http://www.w3.org/2001/04/xmlenc#sha256"):
         if hasattr(algorithm, 'encode'):
             algorithm = algorithm.encode('utf8')
         algorithm = algorithm.decode("utf-8")

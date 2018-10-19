@@ -42,7 +42,7 @@ def test_encrypter_verify_signature(encrypter, certificate_pem):
 def test_encrypter_create_signature(encrypter, pkcs12_certificate):
     certificate, password = pkcs12_certificate
     certificate = crypto.load_pkcs12(certificate, password)
-    private_key = certificate.get_privatekey()
+    private_key = certificate.get_privatekey().to_cryptography_key()
 
     digest_b64 = b'Q4H+bP65Y5RVbzAt3jRE2QdShrimTa4wAmpuZ4YxP1Y='
 
