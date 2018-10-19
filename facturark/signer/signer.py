@@ -41,7 +41,8 @@ class Signer:
         x509_certificate = certificate.get_certificate()
         key_info_id = self.identifier.generate_id(suffix='keyinfo')
         key_info_element, key_info_digest = (
-            self._prepare_key_info(x509_certificate, key_info_id))
+            self._prepare_key_info(x509_certificate, key_info_id,
+                                   self.digest_algorithm))
 
         # Prepare Signed Properties Element
         signed_properties_id = signature_id + '-signedprops'
@@ -51,7 +52,8 @@ class Signer:
 
         # Prepare Document Element
         document_element, document_digest = (
-            self._prepare_document(element))
+            self._prepare_document(element, self.digest_algorithm))
+        return document_element
 
         # Prepare Signed Info
         signed_info_element, signed_info_digest = self._prepare_signed_info(
@@ -75,11 +77,14 @@ class Signer:
             signature_id, signed_info_element, signature_value_element,
             key_info_element, signed_properties_element)
 
-        # Inject Signature Element In Document Element
-        signed_document_element = self._inject_signature(
-            document_element, signature_element)
+        print('UNSIGNED INVOICE')
 
-        return signed_document_element
+        # Inject Signature Element In Document Element
+        # signed_document_element = self._inject_signature(
+        #     document_element, signature_element)
+
+        # return signed_document_element
+        return document_element
 
     def _parse_certificate(self, pkcs12_certificate, pkcs12_password):
         certificate = crypto.load_pkcs12(pkcs12_certificate, pkcs12_password)
@@ -89,8 +94,9 @@ class Signer:
         pem_certificate = crypto.dump_certificate(
             crypto.FILETYPE_PEM, certificate_object)
 
-        pem_certificate_list = pem_certificate.splitlines()[1:-1]
-        return b'\n' + b'\n'.join(pem_certificate_list) + b'\n'
+        # pem_certificate_list = pem_certificate.splitlines()[1:-1]
+        # return b'\n' + b'\n'.join(pem_certificate_list) + b'\n'
+        return self._normalize_certificate(pem_certificate)
 
     def _create_reference_dict(self, digest_value, attributes,
                                transforms=None):
@@ -107,15 +113,16 @@ class Signer:
             reference_dict['transforms'] = transforms
         return reference_dict
 
-    def _prepare_document(self, document_element):
+    def _prepare_document(self, document_element, algorithm):
         canonicalized_document = self.canonicalizer.canonicalize(
             document_element)
         document_digest = self.encoder.base64_encode(self.hasher.hash(
-            canonicalized_document))
+            canonicalized_document, algorithm))
+        document_element = self.canonicalizer.parse(canonicalized_document)
 
         return document_element, document_digest
 
-    def _prepare_key_info(self, certificate_object, uid):
+    def _prepare_key_info(self, certificate_object, uid, algorithm):
         serialized_certificate = self._serialize_certificate(
             certificate_object)
         key_info_dict = {
@@ -127,20 +134,22 @@ class Signer:
         key_info = self.key_info_composer.compose(key_info_dict)
         canonicalized_key_info = self.canonicalizer.canonicalize(key_info)
         key_info_digest = self.encoder.base64_encode(
-            self.hasher.hash(canonicalized_key_info))
+            self.hasher.hash(canonicalized_key_info, algorithm))
+        key_info = self.canonicalizer.parse(canonicalized_key_info)
 
         return key_info, key_info_digest
 
-    def _get_certificate_digest_value(self, certificate_pem, algorithm):
-        algorithm = algorithm
-
+    def _normalize_certificate(self, certificate_pem):
         normalized_certificate = certificate_pem.replace(
             b'-----BEGIN CERTIFICATE-----', b'')
         normalized_certificate = normalized_certificate.replace(
             b'-----END CERTIFICATE-----', b'')
+        return normalized_certificate.replace(b'\n', b'')
 
-        certificate_binary = self.encoder.base64_decode(
-            normalized_certificate)
+    def _get_certificate_digest_value(self, certificate_pem, algorithm):
+        normalized_certificate = self._normalize_certificate(certificate_pem)
+
+        certificate_binary = self.encoder.base64_decode(normalized_certificate)
         certificate_hash = self.hasher.hash(certificate_binary, algorithm)
         certificate_digest = self.encoder.base64_encode(certificate_hash)
 
@@ -161,20 +170,15 @@ class Signer:
         return policy_digest
 
     def _get_local_time(self):
-        class EST(tzinfo):
+        class UTC_M5(tzinfo):
             def utcoffset(self, dt):
                 return timedelta(hours=-5)
-
-            def tzname(self, dt):
-                return ""
 
             def dst(self, dt):
                 return timedelta(0)
 
-        now = datetime.now(tz=EST())
-
-        datetime_format = '%Y-%m-%dT%H:%M:%S.%f%Z%z'
-        serialized_now = now.strftime(datetime_format)
+        now = datetime.now(tz=UTC_M5())
+        serialized_now = now.isoformat()
         timezone_suffix = serialized_now[-6:]
         local_time = serialized_now[:-9] + timezone_suffix
         return local_time

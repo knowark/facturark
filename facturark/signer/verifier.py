@@ -51,7 +51,7 @@ class Verifier:
     def _get_canonical_signed_info(self, element):
         path = self.signature_path + '/ds:SignedInfo'
         signed_info = element.find(path, namespaces=vars(NS))
-        canonical_signed_info = self.canonicalizer.canonicalize(signed_info)
+        # canonical_signed_info = self.canonicalizer.canonicalize(signed_info)
         return fromstring(canonical_signed_info)
 
     def _get_signature_method(self, element):
