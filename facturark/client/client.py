@@ -3,6 +3,7 @@ from random import randint
 from base64 import b64encode
 from datetime import datetime
 from lxml.etree import tostring
+from dateutil import parser
 from .username import UsernameToken
 from .transports import SoapTransport
 from .utils import (
@@ -11,15 +12,16 @@ from .utils import (
 
 class Client:
 
-    def __init__(self, analyzer, username, password, wsdl_url):
+    def __init__(self, analyzer, username, password, wsdl_url, plugins=[]):
         self.analyzer = analyzer
-        nonce = b64encode(bytes(randint(0, 100000000)))
-        created = datetime.now().isoformat(sep='T')
+        # nonce = b64encode(bytes(randint(0, 100000000)))
+        # created = datetime.now().isoformat(sep='T')
 
         self.client = zeep.Client(
             wsdl_url,
             wsse=UsernameToken(username, password),
-            transport=SoapTransport())
+            transport=SoapTransport(),
+            plugins=plugins)
 
     def send(self, document):
         vat = self.analyzer.get_supplier_vat(document)
@@ -42,11 +44,14 @@ class Client:
         document_type = query_dict['document_type']
         document_number = query_dict['document_number']
         vat = query_dict['vat']
-        creation_date = query_dict['creation_date']
+        creation_date = parser.parse(query_dict['creation_date'])
+        print('creation date |||||||||', creation_date)
+        # creation_date = datetime.strptime(
+        #     creation_date, '%Y-%m-%dT%H:%M:%S%z')
         software_identifier = query_dict['software_identifier']
         uuid = query_dict['uuid']
 
-        response = self.client.service.EnvioConsultaDocumento(
+        response = self.client.service.ConsultaResultadoValidacionDocumentos(
             document_type, document_number, vat, creation_date,
             software_identifier, uuid)
 
