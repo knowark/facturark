@@ -16,4 +16,7 @@ class InvoiceBuilder:
         if self.signer and self.verifier:
             invoice = self.signer.sign(invoice)
             self.verifier.verify(invoice)
-        return tostring(invoice, encoding='UTF-8'), uuid
+        serialized_invoice = tostring(
+            invoice, encoding='UTF-8', xml_declaration=True,
+            standalone=False).replace(b'\n', b'')
+        return serialized_invoice, uuid
