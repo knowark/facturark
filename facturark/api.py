@@ -29,3 +29,12 @@ def send_invoice(request_dict):
 def verify_document(document):
     verifier = resolve_verifier()
     return verifier.verify_bytes(document)
+
+
+def query_document(query_dict):
+    client = Client(
+        Analyzer(),
+        query_dict.pop("username"),
+        query_dict.pop("password"),
+        query_dict.pop("wsdl_url"))
+    return client.query(**query_dict)

@@ -31,3 +31,15 @@ def document():
 @fixture
 def request_dict(document):
     return dict(document=document)
+
+
+@fixture
+def query_dict(document):
+    return {
+        "document_type": "1",
+        "document_number": "PRUE34",
+        "vat": "800191678",
+        "creation_date": "2017-11-16T08:18:35",
+        "software_identifier": "98fcc80b-9f61-4fe2-aac3-13570df4a9e3",
+        "uuid": "98fcc80b-9f61-4fe2-aac3-13570df4a9e3"
+    }

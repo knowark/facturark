@@ -38,6 +38,20 @@ class Client:
 
         return zeep.helpers.serialize_object(response)
 
+    def query(self, query_dict):
+        document_type = query_dict['document_type']
+        document_number = query_dict['document_number']
+        vat = query_dict['vat']
+        creation_date = query_dict['creation_date']
+        software_identifier = query_dict['software_identifier']
+        uuid = query_dict['uuid']
+
+        response = self.client.service.EnvioConsultaDocumento(
+            document_type, document_number, vat, creation_date,
+            software_identifier, uuid)
+
+        return zeep.helpers.serialize_object(response)
+
     def compose(self, document):
         vat = self.analyzer.get_supplier_vat(document)
         invoice_number = self.analyzer.get_document_number(document)
