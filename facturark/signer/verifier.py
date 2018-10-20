@@ -110,15 +110,8 @@ class Verifier:
 
         canonical_resource = self.canonicalizer.canonicalize(resource)
 
-        print()
-        print()
-        print('VERIFIER')
-        print('URI', sanitized_uri)
-        print(tostring(resource, pretty_print=True))
-
         resource_hash = self.hasher.hash(canonical_resource, method)
         base64_digest = self.encoder.base64_encode(resource_hash)
-        print('RESOURCE HASH: -->>', base64_digest)
 
         return base64_digest
 
@@ -166,7 +159,8 @@ class Verifier:
     def _verify_xades_cert(self, element):
         digest_path = ".//xades:Cert/xades:CertDigest/ds:DigestValue"
         given_digest = element.find(
-            digest_path, namespaces=vars(NS)).text.encode('utf-8')
+            digest_path, namespaces=vars(NS)).text
+        given_hash = self.encoder.base64_decode(given_digest)
 
         method_path = ".//xades:Cert/xades:CertDigest/ds:DigestMethod"
         method = element.find(
@@ -175,11 +169,10 @@ class Verifier:
         certificate = element.find(
             './/ds:X509Certificate', namespaces=vars(NS)).text
         decoded_certificate = self.encoder.base64_decode(certificate)
-        certificate_hash = self.hasher.hash(decoded_certificate, method)
-        computed_digest = self.encoder.base64_encode(certificate_hash)
+        computed_hash = self.hasher.hash(decoded_certificate, method)
 
-        if computed_digest != given_digest:
-            raise ValueError('XADES: Bad certificate digest')
+        self._compare_hashes(
+            computed_hash, given_hash, 'XADES: Bad certificate digest')
 
     def _verify_xades_policy(self, element):
         policy_uri = element.find(
@@ -195,9 +188,13 @@ class Verifier:
         given_digest = element.find(
             './/xades:SigPolicyHash/ds:DigestValue',
             namespaces=vars(NS)).text.encode('utf-8')
+        given_hash = self.encoder.base64_decode(given_digest)
 
-        computed_digest = self.encoder.base64_encode(
-            self.hasher.hash(policy_binary, method))
+        computed_hash = self.hasher.hash(policy_binary, method)
 
-        if computed_digest != given_digest:
-            raise ValueError('XADES: Bad policy digest')
+        self._compare_hashes(
+            computed_hash, given_hash, 'XADES: Bad policy digest')
+
+    def _compare_hashes(self, computed_hash, given_hash, error_message):
+        if computed_hash != given_hash:
+            raise ValueError(error_message)

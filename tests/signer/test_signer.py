@@ -78,13 +78,14 @@ def test_signer_serialize_certificate(signer, pkcs12_certificate):
 
 
 def test_signer_prepare_key_info(signer, pkcs12_certificate):
+    algorithm = "http://www.w3.org/2001/04/xmlenc#sha512"
     certificate, password = pkcs12_certificate
     certificate_object = signer._parse_certificate(certificate, password)
     x509_certificate = certificate_object.get_certificate()
 
     uid = "xmldsig-8d0c0815-f905-4f6a-9a74-645460917dcc-keyinfo"
     key_info, key_info_digest = (
-        signer._prepare_key_info(x509_certificate, uid))
+        signer._prepare_key_info(x509_certificate, uid, algorithm))
 
     assert key_info.tag == QName(NS.ds, 'KeyInfo').text
     assert key_info_digest is not None
@@ -122,10 +123,10 @@ def test_signer_prepare_signed_properties(signer, pkcs12_certificate):
 
 
 def test_signer_prepare_document(signer, unsigned_invoice):
+    algorithm = "http://www.w3.org/2001/04/xmlenc#sha512"
     document_element, document_digest = (
-        signer._prepare_document(unsigned_invoice))
+        signer._prepare_document(unsigned_invoice, algorithm))
 
-    assert document_element == unsigned_invoice
     assert document_digest is not None
 
 
@@ -207,5 +208,5 @@ def test_create_signature_value_digest(signer, pkcs12_certificate):
 def test_signer_sign(signer, unsigned_invoice):
     signed_document = signer.sign(unsigned_invoice)
 
-    assert 'Invoice' in signed_document.getroot().tag
+    assert 'Invoice' in signed_document.tag
     assert signed_document.find('.//ds:Signature', vars(NS)) is not None
