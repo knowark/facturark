@@ -19,6 +19,11 @@ class SignaturePolicyIdentifierComposer(Composer):
             signature_policy_id, QName(NS.xades, "SigPolicyId"), empty=True)
         make_child(sig_policy_id, QName(NS.xades, "Identifier"),
                    sig_policy_id_dict['identifier'])
+        print('SIG====>>>>', sig_policy_id_dict['description'])
+        make_child(sig_policy_id, QName(NS.xades, "Description"),
+                   sig_policy_id_dict['description'])
+        
+        print(tostring(root))
 
         sig_policy_hash_dict = signature_policy_id_dict['sig_policy_hash']
         sig_policy_hash = make_child(

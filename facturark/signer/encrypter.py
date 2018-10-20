@@ -3,7 +3,7 @@ from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric.padding import (
     PSS, MGF1, PKCS1v15, calculate_max_pss_salt_length)
-from cryptography.hazmat.primitives.hashes import SHA256, SHA512
+from cryptography.hazmat.primitives.hashes import SHA1, SHA256, SHA512
 from cryptography.hazmat.primitives.asymmetric.utils import Prehashed
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from base64 import b64decode
@@ -13,6 +13,8 @@ class Encrypter:
 
     def __init__(self):
         self.algorithms = {
+            "http://www.w3.org/2000/09/xmldsig#sha1": ('sha1', SHA1),
+            "http://www.w3.org/2000/09/xmldsig#rsa-sha1": ('sha1', SHA1),
             "http://www.w3.org/2001/04/xmlenc#sha512": ('sha512', SHA512),
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512": (
                 'sha512', SHA512),
