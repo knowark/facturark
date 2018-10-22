@@ -15,8 +15,12 @@ def data_dict():
     return {
         'signature_policy_id': {
             'sig_policy_id': {
-                'identifier': ('https://facturaelectronica.dian.gov.co/'
-                               'politicadefirma/v1/politicadefirmav1.pdf')
+                'identifier': (
+                    'https://facturaelectronica.dian.gov.co/'
+                    'politicadefirma/v1/politicadefirmav1.pdf'),
+                'description': (
+                    u"Política de firma para facturas electrónicas "
+                    u"de la República de Colombia")
             },
             'sig_policy_hash': {
                 'digest_method': {

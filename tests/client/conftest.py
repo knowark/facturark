@@ -31,3 +31,8 @@ def document():
 @fixture
 def request_dict(document):
     return dict(document=document)
+
+
+@fixture
+def query_dict(document):
+    return dict(document=document)

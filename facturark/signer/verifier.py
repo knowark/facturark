@@ -1,6 +1,7 @@
 from copy import deepcopy
 from lxml.etree import tostring, QName, fromstring
 from ..namespaces import NS
+from ..utils import read_asset
 
 
 class Verifier:
@@ -32,6 +33,9 @@ class Verifier:
 
         # Get Signed Info Digest
         signed_info_digest = self._digest_signed_info(element, method)
+
+        # Verify Xades
+        self._verify_xades(element)
 
         # Verify Encrypted Signature
         self.encrypter.verify_signature(
@@ -105,6 +109,7 @@ class Verifier:
             self._remove_signature(resource)
 
         canonical_resource = self.canonicalizer.canonicalize(resource)
+
         resource_hash = self.hasher.hash(canonical_resource, method)
         base64_digest = self.encoder.base64_encode(resource_hash)
 
@@ -113,9 +118,9 @@ class Verifier:
     def _extract_certificate(self, element):
         path = './/ds:X509Certificate'
         certificate = element.find(path, namespaces=vars(NS))
-        certificate_bytes = b"-----BEGIN CERTIFICATE-----"
-        certificate_bytes += certificate.text.encode('utf-8')
-        certificate_bytes += b"-----END CERTIFICATE-----"
+        certificate_bytes = b"-----BEGIN CERTIFICATE-----\n"
+        certificate_bytes += certificate.text.encode('utf-8').strip()
+        certificate_bytes += b"\n-----END CERTIFICATE-----"
         return certificate_bytes
 
     def _extract_signature_value(self, element):
@@ -143,5 +148,53 @@ class Verifier:
             computed_digest)
         decoded_given_digest = self.encoder.base64_decode(
             given_digest)
+
         if decoded_computed_digest != decoded_given_digest:
             raise ValueError("Mismatched digest values")
+
+    def _verify_xades(self, element):
+        self._verify_xades_cert(element)
+        self._verify_xades_policy(element)
+
+    def _verify_xades_cert(self, element):
+        digest_path = ".//xades:Cert/xades:CertDigest/ds:DigestValue"
+        given_digest = element.find(
+            digest_path, namespaces=vars(NS)).text
+        given_hash = self.encoder.base64_decode(given_digest)
+
+        method_path = ".//xades:Cert/xades:CertDigest/ds:DigestMethod"
+        method = element.find(
+            method_path, namespaces=vars(NS)).attrib['Algorithm']
+
+        certificate = element.find(
+            './/ds:X509Certificate', namespaces=vars(NS)).text
+        decoded_certificate = self.encoder.base64_decode(certificate)
+        computed_hash = self.hasher.hash(decoded_certificate, method)
+
+        self._compare_hashes(
+            computed_hash, given_hash, 'XADES: Bad certificate digest')
+
+    def _verify_xades_policy(self, element):
+        policy_uri = element.find(
+            './/xades:SigPolicyId/xades:Identifier',
+            namespaces=vars(NS)).text
+        policy_filename = policy_uri.split('/')[-1]
+        policy_binary = read_asset(policy_filename)
+
+        method = element.find(
+            './/xades:SigPolicyHash/ds:DigestMethod',
+            namespaces=vars(NS)).attrib['Algorithm']
+
+        given_digest = element.find(
+            './/xades:SigPolicyHash/ds:DigestValue',
+            namespaces=vars(NS)).text.encode('utf-8')
+        given_hash = self.encoder.base64_decode(given_digest)
+
+        computed_hash = self.hasher.hash(policy_binary, method)
+
+        self._compare_hashes(
+            computed_hash, given_hash, 'XADES: Bad policy digest')
+
+    def _compare_hashes(self, computed_hash, given_hash, error_message):
+        if computed_hash != given_hash:
+            raise ValueError(error_message)

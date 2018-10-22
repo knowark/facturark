@@ -3,6 +3,7 @@ from random import randint
 from base64 import b64encode
 from datetime import datetime
 from lxml.etree import tostring
+from dateutil import parser
 from .username import UsernameToken
 from .transports import SoapTransport
 from .utils import (
@@ -11,15 +12,16 @@ from .utils import (
 
 class Client:
 
-    def __init__(self, analyzer, username, password, wsdl_url):
+    def __init__(self, analyzer, username, password, wsdl_url, plugins=[]):
         self.analyzer = analyzer
-        nonce = b64encode(bytes(randint(0, 100000000)))
-        created = datetime.now().isoformat(sep='T')
+        # nonce = b64encode(bytes(randint(0, 100000000)))
+        # created = datetime.now().isoformat(sep='T')
 
         self.client = zeep.Client(
             wsdl_url,
             wsse=UsernameToken(username, password),
-            transport=SoapTransport())
+            transport=SoapTransport(),
+            plugins=plugins)
 
     def send(self, document):
         vat = self.analyzer.get_supplier_vat(document)
@@ -35,6 +37,20 @@ class Client:
 
         response = self.client.service.EnvioFacturaElectronica(
             vat, invoice_number, issue_date, zip_file_bytes)
+
+        return zeep.helpers.serialize_object(response)
+
+    def query(self, document):
+        document_type = self.analyzer.get_document_type(document)
+        document_number = self.analyzer.get_document_number(document)
+        vat = self.analyzer.get_supplier_vat(document)
+        creation_date = self.analyzer.get_signing_time(document)
+        software_identifier = self.analyzer.get_software_identifier(document)
+        uuid = self.analyzer.get_uuid(document)
+
+        response = self.client.service.ConsultaResultadoValidacionDocumentos(
+            document_type, document_number, vat, creation_date,
+            software_identifier, uuid)
 
         return zeep.helpers.serialize_object(response)
 

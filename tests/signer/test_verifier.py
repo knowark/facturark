@@ -47,6 +47,22 @@ def test_verifier_sha512(verifier, signed_invoice_sha512):
     assert result is True
 
 
+def test_verifier_compare_hashes_equal(verifier):
+    given_digest = b'ABCDEF1234'
+    computed_digest = b'ABCDEF1234'
+
+    result = verifier._compare_hashes(given_digest, computed_digest, 'ERROR!')
+    assert result is None
+
+
+def test_verifier_compare_hashes_different(verifier):
+    given_digest = b'ABCDEF1234'
+    computed_digest = b'XYZ1234567'
+
+    with raises(ValueError):
+        verifier._compare_hashes(given_digest, computed_digest, 'ERROR!')
+
+
 def test_verifier_get_signature(verifier, signed_invoice):
     result = verifier._get_signature(signed_invoice)
     assert result.tag == QName(NS.ds, 'Signature').text

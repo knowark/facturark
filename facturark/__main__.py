@@ -2,7 +2,8 @@ import io
 import sys
 import json
 from argparse import ArgumentParser
-from facturark import build_invoice, send_invoice
+from facturark import (
+    build_invoice, send_invoice, verify_document, query_document)
 from facturark.utils import json_serialize
 
 
@@ -46,6 +47,29 @@ def cli_send_invoice(options_dict):
     write_file(output_file, response_json)
 
 
+def cli_verify_document(options_dict):
+    document_path = options_dict.get('document_file')
+    document_bytes = read_file(document_path)
+    return verify_document(document_bytes)
+
+
+def cli_query_document(options_dict):
+    query_bytes = read_file(options_dict.get('query_file'))
+    query_dict = json.loads(query_bytes.decode('utf-8'))
+
+    document_bytes = b''
+    if options_dict.get('document_file'):
+        document_bytes = read_file(options_dict.get('document_file'))
+
+    query_dict['document'] = query_dict.get('document') or document_bytes
+
+    response_dict = query_document(query_dict)
+    response_json = json.dumps(
+        response_dict, default=json_serialize).encode('utf-8')
+    output_file = options_dict.get('output_file')
+    write_file(output_file, response_json)
+
+
 def parse(arg_list):
     parser = ArgumentParser(prog='Facturark')
     subparsers = parser.add_subparsers(dest='action')
@@ -63,6 +87,16 @@ def parse(arg_list):
     send_parser.add_argument('-d', '--document_file')
     send_parser.add_argument('-o', '--output_file')
     send_parser.set_defaults(func=cli_send_invoice)
+
+    verify_parser = subparsers.add_parser('verify')
+    verify_parser.add_argument('document_file')
+    verify_parser.set_defaults(func=cli_verify_document)
+
+    query_parser = subparsers.add_parser('query')
+    query_parser.add_argument('query_file')
+    query_parser.add_argument('-d', '--document_file')
+    query_parser.add_argument('-o', '--output_file')
+    query_parser.set_defaults(func=cli_query_document)
 
     args = parser.parse_args(arg_list)
     return args

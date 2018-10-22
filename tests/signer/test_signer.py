@@ -78,13 +78,14 @@ def test_signer_serialize_certificate(signer, pkcs12_certificate):
 
 
 def test_signer_prepare_key_info(signer, pkcs12_certificate):
+    algorithm = "http://www.w3.org/2001/04/xmlenc#sha512"
     certificate, password = pkcs12_certificate
     certificate_object = signer._parse_certificate(certificate, password)
     x509_certificate = certificate_object.get_certificate()
 
     uid = "xmldsig-8d0c0815-f905-4f6a-9a74-645460917dcc-keyinfo"
     key_info, key_info_digest = (
-        signer._prepare_key_info(x509_certificate, uid))
+        signer._prepare_key_info(x509_certificate, uid, algorithm))
 
     assert key_info.tag == QName(NS.ds, 'KeyInfo').text
     assert key_info_digest is not None
@@ -122,10 +123,10 @@ def test_signer_prepare_signed_properties(signer, pkcs12_certificate):
 
 
 def test_signer_prepare_document(signer, unsigned_invoice):
+    algorithm = "http://www.w3.org/2001/04/xmlenc#sha512"
     document_element, document_digest = (
-        signer._prepare_document(unsigned_invoice))
+        signer._prepare_document(unsigned_invoice, algorithm))
 
-    assert document_element == unsigned_invoice
     assert document_digest is not None
 
 
@@ -147,17 +148,16 @@ def test_signer_prepare_signed_info(signer, unsigned_invoice):
     signed_info, signed_info_digest = signer._prepare_signed_info(
         document_tuple, key_info_tuple, signed_properties_tuple)
     signed_properties_reference_type = (
-            "http://uri.etsi.org/01903#SignedProperties")
-
+        "http://uri.etsi.org/01903#SignedProperties")
 
     assert signed_info.tag == QName(NS.ds, 'SignedInfo').text
     assert signed_info_digest is not None
-    
+
     document_reference = signed_info.find(
         './/ds:Reference[@Id="ABC123"]', vars(NS))
     assert document_reference.attrib['Id'] == 'ABC123'
     assert document_reference.attrib['URI'] == ''
-    
+
     key_info_reference = signed_info.find(
         './/ds:Reference[@URI="#keyinfo"]', vars(NS))
     assert key_info_reference.attrib.get('Id') is None
@@ -191,11 +191,13 @@ def test_signer_prepare_signature_value(signer):
 def test_create_signature_value_digest(signer, pkcs12_certificate):
     certificate, password = pkcs12_certificate
     certificate_object = signer._parse_certificate(certificate, password)
-    private_key = certificate_object.get_privatekey()
+    private_key = certificate_object.get_privatekey().to_cryptography_key()
     signed_info_digest = (
         b"d4OJpOqB2nxNMMYSFL8ZU0+3p1AGA1wHy7K21pktdRT5+FuVTJosq"
         b"f5sw88VuTyF6Auh4mtu4sE7DpBHCmX95Q==")
 
+    signer.signature_algorithm = (
+        "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512")
     signature_digest = signer._create_signature_value_digest(
         private_key, signed_info_digest)
 
@@ -206,5 +208,5 @@ def test_create_signature_value_digest(signer, pkcs12_certificate):
 def test_signer_sign(signer, unsigned_invoice):
     signed_document = signer.sign(unsigned_invoice)
 
-    assert 'Invoice' in signed_document.getroot().tag
+    assert 'Invoice' in signed_document.tag
     assert signed_document.find('.//ds:Signature', vars(NS)) is not None

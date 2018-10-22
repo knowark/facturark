@@ -1,5 +1,5 @@
 from .builder import InvoiceBuilder
-from .client import Client, Analyzer
+from .client import Client, Analyzer, DatePlugin
 from .resolver import resolve_invoice_composer
 from .validator import Validator, InvoiceUuidGenerator
 from .signer.resolver import resolve_signer, resolve_verifier
@@ -29,3 +29,16 @@ def send_invoice(request_dict):
 def verify_document(document):
     verifier = resolve_verifier()
     return verifier.verify_bytes(document)
+
+
+def query_document(query_dict):
+    client = Client(
+        Analyzer(),
+        query_dict.pop("username"),
+        query_dict.pop("password"),
+        query_dict.pop("wsdl_url"),
+        [DatePlugin()])
+    response = client.query(**query_dict)
+    print('||||||||| RESPONSE ||||||||')
+    print(response)
+    return response

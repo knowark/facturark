@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 from OpenSSL import crypto
-from datetime import datetime
+from datetime import datetime, timedelta, tzinfo
 from ..utils import read_asset
+from lxml.etree import tostring
 
 
 class Signer:
@@ -22,9 +24,9 @@ class Signer:
         self.signed_info_composer = signed_info_composer
         self.signature_value_composer = signature_value_composer
         self.signature_algorithm = (
-            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512")
+            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")
         self.digest_algorithm = (
-            "http://www.w3.org/2001/04/xmlenc#sha512")
+            "http://www.w3.org/2001/04/xmlenc#sha256")
         self.pkcs12_certificate = pkcs12_certificate
         self.pkcs12_password = pkcs12_password
 
@@ -41,7 +43,8 @@ class Signer:
         x509_certificate = certificate.get_certificate()
         key_info_id = self.identifier.generate_id(suffix='keyinfo')
         key_info_element, key_info_digest = (
-            self._prepare_key_info(x509_certificate, key_info_id))
+            self._prepare_key_info(x509_certificate, key_info_id,
+                                   self.digest_algorithm))
 
         # Prepare Signed Properties Element
         signed_properties_id = signature_id + '-signedprops'
@@ -51,7 +54,7 @@ class Signer:
 
         # Prepare Document Element
         document_element, document_digest = (
-            self._prepare_document(element))
+            self._prepare_document(element, self.digest_algorithm))
 
         # Prepare Signed Info
         signed_info_element, signed_info_digest = self._prepare_signed_info(
@@ -61,7 +64,7 @@ class Signer:
         )
 
         # Create Encrypted Signature Digest
-        private_key = certificate.get_privatekey()
+        private_key = certificate.get_privatekey().to_cryptography_key()
         signature_value_digest = self._create_signature_value_digest(
             private_key, signed_info_digest)
 
@@ -79,7 +82,8 @@ class Signer:
         signed_document_element = self._inject_signature(
             document_element, signature_element)
 
-        return signed_document_element
+        # return signed_document_element
+        return document_element
 
     def _parse_certificate(self, pkcs12_certificate, pkcs12_password):
         certificate = crypto.load_pkcs12(pkcs12_certificate, pkcs12_password)
@@ -89,8 +93,7 @@ class Signer:
         pem_certificate = crypto.dump_certificate(
             crypto.FILETYPE_PEM, certificate_object)
 
-        pem_certificate_list = pem_certificate.splitlines()[1:-1]
-        return b'\n' + b'\n'.join(pem_certificate_list) + b'\n'
+        return self._normalize_certificate(pem_certificate)
 
     def _create_reference_dict(self, digest_value, attributes,
                                transforms=None):
@@ -107,15 +110,16 @@ class Signer:
             reference_dict['transforms'] = transforms
         return reference_dict
 
-    def _prepare_document(self, document_element):
+    def _prepare_document(self, document_element, algorithm):
         canonicalized_document = self.canonicalizer.canonicalize(
             document_element)
         document_digest = self.encoder.base64_encode(self.hasher.hash(
-            canonicalized_document))
+            canonicalized_document, algorithm))
+        document_element = self.canonicalizer.parse(canonicalized_document)
 
         return document_element, document_digest
 
-    def _prepare_key_info(self, certificate_object, uid):
+    def _prepare_key_info(self, certificate_object, uid, algorithm):
         serialized_certificate = self._serialize_certificate(
             certificate_object)
         key_info_dict = {
@@ -127,28 +131,33 @@ class Signer:
         key_info = self.key_info_composer.compose(key_info_dict)
         canonicalized_key_info = self.canonicalizer.canonicalize(key_info)
         key_info_digest = self.encoder.base64_encode(
-            self.hasher.hash(canonicalized_key_info))
+            self.hasher.hash(canonicalized_key_info, algorithm))
+        key_info = self.canonicalizer.parse(canonicalized_key_info)
 
         return key_info, key_info_digest
 
-    def _get_certificate_digest_value(self, certificate_pem, algorithm):
-        algorithm = algorithm
-
+    def _normalize_certificate(self, certificate_pem):
         normalized_certificate = certificate_pem.replace(
             b'-----BEGIN CERTIFICATE-----', b'')
         normalized_certificate = normalized_certificate.replace(
             b'-----END CERTIFICATE-----', b'')
+        return normalized_certificate.replace(b'\n', b'')
 
-        certificate_binary = self.encoder.base64_decode(
-            normalized_certificate)
+    def _get_certificate_digest_value(self, certificate_pem, algorithm):
+        normalized_certificate = self._normalize_certificate(certificate_pem)
+
+        certificate_binary = self.encoder.base64_decode(normalized_certificate)
         certificate_hash = self.hasher.hash(certificate_binary, algorithm)
         certificate_digest = self.encoder.base64_encode(certificate_hash)
 
         return certificate_digest
 
-    def _get_policy_identifier(self):
-        return ('https://facturaelectronica.dian.gov.co/'
-                'politicadefirma/v1/politicadefirmav1.pdf')
+    def _get_policy(self):
+        return (
+            ('https://facturaelectronica.dian.gov.co/'
+                'politicadefirma/v2/politicadefirmav2.pdf'),
+            ("Política de firma para facturas electrónicas de la "
+             "República de Colombia"))
 
     def _get_policy_hash(self, algorithm, policy_path=None):
         algorithm = algorithm
@@ -160,9 +169,23 @@ class Signer:
 
         return policy_digest
 
+    def _get_local_time(self):
+        class UTC_M5(tzinfo):
+            def utcoffset(self, dt):
+                return timedelta(hours=-5)
+
+            def dst(self, dt):
+                return timedelta(0)
+
+        now = datetime.now(tz=UTC_M5())
+        serialized_now = now.isoformat()
+        timezone_suffix = serialized_now[-6:]
+        local_time = serialized_now[:-9] + timezone_suffix
+        return local_time
+
     def _prepare_signed_properties(self, certificate_object, uid):
         digest_algorithm = self.digest_algorithm
-        signing_time = datetime.now().isoformat()
+        signing_time = self._get_local_time()
 
         issuer_name = b','.join(
             [key + b'=' + value for key, value in
@@ -172,7 +195,7 @@ class Signer:
             crypto.FILETYPE_PEM, certificate_object)
         digest_value = self._get_certificate_digest_value(certificate_pem,
                                                           digest_algorithm)
-        policy_identifier = self._get_policy_identifier()
+        policy_identifier, policy_description = self._get_policy()
         policy_hash = self._get_policy_hash(digest_algorithm)
 
         certs = [{
@@ -190,7 +213,8 @@ class Signer:
 
         signature_policy_id_dict = {
             'sig_policy_id': {
-                'identifier': policy_identifier
+                'identifier': policy_identifier,
+                'description': policy_description
             },
             'sig_policy_hash': {
                 'digest_method': {
@@ -290,9 +314,6 @@ class Signer:
         return signed_info, signed_info_digest
 
     def _create_signature_value_digest(self, private_key, signed_info_digest):
-        binary_signed_info_digest = self.encoder.base64_decode(
-            signed_info_digest)
-
         encrypted_signature_value = self.encrypter.create_signature(
             private_key, signed_info_digest, self.signature_algorithm)
 

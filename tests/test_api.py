@@ -37,3 +37,25 @@ def test_api_send(monkeypatch):
         m.setattr(facturark.client.Client, "send", mock_send)
         result = facturark.send_invoice(request_dict)
         assert result == "<Response></Response>"
+
+
+def test_api_query(monkeypatch):
+    query_dict = {
+        "username": "USER",
+        "password": "PASS",
+        "wsdl_url": "tests/data/electronic_invoice.wsdl",
+        "document_type": "1",
+        "document_number": "PRUE34",
+        "vat": "800191678",
+        "creation_date": "2017-11-16T08:18:35",
+        "software_identifier": "98fcc80b-9f61-4fe2-aac3-13570df4a9e3",
+        "uuid": "98fcc80b-9f61-4fe2-aac3-13570df4a9e3"
+    }
+
+    with monkeypatch.context() as m:
+        def mock_query(*args, **kwargs):
+            return "<Response></Response>"
+
+        m.setattr(facturark.client.Client, "query", mock_query)
+        result = facturark.query_document(query_dict)
+        assert result == "<Response></Response>"

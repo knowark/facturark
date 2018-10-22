@@ -1,9 +1,9 @@
-from OpenSSL import crypto
+# from OpenSSL import crypto
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric.padding import (
     PSS, MGF1, PKCS1v15, calculate_max_pss_salt_length)
-from cryptography.hazmat.primitives.hashes import SHA256, SHA512
+from cryptography.hazmat.primitives.hashes import SHA1, SHA256, SHA512
 from cryptography.hazmat.primitives.asymmetric.utils import Prehashed
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from base64 import b64decode
@@ -13,6 +13,8 @@ class Encrypter:
 
     def __init__(self):
         self.algorithms = {
+            "http://www.w3.org/2000/09/xmldsig#sha1": ('sha1', SHA1),
+            "http://www.w3.org/2000/09/xmldsig#rsa-sha1": ('sha1', SHA1),
             "http://www.w3.org/2001/04/xmlenc#sha512": ('sha512', SHA512),
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512": (
                 'sha512', SHA512),
@@ -22,10 +24,19 @@ class Encrypter:
         }
 
     def create_signature(self, private_key, digest_b64, algorithm=(
-            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha512")):
+            "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")):
 
-        signature = crypto.sign(private_key, digest_b64,
-                                self.algorithms[algorithm][0])
+        data = b64decode(digest_b64)
+        padding = PKCS1v15()
+
+        if hasattr(algorithm, 'encode'):
+            algorithm = algorithm.encode('utf8')
+
+        algorithm = algorithm.decode("utf-8")
+        hash_algorithm = self.algorithms[algorithm][1]()
+
+        signature = private_key.sign(data, padding, Prehashed(hash_algorithm))
+
         return signature
 
     def verify_signature(self, certificate_b64, signature_b64,
@@ -44,11 +55,6 @@ class Encrypter:
         algorithm = algorithm.decode("utf-8")
 
         hash_algorithm = self.algorithms[algorithm][1]()
-
-        print("SIGNATURE =======", signature)
-        print("DIGEST =======", digest, "SIZE:", len(digest))
-        print("ALGORITHM =======", hash_algorithm,
-              "SIZE:", hash_algorithm.digest_size)
 
         public_key.verify(
             signature,

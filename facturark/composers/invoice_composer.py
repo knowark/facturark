@@ -1,4 +1,5 @@
-from lxml.etree import Element, SubElement, QName, tostring
+from lxml.etree import (
+    Element, SubElement, QName, tostring, cleanup_namespaces)
 from ..utils import make_child
 from ..namespaces import NS
 from .composer import Composer
@@ -73,5 +74,7 @@ class InvoiceComposer(Composer):
         invoice_lines_list = data_dict['invoice_lines']
         for invoice_line_dict in invoice_lines_list:
             root.append(self.invoice_line_composer.compose(invoice_line_dict))
+
+        cleanup_namespaces(root)
 
         return root
