@@ -21,8 +21,8 @@ def test_client_query(client, query_dict):
                      software_identifier, uuid):
         return {'response': 'success'}
 
-    client.client.service.EnvioConsultaDocumento = mock_service
-    response = client.query(query_dict)
+    client.client.service.ConsultaResultadoValidacionDocumentos = mock_service
+    response = client.query(**query_dict)
     assert response is not None
 
 

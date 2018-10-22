@@ -38,7 +38,7 @@ def query_document(query_dict):
         query_dict.pop("password"),
         query_dict.pop("wsdl_url"),
         [DatePlugin()])
-    response = client.query(query_dict)
+    response = client.query(**query_dict)
     print('||||||||| RESPONSE ||||||||')
     print(response)
     return response

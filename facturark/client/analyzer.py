@@ -1,4 +1,4 @@
-from lxml.etree import fromstring
+from lxml.etree import fromstring, QName
 from ..namespaces import NS
 
 
@@ -31,3 +31,28 @@ class Analyzer:
         document_date = 'T'.join([issue_date, issue_time])
 
         return document_date
+
+    def get_document_type(self, document):
+        element = fromstring(document)
+        if element.tag == QName(NS.fe, 'Invoice'):
+            return '1'
+
+    def get_signing_time(self, document):
+        element = fromstring(document)
+        signing_time = element.find(
+            './/xades:SignedSignatureProperties/xades:SigningTime',
+            vars(NS)).text
+        return signing_time
+
+    def get_software_identifier(self, document):
+        element = fromstring(document)
+        software_identifier = element.find(
+            './/sts:DianExtensions/sts:SoftwareProvider/sts:SoftwareID',
+            vars(NS)).text
+        return software_identifier
+
+    def get_uuid(self, document):
+        element = fromstring(document)
+        uuid = element.find(
+            './/cbc:UUID', vars(NS)).text
+        return uuid
