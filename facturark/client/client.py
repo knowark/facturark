@@ -45,6 +45,7 @@ class Client:
         document_number = self.analyzer.get_document_number(document)
         vat = self.analyzer.get_supplier_vat(document)
         creation_date = self.analyzer.get_signing_time(document)
+        creation_date = parser.parse(creation_date)
         software_identifier = self.analyzer.get_software_identifier(document)
         uuid = self.analyzer.get_uuid(document)
 
