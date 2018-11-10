@@ -6,6 +6,9 @@ FacturArk
 .. image:: https://img.shields.io/travis/nubark/facturark.svg
         :target: https://travis-ci.org/nubark/facturark
 
+.. image:: https://codecov.io/gh/nubark/facturark/branch/master/graph/badge.svg
+        :target: https://codecov.io/gh/nubark/facturark
+
 
 Librería de Generación de Factura Electrónica en Python
 
