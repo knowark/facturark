@@ -44,8 +44,8 @@ def data_dict():
                             'https://facturaelectronica.dian.gov.co/'
                             'politicadefirma/v1/politicadefirmav1.pdf'),
                         'description':  (
-                            "Política de firma para facturas electrónicas "
-                            "de la República de Colombia")
+                            u"Política de firma para facturas electrónicas "
+                            u"de la República de Colombia")
                     },
                     'sig_policy_hash': {
                         'digest_method': {

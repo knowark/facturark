@@ -57,6 +57,12 @@ def cli_query_document(options_dict):
     query_bytes = read_file(options_dict.get('query_file'))
     query_dict = json.loads(query_bytes.decode('utf-8'))
 
+    document_bytes = b''
+    if options_dict.get('document_file'):
+        document_bytes = read_file(options_dict.get('document_file'))
+
+    query_dict['document'] = query_dict.get('document') or document_bytes
+
     response_dict = query_document(query_dict)
     response_json = json.dumps(
         response_dict, default=json_serialize).encode('utf-8')
@@ -88,8 +94,8 @@ def parse(arg_list):
 
     query_parser = subparsers.add_parser('query')
     query_parser.add_argument('query_file')
+    query_parser.add_argument('-d', '--document_file')
     query_parser.add_argument('-o', '--output_file')
-    query_parser.add_argument('-t', '--test', action='store_true')
     query_parser.set_defaults(func=cli_query_document)
 
     args = parser.parse_args(arg_list)

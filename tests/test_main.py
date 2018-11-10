@@ -29,11 +29,12 @@ def test_parse_verify():
 
 
 def test_parse_query():
-    arg_list = ['query', '-t', '-o', 'query_response.json',  'query.json']
+    arg_list = ['query', '-o', 'query_response.json',
+                '-d', 'document.xml', 'query.json']
     args = parse(arg_list)
     assert args.query_file == 'query.json'
     assert args.output_file == 'query_response.json'
-    assert args.test == True
+    assert args.document_file == 'document.xml'
 
 
 def test_main(monkeypatch):
@@ -195,14 +196,15 @@ def test_cli_query(tmpdir, monkeypatch):
     test_dir = tmpdir.mkdir("cli")
     query_pathlocal = test_dir.join("query.json")
     query_pathlocal.write(b"""{
-        "document_type": "1",
-        "document_number": "PRUE34",
-        "vat": "800191678",
-        "creation_date": "2017-11-16T08:18:35",
-        "software_identifier": "98fcc80b-9f61-4fe2-aac3-13570df4a9e3",
-        "uuid": "98fcc80b-9f61-4fe2-aac3-13570df4a9e3"
+        "username": "USER",
+        "password": "PASS",
+        "wsdl_url": "URL",
+        "document": ""
     }
     """)
+
+    document_pathlocal = test_dir.join("document.xml")
+    document_pathlocal.write(b"<Invoice>DATA</Invoice>")
 
     def mock_query_document(query_dict):
         test_data['test_query_dict'] = query_dict
@@ -216,8 +218,8 @@ def test_cli_query(tmpdir, monkeypatch):
 
     options_dict = {'action': 'query',
                     'query_file': str(query_pathlocal),
-                    'output_file': str(output_pathlocal),
-                    'test': True}
+                    'document_file': str(document_pathlocal),
+                    'output_file': str(output_pathlocal)}
 
     # Call The Cli
     cli_query_document(options_dict)
