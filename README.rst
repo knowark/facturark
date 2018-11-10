@@ -10,7 +10,7 @@ FacturArk
 Librería de Generación de Factura Electrónica en Python
 
 
-* Free software: GNU General Public License v3
+* Free software: GNU Lesser General Public License v3.0
 * Documentation: https://facturark.readthedocs.io.
 
 
