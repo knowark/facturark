@@ -1,7 +1,8 @@
 import os
 import io
 from pytest import fixture
-from facturark.client import Client, Analyzer
+from facturark.analyzer import Analyzer
+from facturark.client import Client
 
 
 @fixture

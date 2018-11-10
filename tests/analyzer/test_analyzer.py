@@ -48,6 +48,7 @@ def test_analyzer_get_software_identifier(analyzer, document):
 
     assert result == '0d2e2883-eb8d-4237-87fe-28aeb71e961e'
 
+
 def test_analyzer_get_uuid(analyzer, document):
 
     result = analyzer.get_uuid(document)
