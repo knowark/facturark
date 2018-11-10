@@ -45,9 +45,6 @@ class Client:
         document_number = query_dict['document_number']
         vat = query_dict['vat']
         creation_date = parser.parse(query_dict['creation_date'])
-        print('creation date |||||||||', creation_date)
-        # creation_date = datetime.strptime(
-        #     creation_date, '%Y-%m-%dT%H:%M:%S%z')
         software_identifier = query_dict['software_identifier']
         uuid = query_dict['uuid']
 
