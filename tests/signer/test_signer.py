@@ -113,7 +113,7 @@ def test_signer_prepare_signed_properties(signer, pkcs12_certificate):
     certificate_object = signer._parse_certificate(certificate, password)
     x509_certificate = certificate_object.get_certificate()
 
-    uid = "xmldsig-a116f9ea-cbfa-4e45-b026-646e43b86df7-signedprops"
+    uid = b"xmldsig-a116f9ea-cbfa-4e45-b026-646e43b86df7-signedprops"
     signed_properties, signed_properties_digest = (
         signer._prepare_signed_properties(x509_certificate, uid))
 

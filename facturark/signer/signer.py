@@ -156,8 +156,8 @@ class Signer:
         return (
             ('https://facturaelectronica.dian.gov.co/'
                 'politicadefirma/v2/politicadefirmav2.pdf'),
-            ("Política de firma para facturas electrónicas de la "
-             "República de Colombia"))
+            (u"Política de firma para facturas electrónicas de la "
+             u"República de Colombia"))
 
     def _get_policy_hash(self, algorithm, policy_path=None):
         algorithm = algorithm
