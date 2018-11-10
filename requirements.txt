@@ -11,6 +11,7 @@ cached-property==1.5.1
 certifi==2018.8.24
 cffi==1.11.5
 chardet==3.0.4
+codecov==2.0.15
 coverage==4.5.1
 cryptography==2.3.1
 defusedxml==0.5.0
@@ -45,7 +46,7 @@ pytest-cov==2.6.0
 python-dateutil==2.7.3
 pytz==2018.5
 PyYAML==3.13
-requests>=2.20.0
+requests==2.20.1
 requests-toolbelt==0.8.0
 scandir==1.9.0
 singledispatch==3.4.0.3
