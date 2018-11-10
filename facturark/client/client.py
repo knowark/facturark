@@ -14,9 +14,6 @@ class Client:
 
     def __init__(self, analyzer, username, password, wsdl_url, plugins=[]):
         self.analyzer = analyzer
-        # nonce = b64encode(bytes(randint(0, 100000000)))
-        # created = datetime.now().isoformat(sep='T')
-
         self.client = zeep.Client(
             wsdl_url,
             wsse=UsernameToken(username, password),
