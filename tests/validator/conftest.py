@@ -1,6 +1,7 @@
 import os
 from pytest import fixture
 from lxml.etree import parse
+from facturark.analyzer import Analyzer
 from facturark.validator import Validator, InvoiceUuidGenerator
 
 
@@ -24,3 +25,8 @@ def invoice():
     directory = os.path.dirname(os.path.realpath(__file__))
     element = parse(os.path.join(directory, '..', 'data', filename))
     return element
+
+
+@fixture
+def reviewer():
+    return Reviewer(Analyzer())

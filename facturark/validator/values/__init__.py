@@ -1,0 +1,2 @@
+from .v01_invoice_types import INVOICE_TYPES
+from .v02_identity_document_types import IDENTITY_DOCUMENT_TYPES
