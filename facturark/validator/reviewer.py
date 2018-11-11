@@ -1,4 +1,4 @@
-from .values import INVOICE_TYPES
+from .values import INVOICE_TYPES, PARTY_TYPES
 
 
 class Reviewer:
@@ -12,4 +12,9 @@ class Reviewer:
             raise ValueError(message)
 
     def review(self, element):
+
         return True
+
+    # def _review_supplier_type(self, element):
+    #     value = self.analyzer.ge
+    #     self.check(PARTY_TYPES, value)

@@ -56,3 +56,9 @@ class Analyzer:
         uuid = element.find(
             './/cbc:UUID', vars(NS)).text
         return uuid
+
+    def get_supplier_type(self, element):
+        supplier_type = element.find(
+            ('.//fe:AccountingSupplierParty/'
+             'cbc:AdditionalAccountID'), vars(NS)).text
+        return supplier_type
