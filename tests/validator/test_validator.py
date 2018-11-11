@@ -10,4 +10,3 @@ def test_validator_invalid(validator):
     with raises(DocumentInvalid):
         element = fromstring('<Invalid></Invalid>')
         assert validator.validate(element)
-

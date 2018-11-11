@@ -2,7 +2,7 @@ import os
 from pytest import fixture
 from lxml.etree import parse
 from facturark.analyzer import Analyzer
-from facturark.validator import Validator, InvoiceUuidGenerator
+from facturark.validator import Validator, InvoiceUuidGenerator, Reviewer
 
 
 @fixture
