@@ -228,12 +228,7 @@ def test_cli_query(tmpdir, monkeypatch):
     assert output_pathlocal.read('rb') == b'{"response": "success"}'
 
 
-def test_resolve_document_empty():
-    result = resolve_document({})
-    assert result == b''
-
-
-def test_resolve_document_empty(monkeypatch):
+def test_resolve_document(monkeypatch):
     data = {'called': False}
 
     def mock_read_file(file_path):
@@ -247,3 +242,8 @@ def test_resolve_document_empty(monkeypatch):
 
     assert result == b'DATA'
     assert data['called'] is True
+
+
+def test_resolve_document_empty():
+    result = resolve_document({})
+    assert result == b''
