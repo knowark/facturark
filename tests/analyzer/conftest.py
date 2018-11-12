@@ -1,6 +1,7 @@
 import os
 import io
 from pytest import fixture
+from lxml.etree import fromstring
 from facturark.analyzer import Analyzer
 
 
@@ -16,4 +17,4 @@ def document():
     directory = os.path.dirname(os.path.realpath(__file__))
     file_path = os.path.join(directory, '..', 'data', filename)
     with io.open(file_path, 'rb') as f:
-        return f.read()
+        return fromstring(f.read())

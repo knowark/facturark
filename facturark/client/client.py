@@ -2,7 +2,7 @@ import zeep
 from random import randint
 from base64 import b64encode
 from datetime import datetime
-from lxml.etree import tostring
+from lxml.etree import tostring, fromstring
 from dateutil import parser
 from .username import UsernameToken
 from .transports import SoapTransport
@@ -21,6 +21,7 @@ class Client:
             plugins=plugins)
 
     def send(self, document):
+        document = fromstring(document)
         vat = self.analyzer.get_supplier_vat(document)
         invoice_number = self.analyzer.get_document_number(document)
         invoice_number_without_prefix = self.analyzer.get_document_number(
@@ -30,7 +31,7 @@ class Client:
             issue_date, '%Y-%m-%dT%H:%M:%S')
 
         filename = make_document_name(vat, invoice_number_without_prefix)
-        zip_file_bytes = make_zip_file_bytes(filename, document)
+        zip_file_bytes = make_zip_file_bytes(filename, tostring(document))
 
         response = self.client.service.EnvioFacturaElectronica(
             vat, invoice_number, issue_date, zip_file_bytes)
@@ -52,6 +53,7 @@ class Client:
         return zeep.helpers.serialize_object(response)
 
     def compose(self, document):
+        document = fromstring(document)
         vat = self.analyzer.get_supplier_vat(document)
         invoice_number = self.analyzer.get_document_number(document)
         issue_date = self.analyzer.get_issue_date(document)
@@ -60,15 +62,11 @@ class Client:
 
         root = self.client.create_message(
             self.client.service, 'EnvioFacturaElectronica',
-            vat, invoice_number, issue_date, document)
+            vat, invoice_number, issue_date, tostring(document))
 
         return root
 
     def serialize(self, document):
-        vat = self.analyzer.get_supplier_vat(document)
-        invoice_number = self.analyzer.get_document_number(document)
-        issue_date = self.analyzer.get_issue_date(document)
-
         root = self.compose(document)
         request_document = tostring(root, pretty_print=True)
 

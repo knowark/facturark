@@ -42,6 +42,5 @@ def test_analyzer_get_uuid(analyzer, document):
 
 
 def test_analyzer_get_supplier_type(analyzer, document):
-    element = fromstring(document)
-    result = analyzer.get_supplier_type(element)
+    result = analyzer.get_supplier_type(document)
     assert result == '1'
