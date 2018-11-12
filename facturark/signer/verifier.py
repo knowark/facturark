@@ -95,8 +95,7 @@ class Verifier:
 
     def _remove_signature(self, element):
         signature = element.find(self.signature_path, namespaces=vars(NS))
-        if signature is not None:
-            signature.getparent().remove(signature)
+        signature.getparent().remove(signature)
 
     def _digest_resource(self, element, uri, method):
         sanitized_uri = uri.replace("#", "")
