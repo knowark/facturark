@@ -10,7 +10,6 @@ FacturArk
         :target: https://codecov.io/gh/nubark/facturark
 
 
-
 Librería de Generación de Factura Electrónica en Python
 
 
