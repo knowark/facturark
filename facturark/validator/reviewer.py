@@ -12,9 +12,9 @@ class Reviewer:
             raise ValueError(message)
 
     def review(self, element):
-
+        self._review_supplier_type(element)
         return True
 
-    # def _review_supplier_type(self, element):
-    #     value = self.analyzer.ge
-    #     self.check(PARTY_TYPES, value)
+    def _review_supplier_type(self, element):
+        value = self.analyzer.get_supplier_type(element)
+        self.check(PARTY_TYPES, value)
