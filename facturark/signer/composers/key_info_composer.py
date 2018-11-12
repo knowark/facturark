@@ -11,8 +11,7 @@ class KeyInfoComposer(Composer):
         root = Element(QName(NS.ds, root_name), nsmap=vars(NS))
 
         key_info_id = data_dict.get('@attributes', {}).get('Id')
-        if key_info_id:
-            root.set('Id', key_info_id)
+        root.set('Id', key_info_id)
 
         X509_data_dict = data_dict['X509_data']
         X509_data = make_child(root, QName(NS.ds, 'X509Data'), empty=True)
