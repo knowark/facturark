@@ -1,7 +1,7 @@
 import facturark.__main__
 from facturark.__main__ import (
     main, cli_build_invoice, cli_send_invoice, cli_verify_document,
-    cli_query_document, parse, read_file, write_file)
+    cli_query_document, parse, read_file, write_file, resolve_document)
 
 
 def test_parse_build():
@@ -226,3 +226,24 @@ def test_cli_query(tmpdir, monkeypatch):
 
     assert isinstance(test_data['test_query_dict'], dict)
     assert output_pathlocal.read('rb') == b'{"response": "success"}'
+
+
+def test_resolve_document_empty():
+    result = resolve_document({})
+    assert result == b''
+
+
+def test_resolve_document_empty(monkeypatch):
+    data = {'called': False}
+
+    def mock_read_file(file_path):
+        data['called'] = True
+        return b'DATA'
+
+    monkeypatch.setattr(
+        facturark.__main__, 'read_file', mock_read_file)
+
+    result = resolve_document({'document_file': 'invoice.xml'})
+
+    assert result == b'DATA'
+    assert data['called'] is True

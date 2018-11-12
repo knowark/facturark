@@ -17,6 +17,13 @@ def write_file(file_path, data):
         f.write(data)
 
 
+def resolve_document(options_dict):
+    document_bytes = b''
+    if options_dict.get('document_file'):
+        document_bytes = read_file(options_dict.get('document_file'))
+    return document_bytes
+
+
 def cli_build_invoice(options_dict):
     invoice_bytes = read_file(options_dict.get('input_file'))
     invoice_dict = json.loads(invoice_bytes.decode('utf-8'))
@@ -34,9 +41,7 @@ def cli_send_invoice(options_dict):
     request_bytes = read_file(options_dict.get('request_file'))
     request_dict = json.loads(request_bytes.decode('utf-8'))
 
-    document_bytes = b''
-    if options_dict.get('document_file'):
-        document_bytes = read_file(options_dict.get('document_file'))
+    document_bytes = resolve_document(options_dict)
 
     request_dict['document'] = request_dict.get('document') or document_bytes
 
@@ -57,9 +62,7 @@ def cli_query_document(options_dict):
     query_bytes = read_file(options_dict.get('query_file'))
     query_dict = json.loads(query_bytes.decode('utf-8'))
 
-    document_bytes = b''
-    if options_dict.get('document_file'):
-        document_bytes = read_file(options_dict.get('document_file'))
+    document_bytes = resolve_document(options_dict)
 
     query_dict['document'] = query_dict.get('document') or document_bytes
 
