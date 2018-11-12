@@ -22,7 +22,13 @@ def test_identifier_generate_id_suffix(identifier):
     assert result.endswith('sigvalue')
 
 
-def test_identifie_generate_id_only_uuid(identifier):
+def test_identifier_generate_id_only_uuid(identifier):
     result = identifier.generate_id(prefix=None)
     assert not result.startswith('xmldsig')
     assert len(result) == 36
+
+
+def test_identifier_generate_id_given_uuid(identifier):
+    uuid = 'ABCD'
+    result = identifier.generate_id(uuid=uuid, prefix=None)
+    assert len(result) == 4
