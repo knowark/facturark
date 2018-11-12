@@ -44,3 +44,8 @@ def test_analyzer_get_uuid(analyzer, document):
 def test_analyzer_get_supplier_type(analyzer, document):
     result = analyzer.get_supplier_type(document)
     assert result == '1'
+
+
+def test_analyzer_get_customer_type(analyzer, document):
+    result = analyzer.get_customer_type(document)
+    assert result == '2'

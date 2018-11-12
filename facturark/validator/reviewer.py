@@ -13,8 +13,13 @@ class Reviewer:
 
     def review(self, element):
         self._review_supplier_type(element)
+        self._review_customer_type(element)
         return True
 
     def _review_supplier_type(self, element):
         value = self.analyzer.get_supplier_type(element)
+        self.check(PARTY_TYPES, value)
+
+    def _review_customer_type(self, element):
+        value = self.analyzer.get_customer_type(element)
         self.check(PARTY_TYPES, value)

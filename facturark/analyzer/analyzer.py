@@ -51,7 +51,11 @@ class Analyzer:
         return uuid
 
     def get_supplier_type(self, document):
-        supplier_type = document.find(
+        return document.find(
             ('.//fe:AccountingSupplierParty/'
              'cbc:AdditionalAccountID'), vars(NS)).text
-        return supplier_type
+
+    def get_customer_type(self, document):
+        return document.find(
+            ('.//fe:AccountingCustomerParty/'
+             'cbc:AdditionalAccountID'), vars(NS)).text
