@@ -15,8 +15,7 @@ class SignedPropertiesComposer(Composer):
         root = Element(QName(NS.xades, root_name), nsmap=vars(NS))
 
         signed_properties_id = data_dict.get('@attributes', {}).get('Id')
-        if signed_properties_id:
-            root.set('Id', signed_properties_id)
+        root.set('Id', signed_properties_id)
 
         signed_signature_properties_dict = data_dict[
             'signed_signature_properties']
