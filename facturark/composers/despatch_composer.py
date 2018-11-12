@@ -15,13 +15,11 @@ class DespatchComposer(Composer):
         root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
 
         despatch_address_dict = data_dict.get('despatch_address')
-        if despatch_address_dict:
-            root.append(self.address_composer.compose(
-                despatch_address_dict, 'DespatchAddress'))
+        root.append(self.address_composer.compose(
+            despatch_address_dict, 'DespatchAddress'))
 
         despatch_party_dict = data_dict.get('despatch_party')
-        if despatch_party_dict:
-            root.append(self.party_composer.compose(
-                despatch_party_dict, 'DespatchParty'))
+        root.append(self.party_composer.compose(
+            despatch_party_dict, 'DespatchParty'))
 
         return root

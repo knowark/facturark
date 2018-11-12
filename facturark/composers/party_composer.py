@@ -33,9 +33,8 @@ class PartyComposer(Composer):
                 data_dict['party_tax_scheme']))
 
         party_legal_entity_dict = data_dict.get('party_legal_entity')
-        if party_legal_entity_dict:
-            root.append(self.party_legal_entity_composer.compose(
-                party_legal_entity_dict))
+        root.append(self.party_legal_entity_composer.compose(
+            party_legal_entity_dict))
 
         person_dict = data_dict.get('person')
         if person_dict:

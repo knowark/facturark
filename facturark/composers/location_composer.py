@@ -14,7 +14,6 @@ class LocationComposer(Composer):
         root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
 
         address_dict = data_dict.get('address')
-        if address_dict:
-            root.append(self.address_composer.compose(address_dict))
+        root.append(self.address_composer.compose(address_dict))
 
         return root

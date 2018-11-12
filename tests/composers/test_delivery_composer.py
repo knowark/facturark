@@ -120,3 +120,12 @@ def test_compose(composer, data_dict, schema):
     assert delivery.tag == QName(NS.fe, "Delivery").text
 
     schema.assertValid(delivery)
+
+
+def test_compose_basic(composer, schema):
+    data_dict = {}
+    delivery = composer.compose(data_dict)
+
+    assert delivery.tag == QName(NS.fe, "Delivery").text
+
+    schema.assertValid(delivery)
