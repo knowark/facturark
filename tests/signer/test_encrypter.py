@@ -31,7 +31,7 @@ def test_encrypter_verify_signature(encrypter, certificate_pem):
         b"XsbTpSuoQQSjBb6A7KLGS8WNTSPbq8xiCvRGyzAEHonirgMK2vIXM9uJHvCoN1XZaxB"
         b"57++FsuyLBiwn5T4ngb8ephNQMvIdofNsK4IrZXd9YhirV3sZ5bgXtR4Kcn1ughzLrx"
         b"j8Y5XqGw==")
-    algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
+    algorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"
 
     result = encrypter.verify_signature(
         certificate_pem, signature_b64, digest_b64, algorithm)
@@ -49,3 +49,13 @@ def test_encrypter_create_signature(encrypter, pkcs12_certificate):
     result = encrypter.create_signature(private_key, digest_b64)
 
     assert result is not None
+
+
+def test_enrypter_encode_string(encrypter):
+    value = b'VALUE'
+    result = encrypter._encode_string(value)
+    assert result == value
+
+    value = u'VALUE'
+    result = encrypter._encode_string(value)
+    assert b'VALUE' == result

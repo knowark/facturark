@@ -29,8 +29,7 @@ class Encrypter:
         data = b64decode(digest_b64)
         padding = PKCS1v15()
 
-        if hasattr(algorithm, 'encode'):
-            algorithm = algorithm.encode('utf8')
+        algorithm = self._encode_string(algorithm)
 
         algorithm = algorithm.decode("utf-8")
         hash_algorithm = self.algorithms[algorithm][1]()
@@ -68,3 +67,8 @@ class Encrypter:
     def _parse_certificate(self, certificate_b64):
         return x509.load_pem_x509_certificate(
             certificate_b64, default_backend())
+
+    def _encode_string(self, value):
+        if hasattr(value, 'encode'):
+            return value.encode('utf8')
+        return value
