@@ -56,3 +56,13 @@ def test_analyzer_get_supplier_type(analyzer, document):
 def test_analyzer_get_customer_type(analyzer, document):
     result = analyzer.get_customer_type(document)
     assert result == '2'
+
+
+def test_analyzer_get_supplier_country(analyzer, document):
+    result = analyzer.get_supplier_country(document)
+    assert result == 'CO'
+
+
+def test_analyzer_get_customer_country(analyzer, document):
+    result = analyzer.get_customer_country(document)
+    assert result == 'CO'

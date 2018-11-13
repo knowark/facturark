@@ -64,3 +64,13 @@ class Analyzer:
         return document.find(
             ('.//fe:AccountingCustomerParty/'
              'cbc:AdditionalAccountID'), vars(NS)).text
+
+    def get_supplier_country(self, document):
+        return document.find(
+            ('.//fe:AccountingSupplierParty/fe:Party/fe:PhysicalLocation/'
+             'fe:Address/cac:Country/cbc:IdentificationCode'), vars(NS)).text
+
+    def get_customer_country(self, document):
+        return document.find(
+            ('.//fe:AccountingCustomerParty/fe:Party/fe:PhysicalLocation/'
+             'fe:Address/cac:Country/cbc:IdentificationCode'), vars(NS)).text
