@@ -142,3 +142,9 @@ def test_compose(composer, data_dict, schema):
     assert credit_note.findtext(QName(NS.cbc, "DocumentCurrencyCode")) == "COP"
 
     schema.assertValid(credit_note)
+
+
+def test_compose_no_uuid(composer, data_dict, schema):
+    data_dict.pop('uuid')
+    credit_note = composer.compose(data_dict)
+    schema.assertValid(credit_note)

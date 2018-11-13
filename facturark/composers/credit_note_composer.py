@@ -42,9 +42,8 @@ class CreditNoteComposer(Composer):
 
         make_child(root, QName(NS.cbc, "IssueTime"), data_dict['issue_time'])
 
-        if data_dict.get('document_currency_code'):
-            make_child(root, QName(NS.cbc, "DocumentCurrencyCode"),
-                       data_dict['document_currency_code'])
+        make_child(root, QName(NS.cbc, "DocumentCurrencyCode"),
+                   data_dict['document_currency_code'])
 
         root.append(self.supplier_party_composer.compose(
             data_dict['accounting_supplier_party'], 'AccountingSupplierParty'))

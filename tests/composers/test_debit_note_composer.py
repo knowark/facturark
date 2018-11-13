@@ -144,7 +144,7 @@ def test_compose(composer, data_dict, schema):
     schema.assertValid(debit_note)
 
 
-def test_compose_basic(composer, data_dict, schema):
+def test_compose_no_uuid(composer, data_dict, schema):
     data_dict.pop('uuid')
     debit_note = composer.compose(data_dict)
     schema.assertValid(debit_note)
