@@ -1,4 +1,4 @@
-from .values import INVOICE_TYPES, PARTY_TYPES, COUNTRIES
+from .values import INVOICE_TYPES, PARTY_TYPES, COUNTRIES, CURRENCIES
 
 
 class Reviewer:
@@ -16,6 +16,7 @@ class Reviewer:
         self._review_customer_type(element)
         self._review_supplier_country(element)
         self._review_customer_country(element)
+        self._review_document_currency(element)
         return True
 
     def _review_supplier_type(self, element):
@@ -33,3 +34,7 @@ class Reviewer:
     def _review_customer_country(self, element):
         value = self.analyzer.get_customer_country(element)
         self.check(COUNTRIES, value)
+
+    def _review_document_currency(self, element):
+        value = self.analyzer.get_document_currency(element)
+        self.check(CURRENCIES, value)

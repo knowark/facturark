@@ -66,3 +66,8 @@ def test_analyzer_get_supplier_country(analyzer, document):
 def test_analyzer_get_customer_country(analyzer, document):
     result = analyzer.get_customer_country(document)
     assert result == 'CO'
+
+
+def test_analyzer_get_document_currency(analyzer, document):
+    result = analyzer.get_document_currency(document)
+    assert result == 'COP'

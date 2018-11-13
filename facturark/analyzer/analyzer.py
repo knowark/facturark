@@ -74,3 +74,7 @@ class Analyzer:
         return document.find(
             ('.//fe:AccountingCustomerParty/fe:Party/fe:PhysicalLocation/'
              'fe:Address/cac:Country/cbc:IdentificationCode'), vars(NS)).text
+
+    def get_document_currency(self, document):
+        return document.find(
+            ('.//cbc:DocumentCurrencyCode'), vars(NS)).text
