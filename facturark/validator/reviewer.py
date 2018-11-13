@@ -1,4 +1,5 @@
-from .values import INVOICE_TYPES, PARTY_TYPES, COUNTRIES, CURRENCIES
+from .values import (INVOICE_TYPES, IDENTITY_DOCUMENT_TYPES, PARTY_TYPES,
+                     COUNTRIES, CURRENCIES)
 
 
 class Reviewer:
@@ -18,6 +19,7 @@ class Reviewer:
         self._review_customer_country(element)
         self._review_document_currency(element)
         self._review_invoice_type(element)
+        self._review_supplier_identification_type(element)
         return True
 
     def _review_supplier_type(self, element):
@@ -44,3 +46,7 @@ class Reviewer:
         value = self.analyzer.get_invoice_type(element)
         if value is not None:
             self.check(INVOICE_TYPES, value)
+
+    def _review_supplier_identification_type(self, element):
+        value = self.analyzer.get_supplier_identification_type(element)
+        self.check(IDENTITY_DOCUMENT_TYPES, value)

@@ -83,3 +83,8 @@ class Analyzer:
         element = document.find(('.//cbc:InvoiceTypeCode'), vars(NS))
         if element is not None:
             return element.text
+
+    def get_supplier_identification_type(self, document):
+        return document.find(
+            ('.//fe:AccountingSupplierParty/fe:Party/cac:PartyIdentification/'
+             'cbc:ID'), vars(NS)).attrib.get('schemeID')

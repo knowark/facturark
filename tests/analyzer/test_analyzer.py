@@ -82,3 +82,8 @@ def test_analyzer_get_invoice_type_none(analyzer):
     document = Element(QName(NS.fe, 'CreditNote'), nsmap=vars(NS))
     result = analyzer.get_invoice_type(document)
     assert result is None
+
+
+def test_analyzer_get_supplier_identification_type(analyzer, document):
+    result = analyzer.get_supplier_identification_type(document)
+    assert result == '31'
