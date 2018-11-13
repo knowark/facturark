@@ -1,0 +1,15 @@
+# -*- coding: utf-8 -*-
+
+# 8.5 Impuestos registrados en la Factura Electrónica
+
+TAX_TYPES = {
+    "01": u"VALOR TOTAL DE IVA",
+    "02": u"VALOR TOTAL DE IMPUESTO AL CONSUMO",
+    "03": u"VALOR TOTAL DE ICA",
+    "04": u"VALOR TOTAL DE IMPUESTO NACIONAL AL CONSUMO",
+    "05": u"CODIGO RESERVADO PARA LA DIAN",
+    "06": u"CODIGO RESERVADO PARA LA DIAN",
+    "07": u"CODIGO RESERVADO PARA LA DIAN",
+    "08": u"CODIGO RESERVADO PARA LA DIAN",
+    "09": u"CODIGO RESERVADO PARA LA DIAN"
+}
