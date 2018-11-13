@@ -10,6 +10,7 @@ IDENTITY_DOCUMENT_TYPES = {
     "21": u"Tarjeta de extranjería",
     "22": u"Cédula de extranjería",
     "31": u"NIT",
+    "31d": u"NIT",
     "41": u"Pasaporte",
     "42": u"Documento de identificación extranjero",
     "91": u"NUIP *"

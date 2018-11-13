@@ -88,3 +88,8 @@ class Analyzer:
         return document.find(
             ('.//fe:AccountingSupplierParty/fe:Party/cac:PartyIdentification/'
              'cbc:ID'), vars(NS)).attrib.get('schemeID')
+
+    def get_customer_identification_type(self, document):
+        return document.find(
+            ('.//fe:AccountingCustomerParty/fe:Party/cac:PartyIdentification/'
+             'cbc:ID'), vars(NS)).attrib.get('schemeID')

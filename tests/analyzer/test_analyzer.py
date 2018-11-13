@@ -87,3 +87,8 @@ def test_analyzer_get_invoice_type_none(analyzer):
 def test_analyzer_get_supplier_identification_type(analyzer, document):
     result = analyzer.get_supplier_identification_type(document)
     assert result == '31'
+
+
+def test_analyzer_get_customer_identification_type(analyzer, document):
+    result = analyzer.get_customer_identification_type(document)
+    assert result == '22'
