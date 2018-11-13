@@ -71,3 +71,14 @@ def test_analyzer_get_customer_country(analyzer, document):
 def test_analyzer_get_document_currency(analyzer, document):
     result = analyzer.get_document_currency(document)
     assert result == 'COP'
+
+
+def test_analyzer_get_invoice_type(analyzer, document):
+    result = analyzer.get_invoice_type(document)
+    assert result == '1'
+
+
+def test_analyzer_get_invoice_type_none(analyzer):
+    document = Element(QName(NS.fe, 'CreditNote'), nsmap=vars(NS))
+    result = analyzer.get_invoice_type(document)
+    assert result is None

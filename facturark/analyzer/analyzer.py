@@ -78,3 +78,8 @@ class Analyzer:
     def get_document_currency(self, document):
         return document.find(
             ('.//cbc:DocumentCurrencyCode'), vars(NS)).text
+
+    def get_invoice_type(self, document):
+        element = document.find(('.//cbc:InvoiceTypeCode'), vars(NS))
+        if element is not None:
+            return element.text

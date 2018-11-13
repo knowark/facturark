@@ -7,6 +7,11 @@ def test_reviewer_review(reviewer, invoice):
     assert result is True
 
 
+def test_reviewer_review_credit_note(reviewer, credit_note):
+    result = reviewer.review(credit_note)
+    assert result is True
+
+
 def test_reviewer_check(reviewer, invoice):
     valid_values = {'A': 1, 'B': 2, 'C': 3}
     given_value = 'A'
