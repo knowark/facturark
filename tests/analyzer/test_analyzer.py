@@ -1,4 +1,5 @@
-from lxml.etree import fromstring
+from lxml.etree import fromstring, Element, QName
+from facturark.namespaces import NS
 
 
 def test_analyzer_get_supplier_vat(analyzer, document):
@@ -21,9 +22,15 @@ def test_analyzer_get_issue_date(analyzer, document):
     assert result == '2016-07-12T00:31:40'
 
 
-def test_analyzer_get_document_type(analyzer, document):
-    result = analyzer.get_document_type(document)
-    assert result == '1'
+def test_analyzer_get_document_type(analyzer):
+    assert analyzer.get_document_type(
+        Element(QName(NS.fe, 'Invoice'), nsmap=vars(NS))) == '1'
+    assert analyzer.get_document_type(
+        Element(QName(NS.fe, 'CreditNote'), nsmap=vars(NS))) == '2'
+    assert analyzer.get_document_type(
+        Element(QName(NS.fe, 'DebitNote'), nsmap=vars(NS))) == '3'
+    assert analyzer.get_document_type(
+        Element(QName(NS.fe, 'ApplicationResponse'), nsmap=vars(NS))) == '4'
 
 
 def test_analyzer_get_signing_date(analyzer, document):

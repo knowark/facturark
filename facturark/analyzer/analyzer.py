@@ -32,6 +32,11 @@ class Analyzer:
     def get_document_type(self, document):
         if document.tag == QName(NS.fe, 'Invoice'):
             return '1'
+        elif document.tag == QName(NS.fe, 'CreditNote'):
+            return '2'
+        elif document.tag == QName(NS.fe, 'DebitNote'):
+            return '3'
+        return '4'
 
     def get_signing_time(self, document):
         signing_time = document.find(

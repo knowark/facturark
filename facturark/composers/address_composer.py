@@ -23,6 +23,6 @@ class AddressComposer(Composer):
 
         country = make_child(root, QName(NS.cac, "Country"), empty=True)
         make_child(country, QName(NS.cbc, "IdentificationCode"),
-                    data_dict['country']['identification_code'])
+                   data_dict['country']['identification_code'])
 
         return root
