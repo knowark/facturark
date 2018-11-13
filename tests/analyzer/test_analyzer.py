@@ -97,3 +97,8 @@ def test_analyzer_get_customer_identification_type(analyzer, document):
 def test_analyzer_get_supplier_tax_scheme(analyzer, document):
     result = analyzer.get_supplier_tax_scheme(document)
     assert result == '0'
+
+
+def test_analyzer_get_customer_tax_scheme(analyzer, document):
+    result = analyzer.get_customer_tax_scheme(document)
+    assert result == '0'

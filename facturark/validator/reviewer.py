@@ -22,6 +22,7 @@ class Reviewer:
         self._review_supplier_identification_type(element)
         self._review_customer_identification_type(element)
         self._review_supplier_tax_scheme(element)
+        self._review_customer_tax_scheme(element)
         return True
 
     def _review_supplier_type(self, element):
@@ -59,4 +60,8 @@ class Reviewer:
 
     def _review_supplier_tax_scheme(self, element):
         value = self.analyzer.get_supplier_tax_scheme(element)
+        self.check(TAX_LEVELS, value)
+
+    def _review_customer_tax_scheme(self, element):
+        value = self.analyzer.get_customer_tax_scheme(element)
         self.check(TAX_LEVELS, value)

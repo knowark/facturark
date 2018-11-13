@@ -98,3 +98,8 @@ class Analyzer:
         return document.find(
             ('.//fe:AccountingSupplierParty/fe:Party/fe:PartyTaxScheme/'
              'cbc:TaxLevelCode'), vars(NS)).text
+
+    def get_customer_tax_scheme(self, document):
+        return document.find(
+            ('.//fe:AccountingCustomerParty/fe:Party/fe:PartyTaxScheme/'
+             'cbc:TaxLevelCode'), vars(NS)).text
