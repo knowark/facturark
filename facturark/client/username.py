@@ -16,12 +16,8 @@ class UsernameToken:
     def apply(self, envelope, headers):
         security = utils.get_security_header(envelope)
 
-        # The token placeholder might already exists since it is specified in
-        # the WSDL.
-        token = security.find('{%s}UsernameToken' % ns.WSSE)
-        if token is None:
-            token = utils.WSSE.UsernameToken()
-            security.append(token)
+        token = utils.WSSE.UsernameToken()
+        security.append(token)
 
         # Extra values
         nonce = os.urandom(16)
