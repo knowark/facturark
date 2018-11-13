@@ -1,5 +1,5 @@
 from .values import (INVOICE_TYPES, IDENTITY_DOCUMENT_TYPES, PARTY_TYPES,
-                     COUNTRIES, CURRENCIES)
+                     COUNTRIES, CURRENCIES, TAX_LEVELS)
 
 
 class Reviewer:
@@ -21,6 +21,7 @@ class Reviewer:
         self._review_invoice_type(element)
         self._review_supplier_identification_type(element)
         self._review_customer_identification_type(element)
+        self._review_supplier_tax_scheme(element)
         return True
 
     def _review_supplier_type(self, element):
@@ -55,3 +56,7 @@ class Reviewer:
     def _review_customer_identification_type(self, element):
         value = self.analyzer.get_customer_identification_type(element)
         self.check(IDENTITY_DOCUMENT_TYPES, value)
+
+    def _review_supplier_tax_scheme(self, element):
+        value = self.analyzer.get_supplier_tax_scheme(element)
+        self.check(TAX_LEVELS, value)

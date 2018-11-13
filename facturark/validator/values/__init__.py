@@ -7,3 +7,4 @@ from .v06_payment_methods import PAYMENT_METHODS
 from .v07_currencies import CURRENCIES
 from .v08_countries import COUNTRIES
 from .v09_party_types import PARTY_TYPES
+from .v10_tax_levels import TAX_LEVELS
