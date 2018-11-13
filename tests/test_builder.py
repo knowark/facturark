@@ -11,8 +11,12 @@ def invoice_builder():
         def generate(self, invoice):
             return invoice, ""
 
+    class MockReviewer:
+        def review(self, document):
+            return None
+
     invoice_composer = resolve_invoice_composer()
-    validator = Validator(MockUuidGenerator())
+    validator = Validator(MockUuidGenerator(), MockReviewer())
     builder = InvoiceBuilder(invoice_composer, validator)
     return builder
 
@@ -30,7 +34,7 @@ def test_invoice_builder_build_and_sign(invoice_builder, invoice_dict):
     class MockSigner:
         def sign(self, element):
             return element
-    
+
     class MockVerifier:
         def verify(self, element):
             return True

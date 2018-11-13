@@ -16,7 +16,12 @@ def validator(invoice_uuid_generator):
     class MockUuidGenerator:
         def generate(self, invoice):
             return invoice, ""
-    return Validator(MockUuidGenerator())
+
+    class MockReviewer:
+        def review(self, document):
+            return None
+
+    return Validator(MockUuidGenerator(), MockReviewer())
 
 
 @fixture
