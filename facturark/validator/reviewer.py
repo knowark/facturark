@@ -1,5 +1,5 @@
 from .values import (INVOICE_TYPES, IDENTITY_DOCUMENT_TYPES, PARTY_TYPES,
-                     COUNTRIES, CURRENCIES, TAX_LEVELS)
+                     COUNTRIES, CURRENCIES, TAX_LEVELS, TAX_TYPES)
 
 
 class Reviewer:
@@ -10,6 +10,11 @@ class Reviewer:
     @staticmethod
     def check(valid_values, value, message=''):
         if value not in valid_values:
+            raise ValueError(message)
+
+    @staticmethod
+    def check_lower(upper_limit, value, message=''):
+        if value > upper_limit:
             raise ValueError(message)
 
     def review(self, element):
@@ -23,6 +28,9 @@ class Reviewer:
         self._review_customer_identification_type(element)
         self._review_supplier_tax_scheme(element)
         self._review_customer_tax_scheme(element)
+        self._review_tax_total(element)
+        self._review_tax_types(element)
+        self._review_taxable_amounts(element)
         return True
 
     def _review_supplier_type(self, element):
@@ -65,3 +73,23 @@ class Reviewer:
     def _review_customer_tax_scheme(self, element):
         value = self.analyzer.get_customer_tax_scheme(element)
         self.check(TAX_LEVELS, value)
+
+    def _review_tax_total(self, element):
+        value = self.analyzer.get_tax_total_amount(element)
+        value = value if "." in value else value + ".0"
+        integers, decimals = value.split('.')
+        self.check_lower(14, len(integers))
+        self.check_lower(4, len(decimals))
+
+    def _review_tax_types(self, element):
+        values = self.analyzer.get_tax_types(element)
+        for value in values:
+            self.check(TAX_TYPES, value)
+
+    def _review_taxable_amounts(self, element):
+        values = self.analyzer.get_taxable_amount(element)
+        for value in values:
+            value = value if "." in value else value + ".0"
+            integers, decimals = value.split('.')
+            self.check_lower(14, len(integers))
+            self.check_lower(4, len(decimals))

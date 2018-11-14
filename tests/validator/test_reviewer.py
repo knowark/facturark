@@ -25,3 +25,11 @@ def test_reviewer_check_raise_error(reviewer, invoice):
     message = 'Invalid value: {}'.format(given_value)
     with raises(ValueError):
         reviewer.check(valid_values, given_value, message)
+
+
+def test_reviewer_check_lower_raise_error(reviewer, invoice):
+    upper_limit = 14
+    given_value = 15
+    message = 'Invalid value: {}'.format(given_value)
+    with raises(ValueError):
+        reviewer.check_lower(upper_limit, given_value, message)

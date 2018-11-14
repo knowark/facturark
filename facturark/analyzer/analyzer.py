@@ -103,3 +103,22 @@ class Analyzer:
         return document.find(
             ('.//fe:AccountingCustomerParty/fe:Party/fe:PartyTaxScheme/'
              'cbc:TaxLevelCode'), vars(NS)).text
+
+    def get_tax_total_amount(self, document):
+        return document.find(
+            ('.//fe:TaxTotal/cbc:TaxAmount'), vars(NS)).text
+
+    def get_tax_types(self, document):
+        result = []
+        for tax_element in document.findall(
+                ('.//fe:TaxSubtotal/cac:TaxCategory/'
+                 'cac:TaxScheme/cbc:ID'), vars(NS)):
+            result.append(tax_element.text)
+        return result
+
+    def get_taxable_amount(self, document):
+        result = []
+        for tax_element in document.findall(
+                ('.//fe:TaxSubtotal/cbc:TaxableAmount'), vars(NS)):
+            result.append(tax_element.text)
+        return result

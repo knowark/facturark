@@ -102,3 +102,22 @@ def test_analyzer_get_supplier_tax_scheme(analyzer, document):
 def test_analyzer_get_customer_tax_scheme(analyzer, document):
     result = analyzer.get_customer_tax_scheme(document)
     assert result == '0'
+
+
+def test_analyzer_get_tax_total_amount(analyzer, document):
+    result = analyzer.get_tax_total_amount(document)
+    assert result == '109625.61'
+
+
+def test_analyzer_get_tax_types(analyzer, document):
+    result = analyzer.get_tax_types(document)
+    assert isinstance(result, list)
+    assert '02' in result
+    assert '03' in result
+
+
+def test_analyzer_get_taxable_amount(analyzer, document):
+    result = analyzer.get_taxable_amount(document)
+    assert isinstance(result, list)
+    assert result[0] == '1134840.69'
+    assert result[1] == '1134840.69'
