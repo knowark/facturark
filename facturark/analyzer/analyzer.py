@@ -4,6 +4,10 @@ from ..namespaces import NS
 
 class Analyzer:
 
+    def get_id(self, document):
+        id = document.find('./cbc:ID', vars(NS)).text
+        return id
+
     def get_supplier_vat(self, document):
         supplier_vat = document.find(
             ('fe:AccountingSupplierParty/fe:Party/'

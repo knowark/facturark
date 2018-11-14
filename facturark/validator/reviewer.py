@@ -18,6 +18,7 @@ class Reviewer:
             raise ValueError(message)
 
     def review(self, element):
+        self._review_id(element)
         self._review_supplier_type(element)
         self._review_customer_type(element)
         self._review_supplier_country(element)
@@ -33,6 +34,10 @@ class Reviewer:
         self._review_taxable_amounts(element)
         self._review_tax_amounts(element)
         return True
+
+    def _review_id(self, element):
+        value = self.analyzer.get_id(element)
+        self.check_lower(35, len(value))
 
     def _review_supplier_type(self, element):
         value = self.analyzer.get_supplier_type(element)
