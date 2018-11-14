@@ -31,6 +31,7 @@ class Reviewer:
         self._review_tax_total(element)
         self._review_tax_types(element)
         self._review_taxable_amounts(element)
+        self._review_tax_amounts(element)
         return True
 
     def _review_supplier_type(self, element):
@@ -88,6 +89,14 @@ class Reviewer:
 
     def _review_taxable_amounts(self, element):
         values = self.analyzer.get_taxable_amount(element)
+        for value in values:
+            value = value if "." in value else value + ".0"
+            integers, decimals = value.split('.')
+            self.check_lower(14, len(integers))
+            self.check_lower(4, len(decimals))
+
+    def _review_tax_amounts(self, element):
+        values = self.analyzer.get_tax_amount(element)
         for value in values:
             value = value if "." in value else value + ".0"
             integers, decimals = value.split('.')

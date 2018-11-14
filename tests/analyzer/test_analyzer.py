@@ -121,3 +121,10 @@ def test_analyzer_get_taxable_amount(analyzer, document):
     assert isinstance(result, list)
     assert result[0] == '1134840.69'
     assert result[1] == '1134840.69'
+
+
+def test_analyzer_get_tax_amount(analyzer, document):
+    result = analyzer.get_tax_amount(document)
+    assert isinstance(result, list)
+    assert result[0] == '109625.61'
+    assert result[1] == '46982.4'

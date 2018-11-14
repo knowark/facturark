@@ -122,3 +122,10 @@ class Analyzer:
                 ('.//fe:TaxSubtotal/cbc:TaxableAmount'), vars(NS)):
             result.append(tax_element.text)
         return result
+
+    def get_tax_amount(self, document):
+        result = []
+        for tax_element in document.findall(
+                ('.//fe:TaxSubtotal/cbc:TaxAmount'), vars(NS)):
+            result.append(tax_element.text)
+        return result
