@@ -165,3 +165,8 @@ class Analyzer:
         return document.find(
             ('.//sts:DianExtensions/'
              'sts:SoftwareProvider/sts:SoftwareID'), vars(NS)).text
+
+    def get_software_provider_id(self, document):
+        return document.find(
+            ('.//sts:DianExtensions/'
+             'sts:SoftwareProvider/sts:ProviderID'), vars(NS)).text

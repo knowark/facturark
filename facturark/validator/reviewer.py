@@ -42,6 +42,7 @@ class Reviewer:
         self._review_total_tax_exclusive_amount(element)
         self._review_total_payable_amount(element)
         self._review_software_id(element)
+        self._review_software_provider_id(element)
         return True
 
     def _review_id(self, element):
@@ -140,3 +141,7 @@ class Reviewer:
     def _review_software_id(self, element):
         value = self.analyzer.get_software_id(element)
         self.check_lower(50, len(value))
+
+    def _review_software_provider_id(self, element):
+        value = self.analyzer.get_software_provider_id(element)
+        self.check_lower(100, len(value))
