@@ -168,3 +168,8 @@ def test_analyzer_get_software_id(analyzer, document):
 def test_analyzer_get_software_provider_id(analyzer, document):
     result = analyzer.get_software_provider_id(document)
     assert result == '900373115'
+
+
+def test_analyzer_get_invoice_authorization(analyzer, document):
+    result = analyzer.get_invoice_authorization(document)
+    assert result == '9000000500017960'

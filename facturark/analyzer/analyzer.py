@@ -170,3 +170,10 @@ class Analyzer:
         return document.find(
             ('.//sts:DianExtensions/'
              'sts:SoftwareProvider/sts:ProviderID'), vars(NS)).text
+
+    def get_invoice_authorization(self, document):
+        element = document.find(
+            ('.//sts:DianExtensions/sts:InvoiceControl/'
+             'sts:InvoiceAuthorization'), vars(NS))
+        if element is not None:
+            return element.text
