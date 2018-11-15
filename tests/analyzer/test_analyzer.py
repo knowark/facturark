@@ -153,3 +153,8 @@ def test_analyzer_get_total_line_extension_amount(analyzer, document):
 def test_analyzer_get_total_tax_exclusive_amount(analyzer, document):
     result = analyzer.get_total_tax_exclusive_amount(document)
     assert result == '156608.01'
+
+
+def test_analyzer_get_total_payable_amount(analyzer, document):
+    result = analyzer.get_total_payable_amount(document)
+    assert result == '1291448.7'

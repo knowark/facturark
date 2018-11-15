@@ -155,3 +155,8 @@ class Analyzer:
         return document.find(
             ('.//fe:LegalMonetaryTotal/'
              'cbc:TaxExclusiveAmount'), vars(NS)).text
+
+    def get_total_payable_amount(self, document):
+        return document.find(
+            ('.//fe:LegalMonetaryTotal/'
+             'cbc:PayableAmount'), vars(NS)).text
