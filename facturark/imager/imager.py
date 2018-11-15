@@ -1,0 +1,2 @@
+class Imager:
+    pass
