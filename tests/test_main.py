@@ -1,7 +1,8 @@
 import facturark.__main__
 from facturark.__main__ import (
     main, cli_build_invoice, cli_send_invoice, cli_verify_document,
-    cli_query_document, parse, read_file, write_file, resolve_document)
+    cli_query_document, parse, read_file, write_file, resolve_document,
+    cli_qrcode)
 
 
 def test_parse_build():
@@ -121,6 +122,28 @@ def test_cli_build(tmpdir, monkeypatch):
     assert test_data['test_pkcs12_password'] is None
     assert test_data['test_technical_key'] is None
     assert output_pathlocal.read('rb') == b'<Invoice><Id>777</Id><Invoice>'
+
+
+def test_cli_qrcode(tmpdir, monkeypatch):
+    monkeypatch.setattr(
+        facturark.__main__, 'generate_qrcode', lambda document: b'QRIMAGE')
+
+    # Load Document File
+    test_dir = tmpdir.mkdir("cli")
+    document_pathlocal = test_dir.join("invoice.xml")
+    document_pathlocal.write(b'<Invoice></Invoice>')
+
+    # Set Output File
+    output_pathlocal = test_dir.join("qrcode.png")
+
+    options_dict = {'action': 'qrcode',
+                    'document_file': str(document_pathlocal),
+                    'output_file': str(output_pathlocal)}
+
+    # Call The Cli
+    result = cli_qrcode(options_dict)
+
+    assert result is True
 
 
 def test_cli_send(tmpdir, monkeypatch):

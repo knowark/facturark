@@ -44,6 +44,7 @@ def cli_qrcode(options_dict):
     image_bytes = generate_qrcode(document_bytes)
     output_file = options_dict.get('output_file')
     write_file(output_file, image_bytes)
+    return True
 
 
 def cli_send_invoice(options_dict):

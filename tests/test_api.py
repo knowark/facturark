@@ -15,6 +15,11 @@ def test_api_build(invoice_dict, monkeypatch):
         assert result is not None
 
 
+def test_api_generate_qrcode(signed_document_sha512, monkeypatch):
+    result = facturark.generate_qrcode(signed_document_sha512)
+    assert isinstance(result, bytes)
+
+
 def test_api_verify(signed_document_sha512, monkeypatch):
     result = facturark.verify_document(signed_document_sha512)
     assert result is True

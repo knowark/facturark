@@ -180,7 +180,12 @@ def test_analyzer_get_prefix(analyzer, document):
     assert result == 'PRUE'
 
 
-def test_analyzer_get_tax_vat(analyzer, document):
+def test_analyzer_get_tax_vat(analyzer, document_sha512):
+    result = analyzer.get_tax_vat(document_sha512)
+    assert result == '380.00'
+
+
+def test_analyzer_get_tax_vat_without(analyzer, document):
     result = analyzer.get_tax_vat(document)
     assert result == '0.00'
 
