@@ -33,6 +33,7 @@ class Reviewer:
         self._review_tax_types(element)
         self._review_taxable_amounts(element)
         self._review_tax_amounts(element)
+        self._review_supplier_id(element)
         return True
 
     def _review_id(self, element):
@@ -107,3 +108,7 @@ class Reviewer:
             integers, decimals = value.split('.')
             self.check_lower(14, len(integers))
             self.check_lower(4, len(decimals))
+
+    def _review_supplier_id(self, element):
+        value = self.analyzer.get_supplier_id(element)
+        self.check_lower(35, len(value))

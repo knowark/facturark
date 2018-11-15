@@ -133,3 +133,9 @@ class Analyzer:
                 ('.//fe:TaxSubtotal/cbc:TaxAmount'), vars(NS)):
             result.append(tax_element.text)
         return result
+
+    def get_supplier_id(self, document):
+        id = document.find(
+            './/fe:AccountingSupplierParty/fe:Party/'
+            'cac:PartyIdentification/cbc:ID', vars(NS)).text
+        return id

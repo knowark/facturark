@@ -133,3 +133,8 @@ def test_analyzer_get_tax_amount(analyzer, document):
 def test_analyzer_get_id(analyzer, document):
     result = analyzer.get_id(document)
     assert result == 'PRUE980007161'
+
+
+def test_analyzer_get_supplier_id(analyzer, document):
+    result = analyzer.get_supplier_id(document)
+    assert result == '900373115'
