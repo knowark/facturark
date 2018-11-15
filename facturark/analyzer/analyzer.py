@@ -145,3 +145,8 @@ class Analyzer:
             './/fe:AccountingCustomerParty/fe:Party/'
             'cac:PartyIdentification/cbc:ID', vars(NS)).text
         return id
+
+    def get_total_line_extension_amount(self, document):
+        return document.find(
+            ('.//fe:LegalMonetaryTotal/'
+             'cbc:LineExtensionAmount'), vars(NS)).text

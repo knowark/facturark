@@ -143,3 +143,8 @@ def test_analyzer_get_supplier_id(analyzer, document):
 def test_analyzer_get_customer_id(analyzer, document):
     result = analyzer.get_customer_id(document)
     assert result == '11333000'
+
+
+def test_analyzer_get_total_line_extension_amount(analyzer, document):
+    result = analyzer.get_total_line_extension_amount(document)
+    assert result == '1134840.69'
