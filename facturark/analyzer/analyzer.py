@@ -184,3 +184,22 @@ class Analyzer:
              'sts:AuthorizedInvoices/sts:Prefix'), vars(NS))
         if element is not None:
             return element.text
+
+    def get_tax_vat(self, document):
+        for tax_element in document.findall('.//fe:TaxSubtotal', vars(NS)):
+            tax_id = tax_element.find(
+                ('cac:TaxCategory/cac:TaxScheme/cbc:ID'), vars(NS))
+            if tax_id is not None and tax_id.text == '01':
+                tax_amount = tax_element.find('cbc:TaxAmount', vars(NS)).text
+                return tax_amount
+        return '0.00'
+
+    def get_tax_other(self, document):
+        result = []
+        for tax_element in document.findall('.//fe:TaxSubtotal', vars(NS)):
+            tax_id = tax_element.find(
+                ('cac:TaxCategory/cac:TaxScheme/cbc:ID'), vars(NS))
+            if tax_id is not None and tax_id.text != '01':
+                tax_amount = tax_element.find('cbc:TaxAmount', vars(NS)).text
+                result.append(tax_amount)
+        return result

@@ -5,6 +5,7 @@ from .resolver import resolve_invoice_composer
 from .validator import Validator, InvoiceUuidGenerator
 from .signer.resolver import resolve_signer, resolve_verifier
 from .validator.resolver import resolve_validator
+from .imager import Imager
 
 
 def build_invoice(invoice_dict, pkcs12_certificate=None,
@@ -25,6 +26,11 @@ def send_invoice(request_dict):
         request_dict.pop("password"),
         request_dict.pop("wsdl_url"))
     return client.send(**request_dict)
+
+
+def generate_qrcode(document):
+    imager = Imager(Analyzer())
+    return imager.qrcode(document)
 
 
 def verify_document(document):

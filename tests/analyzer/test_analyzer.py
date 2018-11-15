@@ -178,3 +178,16 @@ def test_analyzer_get_invoice_authorization(analyzer, document):
 def test_analyzer_get_prefix(analyzer, document):
     result = analyzer.get_prefix(document)
     assert result == 'PRUE'
+
+
+def test_analyzer_get_tax_vat(analyzer, document):
+    result = analyzer.get_tax_vat(document)
+    assert result == '0.00'
+
+
+def test_analyzer_get_tax_other(analyzer, document):
+    result = analyzer.get_tax_other(document)
+    assert isinstance(result, list)
+    assert len(result) == 2
+    assert result[0] == '109625.61'
+    assert result[1] == '46982.4'
