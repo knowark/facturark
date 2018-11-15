@@ -148,3 +148,8 @@ def test_analyzer_get_customer_id(analyzer, document):
 def test_analyzer_get_total_line_extension_amount(analyzer, document):
     result = analyzer.get_total_line_extension_amount(document)
     assert result == '1134840.69'
+
+
+def test_analyzer_get_total_tax_exclusive_amount(analyzer, document):
+    result = analyzer.get_total_tax_exclusive_amount(document)
+    assert result == '156608.01'
