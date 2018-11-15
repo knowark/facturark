@@ -138,3 +138,8 @@ def test_analyzer_get_id(analyzer, document):
 def test_analyzer_get_supplier_id(analyzer, document):
     result = analyzer.get_supplier_id(document)
     assert result == '900373115'
+
+
+def test_analyzer_get_customer_id(analyzer, document):
+    result = analyzer.get_customer_id(document)
+    assert result == '11333000'

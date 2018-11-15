@@ -139,3 +139,9 @@ class Analyzer:
             './/fe:AccountingSupplierParty/fe:Party/'
             'cac:PartyIdentification/cbc:ID', vars(NS)).text
         return id
+
+    def get_customer_id(self, document):
+        id = document.find(
+            './/fe:AccountingCustomerParty/fe:Party/'
+            'cac:PartyIdentification/cbc:ID', vars(NS)).text
+        return id
