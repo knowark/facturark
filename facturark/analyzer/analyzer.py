@@ -177,3 +177,10 @@ class Analyzer:
              'sts:InvoiceAuthorization'), vars(NS))
         if element is not None:
             return element.text
+
+    def get_prefix(self, document):
+        element = document.find(
+            ('.//sts:DianExtensions/sts:InvoiceControl/'
+             'sts:AuthorizedInvoices/sts:Prefix'), vars(NS))
+        if element is not None:
+            return element.text

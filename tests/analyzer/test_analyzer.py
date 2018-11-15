@@ -173,3 +173,8 @@ def test_analyzer_get_software_provider_id(analyzer, document):
 def test_analyzer_get_invoice_authorization(analyzer, document):
     result = analyzer.get_invoice_authorization(document)
     assert result == '9000000500017960'
+
+
+def test_analyzer_get_prefix(analyzer, document):
+    result = analyzer.get_prefix(document)
+    assert result == 'PRUE'

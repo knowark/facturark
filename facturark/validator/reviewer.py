@@ -44,6 +44,7 @@ class Reviewer:
         self._review_software_id(element)
         self._review_software_provider_id(element)
         self._review_invoice_authorization(element)
+        self._review_prefix(element)
         return True
 
     def _review_id(self, element):
@@ -151,3 +152,8 @@ class Reviewer:
         value = self.analyzer.get_invoice_authorization(element)
         if value is not None:
             self.check_lower(16, len(value))
+
+    def _review_prefix(self, element):
+        value = self.analyzer.get_prefix(element)
+        if value is not None:
+            self.check_lower(5, len(value))
