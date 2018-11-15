@@ -38,5 +38,5 @@ def query_document(query_dict):
         query_dict.pop("username"),
         query_dict.pop("password"),
         query_dict.pop("wsdl_url"))
-    response = client.query(query_dict)
+    response = client.query(**query_dict)
     return response

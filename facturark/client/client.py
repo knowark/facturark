@@ -38,13 +38,17 @@ class Client:
 
         return zeep.helpers.serialize_object(response)
 
-    def query(self, query_dict):
-        document_type = query_dict['document_type']
-        document_number = query_dict['document_number']
-        vat = query_dict['vat']
-        creation_date = parser.parse(query_dict['creation_date'])
-        software_identifier = query_dict['software_identifier']
-        uuid = query_dict['uuid']
+    def query(self, document):
+        document = fromstring(document)
+
+        document_type = self.analyzer.get_document_type(document)
+        document_number = self.analyzer.get_document_number(document)
+        vat = self.analyzer.get_supplier_vat(document)
+        creation_date = self.analyzer.get_signing_time(document)
+        creation_date = datetime.strptime(
+            creation_date.split('.')[0], '%Y-%m-%dT%H:%M:%S')
+        software_identifier = self.analyzer.get_software_identifier(document)
+        uuid = self.analyzer.get_uuid(document)
 
         response = self.client.service.ConsultaResultadoValidacionDocumentos(
             document_type, document_number, vat, creation_date,

@@ -22,7 +22,7 @@ def test_client_query(client, query_dict):
         return {'response': 'success'}
 
     client.client.service.ConsultaResultadoValidacionDocumentos = mock_service
-    response = client.query(query_dict)
+    response = client.query(**query_dict)
     assert response is not None
 
 
