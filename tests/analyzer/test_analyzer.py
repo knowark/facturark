@@ -158,3 +158,8 @@ def test_analyzer_get_total_tax_exclusive_amount(analyzer, document):
 def test_analyzer_get_total_payable_amount(analyzer, document):
     result = analyzer.get_total_payable_amount(document)
     assert result == '1291448.7'
+
+
+def test_analyzer_get_software_id(analyzer, document):
+    result = analyzer.get_software_id(document)
+    assert result == '0d2e2883-eb8d-4237-87fe-28aeb71e961e'

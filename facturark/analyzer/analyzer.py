@@ -160,3 +160,8 @@ class Analyzer:
         return document.find(
             ('.//fe:LegalMonetaryTotal/'
              'cbc:PayableAmount'), vars(NS)).text
+
+    def get_software_id(self, document):
+        return document.find(
+            ('.//sts:DianExtensions/'
+             'sts:SoftwareProvider/sts:SoftwareID'), vars(NS)).text

@@ -9,11 +9,14 @@ class Reviewer:
 
     @staticmethod
     def check(valid_values, value, message=''):
+        message = message or 'Invalid Value: {}'.format(value)
         if value not in valid_values:
             raise ValueError(message)
 
     @staticmethod
     def check_lower(upper_limit, value, message=''):
+        message = message or (
+            'Value ({}) exceeds upper limit {}.'.format(value, upper_limit))
         if value > upper_limit:
             raise ValueError(message)
 
@@ -38,6 +41,7 @@ class Reviewer:
         self._review_total_line_extension_amount(element)
         self._review_total_tax_exclusive_amount(element)
         self._review_total_payable_amount(element)
+        self._review_software_id(element)
         return True
 
     def _review_id(self, element):
@@ -132,3 +136,7 @@ class Reviewer:
     def _review_total_payable_amount(self, element):
         value = self.analyzer.get_total_payable_amount(element)
         self.check_lower(35, len(value))
+
+    def _review_software_id(self, element):
+        value = self.analyzer.get_software_id(element)
+        self.check_lower(50, len(value))
