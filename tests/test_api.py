@@ -36,6 +36,19 @@ def test_api_build_credit_note(credit_note_dict, monkeypatch):
         assert result is not None
 
 
+def test_api_build_debit_note(debit_note_dict, monkeypatch):
+    with monkeypatch.context() as m:
+        def mock_resolve_validator():
+            class MockValidator:
+                def validate(self, invoice):
+                    return invoice
+            return MockValidator()
+        m.setattr(facturark.api, "resolve_validator", mock_resolve_validator)
+
+        result = facturark.build_debit_note(debit_note_dict)
+        assert result is not None
+
+
 def test_api_generate_qrcode(signed_document_sha512, monkeypatch):
     result = facturark.generate_qrcode(signed_document_sha512)
     assert isinstance(result, bytes)
