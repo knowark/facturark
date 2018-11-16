@@ -105,8 +105,9 @@ def test_analyzer_get_customer_tax_scheme(analyzer, document):
 
 
 def test_analyzer_get_tax_total_amount(analyzer, document):
-    result = analyzer.get_tax_total_amount(document)
-    assert result == '109625.61'
+    result = analyzer.get_tax_total_amounts(document)
+    assert result[0] == '109625.61'
+    assert result[1] == '46982.4'
 
 
 def test_analyzer_get_tax_types(analyzer, document):

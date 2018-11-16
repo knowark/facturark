@@ -1,4 +1,4 @@
-from lxml.etree import fromstring, QName
+from lxml.etree import fromstring, QName, tostring
 from ..namespaces import NS
 
 
@@ -108,9 +108,13 @@ class Analyzer:
             ('.//fe:AccountingCustomerParty/fe:Party/fe:PartyTaxScheme/'
              'cbc:TaxLevelCode'), vars(NS)).text
 
-    def get_tax_total_amount(self, document):
-        return document.find(
-            ('.//fe:TaxTotal/cbc:TaxAmount'), vars(NS)).text
+    def get_tax_total_amounts(self, document):
+        print(tostring(document))
+        result = []
+        for tax_element in document.findall(
+                ('.//fe:TaxTotal/cbc:TaxAmount'), vars(NS)):
+            result.append(tax_element.text)
+        return result
 
     def get_tax_types(self, document):
         result = []

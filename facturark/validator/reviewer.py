@@ -93,11 +93,12 @@ class Reviewer:
         self.check(TAX_LEVELS, value)
 
     def _review_tax_total(self, element):
-        value = self.analyzer.get_tax_total_amount(element)
-        value = value if "." in value else value + ".0"
-        integers, decimals = value.split('.')
-        self.check_lower(14, len(integers))
-        self.check_lower(4, len(decimals))
+        values = self.analyzer.get_tax_total_amounts(element)
+        for value in values:
+            value = value if "." in value else value + ".0"
+            integers, decimals = value.split('.')
+            self.check_lower(14, len(integers))
+            self.check_lower(4, len(decimals))
 
     def _review_tax_types(self, element):
         values = self.analyzer.get_tax_types(element)
