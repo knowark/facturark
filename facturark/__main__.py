@@ -3,7 +3,7 @@ import sys
 import json
 from argparse import ArgumentParser
 from facturark import (
-    build_invoice, send_invoice, verify_document, query_document,
+    build_document, send_invoice, verify_document, query_document,
     generate_qrcode)
 from facturark.utils import json_serialize
 

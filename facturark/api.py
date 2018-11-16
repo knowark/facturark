@@ -11,8 +11,8 @@ from .validator.resolver import resolve_validator
 from .imager import Imager
 
 
-def build_invoice(invoice_dict, pkcs12_certificate=None,
-                  pkcs12_password=None, technical_key=None, kind='invoice'):
+def build_document(document_dict, pkcs12_certificate=None,
+                   pkcs12_password=None, technical_key=None, kind='invoice'):
     composer = resolve_composer(kind)
     identifier = resolve_identifier(kind, technical_key)
     validator = resolve_validator()
@@ -21,7 +21,7 @@ def build_invoice(invoice_dict, pkcs12_certificate=None,
 
     builder = DocumentBuilder(
         composer, identifier, validator, signer, verifier)
-    return builder.build(invoice_dict)
+    return builder.build(document_dict)
 
 
 def build_credit_note(credit_note_dict, pkcs12_certificate=None,
