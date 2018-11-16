@@ -19,7 +19,7 @@ class InvoiceIdentifier(Identifier):
         uuid_dict['technical_key'] = self.technical_key
         uuid_hash = self._hash_uuid(uuid_dict)
         invoice = self._inject_uuid_hash(invoice, uuid_hash)
-        return invoice, uuid_hash
+        return uuid_hash
 
     def _parse_invoice(self, invoice):
         invoice_number = invoice.find('cbc:ID', vars(NS)).text

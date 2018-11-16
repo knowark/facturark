@@ -2,26 +2,16 @@ import os
 from pytest import fixture
 from lxml.etree import parse
 from facturark.analyzer import Analyzer
-from facturark.validator import Validator, InvoiceUuidGenerator, Reviewer
+from facturark.validator import Validator, Reviewer
 
 
 @fixture
-def invoice_uuid_generator():
-    technical_key = '693ff6f2a553c3646a063436fd4dd9ded0311471'
-    return InvoiceUuidGenerator(technical_key)
-
-
-@fixture
-def validator(invoice_uuid_generator):
-    class MockUuidGenerator:
-        def generate(self, invoice):
-            return invoice, ""
-
+def validator():
     class MockReviewer:
         def review(self, document):
             return None
 
-    return Validator(MockUuidGenerator(), MockReviewer())
+    return Validator(MockReviewer())
 
 
 @fixture

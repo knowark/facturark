@@ -23,7 +23,7 @@ def test_invoice_identifier_identify(
         return 'ABC'
 
     invoice_identifier._hash_uuid = mock_hash_uuid
-    injected_invoice, uuid_hash = invoice_identifier.identify(invoice)
+    uuid_hash = invoice_identifier.identify(invoice)
 
     assert uuid_hash == 'ABC'
     assert expected_dict['invoice_number'] == '980007541'
