@@ -31,6 +31,10 @@ def test_invoice_identifier_identify(
         invoice_identifier.technical_key)
 
 
+def test_blank_identifier_identify(invoice, blank_identifier):
+    assert blank_identifier.identify(invoice) == ''
+
+
 def test_invoice_uuid_generator_parse_invoice(
         invoice, invoice_identifier):
 

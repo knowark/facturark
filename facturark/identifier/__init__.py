@@ -1,1 +1,1 @@
-from .identifier import Identifier, InvoiceIdentifier
+from .identifier import Identifier, InvoiceIdentifier, BlankIdentifier

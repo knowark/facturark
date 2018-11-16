@@ -87,3 +87,9 @@ class InvoiceIdentifier(Identifier):
         uuid_element = invoice.find('cbc:UUID', vars(NS))
         uuid_element.text = uuid_hash
         return invoice
+
+
+class BlankIdentifier(Identifier):
+
+    def identify(self, document):
+        return ''

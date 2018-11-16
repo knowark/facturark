@@ -1,7 +1,7 @@
 import os
 from pytest import fixture
 from lxml.etree import parse
-from facturark.identifier import Identifier, InvoiceIdentifier
+from facturark.identifier import Identifier, InvoiceIdentifier, BlankIdentifier
 
 
 @fixture
@@ -13,6 +13,11 @@ def identifier():
 def invoice_identifier():
     technical_key = '693ff6f2a553c3646a063436fd4dd9ded0311471'
     return InvoiceIdentifier(technical_key)
+
+
+@fixture
+def blank_identifier():
+    return BlankIdentifier()
 
 
 @fixture
