@@ -1,6 +1,6 @@
 import facturark.__main__
 from facturark.__main__ import (
-    main, cli_build_invoice, cli_send_invoice, cli_verify_document,
+    main, cli_build_document, cli_send_invoice, cli_verify_document,
     cli_query_document, parse, read_file, write_file, resolve_document,
     cli_qrcode)
 
@@ -79,7 +79,7 @@ def test_write_file(tmpdir):
     assert invoice_pathlocal.read('rb') == data
 
 
-def xtest_cli_build_invoice(tmpdir, monkeypatch):
+def test_cli_build_invoice(tmpdir, monkeypatch):
     test_data = {
         'test_invoice_dict': None,
         'test_pkcs12_certificate': None,
@@ -92,10 +92,11 @@ def xtest_cli_build_invoice(tmpdir, monkeypatch):
     input_pathlocal = test_dir.join("invoice.json")
     input_pathlocal.write(b'{"name": "Company XYX", "amount": 50}')
 
-    def mock_build_invoice(invoice_dict,
-                           pkcs12_certificate=None,
-                           pkcs12_password=None,
-                           technical_key=None):
+    def mock_build_document(invoice_dict,
+                            pkcs12_certificate=None,
+                            pkcs12_password=None,
+                            technical_key=None,
+                            kind='invoice'):
 
         test_data['test_invoice_dict'] = invoice_dict
         test_data['test_pkcs12_certificate'] = pkcs12_certificate
@@ -105,7 +106,7 @@ def xtest_cli_build_invoice(tmpdir, monkeypatch):
         return b'<Invoice><Id>777</Id><Invoice>', ''
 
     monkeypatch.setattr(
-        facturark.__main__, 'build_invoice', mock_build_invoice)
+        facturark.__main__, 'build_document', mock_build_document)
 
     # Set Output File
     output_pathlocal = test_dir.join("invoice.xml")
@@ -115,7 +116,7 @@ def xtest_cli_build_invoice(tmpdir, monkeypatch):
                     'output_file': str(output_pathlocal)}
 
     # Call The Cli
-    cli_build_invoice(options_dict)
+    cli_build_document(options_dict)
 
     assert isinstance(test_data['test_invoice_dict'], dict)
     assert test_data['test_pkcs12_certificate'] is None
