@@ -2,7 +2,7 @@
 
 """Top-level package for FacturArk."""
 
-from .api import (build_document, send_invoice, verify_document,
+from .api import (build_document, send_document, verify_document,
                   query_document, generate_qrcode)
 
 __author__ = """Nubark"""

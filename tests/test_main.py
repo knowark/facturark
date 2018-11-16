@@ -1,6 +1,6 @@
 import facturark.__main__
 from facturark.__main__ import (
-    main, cli_build_document, cli_send_invoice, cli_verify_document,
+    main, cli_build_document, cli_send_document, cli_verify_document,
     cli_query_document, parse, read_file, write_file, resolve_document,
     cli_qrcode)
 
@@ -213,13 +213,13 @@ def test_cli_send(tmpdir, monkeypatch):
     document_pathlocal = test_dir.join("invoice.xml")
     document_pathlocal.write(b"<Invoice>DATA</Invoice>")
 
-    def mock_send_invoice(request_dict):
+    def mock_send_document(request_dict):
         test_data['test_request_dict'] = request_dict
 
         return {"response": "success"}
 
     monkeypatch.setattr(
-        facturark.__main__, 'send_invoice', mock_send_invoice)
+        facturark.__main__, 'send_document', mock_send_document)
 
     # Set Output File
     output_pathlocal = test_dir.join("response.json")
@@ -231,7 +231,7 @@ def test_cli_send(tmpdir, monkeypatch):
                     }
 
     # Call The Cli
-    cli_send_invoice(options_dict)
+    cli_send_document(options_dict)
 
     assert isinstance(test_data['test_request_dict'], dict)
     assert test_data['test_request_dict']['username'] == 'USER'

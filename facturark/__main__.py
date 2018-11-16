@@ -3,7 +3,7 @@ import sys
 import json
 from argparse import ArgumentParser
 from facturark import (
-    build_document, send_invoice, verify_document, query_document,
+    build_document, send_document, verify_document, query_document,
     generate_qrcode)
 from facturark.utils import json_serialize
 
@@ -48,7 +48,7 @@ def cli_qrcode(options_dict):
     return True
 
 
-def cli_send_invoice(options_dict):
+def cli_send_document(options_dict):
     request_bytes = read_file(options_dict.get('request_file'))
     request_dict = json.loads(request_bytes.decode('utf-8'))
 
@@ -56,7 +56,7 @@ def cli_send_invoice(options_dict):
 
     request_dict['document'] = request_dict.get('document') or document_bytes
 
-    response_dict = send_invoice(request_dict)
+    response_dict = send_document(request_dict)
     response_json = json.dumps(
         response_dict, default=json_serialize).encode('utf-8')
     output_file = options_dict.get('output_file')
@@ -101,7 +101,7 @@ def parse(arg_list):
     send_parser.add_argument('request_file')
     send_parser.add_argument('-d', '--document_file')
     send_parser.add_argument('-o', '--output_file')
-    send_parser.set_defaults(func=cli_send_invoice)
+    send_parser.set_defaults(func=cli_send_document)
 
     qrcode_parser = subparsers.add_parser('qrcode')
     qrcode_parser.add_argument('document_file')

@@ -24,7 +24,7 @@ def build_document(document_dict, pkcs12_certificate=None,
     return builder.build(document_dict)
 
 
-def send_invoice(request_dict):
+def send_document(request_dict):
     client = Client(
         Analyzer(),
         request_dict.pop("username"),
