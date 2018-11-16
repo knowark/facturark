@@ -24,32 +24,6 @@ def build_document(document_dict, pkcs12_certificate=None,
     return builder.build(document_dict)
 
 
-def build_credit_note(credit_note_dict, pkcs12_certificate=None,
-                      pkcs12_password=None, technical_key=None):
-    composer = resolve_credit_note_composer()
-    identifier = BlankIdentifier()
-    validator = resolve_validator()
-    signer = resolve_signer(pkcs12_certificate, pkcs12_password)
-    verifier = resolve_verifier()
-
-    builder = DocumentBuilder(
-        composer, identifier, validator, signer, verifier)
-    return builder.build(credit_note_dict)
-
-
-def build_debit_note(debit_note_dict, pkcs12_certificate=None,
-                     pkcs12_password=None, technical_key=None):
-    composer = resolve_debit_note_composer()
-    identifier = BlankIdentifier()
-    validator = resolve_validator()
-    signer = resolve_signer(pkcs12_certificate, pkcs12_password)
-    verifier = resolve_verifier()
-
-    builder = DocumentBuilder(
-        composer, identifier, validator, signer, verifier)
-    return builder.build(debit_note_dict)
-
-
 def send_invoice(request_dict):
     client = Client(
         Analyzer(),
