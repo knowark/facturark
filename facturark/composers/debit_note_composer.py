@@ -51,6 +51,11 @@ class DebitNoteComposer(Composer):
         root.append(self.customer_party_composer.compose(
             data_dict['accounting_customer_party'], 'AccountingCustomerParty'))
 
+        tax_totals = data_dict.get('tax_totals', [])
+        for tax_total in tax_totals:
+            root.append(self.tax_total_composer.compose(
+                tax_total, 'TaxTotal'))
+
         root.append(self.monetary_total_composer.compose(
             data_dict['legal_monetary_total'], 'LegalMonetaryTotal'))
 
