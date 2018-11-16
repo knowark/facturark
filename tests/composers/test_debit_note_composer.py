@@ -91,6 +91,37 @@ def data_dict():
                 }
             }
         },
+        "tax_totals": [
+            {
+                "tax_amount": {
+                    "@attributes": {
+                        "currencyID": "COP"
+                    },
+                    "#text": "4465.00"
+                },
+                "tax_evidence_indicator": "false",
+                "tax_subtotal": {
+                    "percent": "19.0000",
+                    "taxable_amount": {
+                        "@attributes": {
+                            "currencyID": "COP"
+                        },
+                        "#text": "23500.00"
+                    },
+                    "tax_amount": {
+                        "@attributes": {
+                            "currencyID": "COP"
+                        },
+                        "#text": "4465.00"
+                    },
+                    "tax_category": {
+                        "tax_scheme": {
+                            "id": "01"
+                        }
+                    }
+                }
+            }
+        ],
         "legal_monetary_total": {
             'line_extension_amount': {
                 '@attributes': {'currencyID': 'COP'},

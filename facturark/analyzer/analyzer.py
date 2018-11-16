@@ -109,7 +109,6 @@ class Analyzer:
              'cbc:TaxLevelCode'), vars(NS)).text
 
     def get_tax_total_amounts(self, document):
-        print(tostring(document))
         result = []
         for tax_element in document.findall(
                 ('.//fe:TaxTotal/cbc:TaxAmount'), vars(NS)):
