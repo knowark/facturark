@@ -1,7 +1,7 @@
 from lxml.etree import tostring
 
 
-class InvoiceBuilder:
+class DocumentBuilder:
 
     def __init__(self, composer, identifier, validator,
                  signer=None, verifier=None):

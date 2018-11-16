@@ -1,5 +1,5 @@
 from .analyzer import Analyzer
-from .builder import InvoiceBuilder
+from .builder import DocumentBuilder
 from .client import Client
 from .resolver import resolve_invoice_composer
 from .identifier import InvoiceIdentifier
@@ -17,7 +17,7 @@ def build_invoice(invoice_dict, pkcs12_certificate=None,
     signer = resolve_signer(pkcs12_certificate, pkcs12_password)
     verifier = resolve_verifier()
 
-    builder = InvoiceBuilder(
+    builder = DocumentBuilder(
         composer, identifier, validator, signer, verifier)
     return builder.build(invoice_dict)
 

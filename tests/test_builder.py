@@ -1,5 +1,5 @@
 from pytest import fixture
-from facturark.builder import InvoiceBuilder
+from facturark.builder import DocumentBuilder
 from facturark.composers import InvoiceComposer
 from facturark.resolver import resolve_invoice_composer
 from facturark.validator import Validator
@@ -18,7 +18,7 @@ def invoice_builder():
     invoice_composer = resolve_invoice_composer()
     validator = Validator(MockReviewer())
     identifier = MockIdentifier()
-    builder = InvoiceBuilder(invoice_composer, identifier, validator)
+    builder = DocumentBuilder(invoice_composer, identifier, validator)
     return builder
 
 
