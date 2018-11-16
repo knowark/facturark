@@ -79,7 +79,7 @@ def test_write_file(tmpdir):
     assert invoice_pathlocal.read('rb') == data
 
 
-def test_cli_build(tmpdir, monkeypatch):
+def test_cli_build_invoice(tmpdir, monkeypatch):
     test_data = {
         'test_invoice_dict': None,
         'test_pkcs12_certificate': None,
@@ -101,6 +101,51 @@ def test_cli_build(tmpdir, monkeypatch):
         test_data['test_pkcs12_certificate'] = pkcs12_certificate
         test_data['test_pkcs12_password'] = pkcs12_password
         test_data['test_tecnical_key'] = technical_key
+
+        return b'<Invoice><Id>777</Id><Invoice>', ''
+
+    monkeypatch.setattr(
+        facturark.__main__, 'build_invoice', mock_build_invoice)
+
+    # Set Output File
+    output_pathlocal = test_dir.join("invoice.xml")
+
+    options_dict = {'action': 'build',
+                    'input_file': str(input_pathlocal),
+                    'output_file': str(output_pathlocal)}
+
+    # Call The Cli
+    cli_build_invoice(options_dict)
+
+    assert isinstance(test_data['test_invoice_dict'], dict)
+    assert test_data['test_pkcs12_certificate'] is None
+    assert test_data['test_pkcs12_password'] is None
+    assert test_data['test_technical_key'] is None
+    assert output_pathlocal.read('rb') == b'<Invoice><Id>777</Id><Invoice>'
+
+
+def xtest_cli_build_credit_note(tmpdir, monkeypatch):
+    test_data = {
+        'test_credit_note_dict': None,
+        'test_pkcs12_certificate': None,
+        'test_pkcs12_password': None,
+        'test_technical_key': None
+    }
+
+    # Load Invoice File
+    test_dir = tmpdir.mkdir("cli")
+    input_pathlocal = test_dir.join("credit_note.json")
+    input_pathlocal.write(b'{"name": "Company XYX", "amount": 50}')
+
+    def mock_build_invoice(credit_note_dict,
+                           pkcs12_certificate=None,
+                           pkcs12_password=None,
+                           technical_key=None):
+
+        test_data['test_credit_note_dict'] = credit_note_dict
+        test_data['test_pkcs12_certificate'] = pkcs12_certificate
+        test_data['test_pkcs12_password'] = pkcs12_password
+        test_data['test_technical_key'] = technical_key
 
         return b'<Invoice><Id>777</Id><Invoice>', ''
 

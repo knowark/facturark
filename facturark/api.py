@@ -19,6 +19,17 @@ def build_invoice(invoice_dict, pkcs12_certificate=None,
     return builder.build(invoice_dict)
 
 
+def build_credit_note(credit_note_dict, pkcs12_certificate=None,
+                      pkcs12_password=None, technical_key=None):
+    credit_note_composer = resolve_credit_note_composer()
+    validator = resolve_validator(technical_key)
+    signer = resolve_signer(pkcs12_certificate, pkcs12_password)
+    verifier = resolve_verifier()
+
+    builder = InvoiceBuilder(invoice_composer, validator, signer, verifier)
+    return builder.build(invoice_dict)
+
+
 def send_invoice(request_dict):
     client = Client(
         Analyzer(),
