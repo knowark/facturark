@@ -3,7 +3,7 @@ from .builder import DocumentBuilder
 from .client import Client
 from .resolver import (
     resolve_invoice_composer, resolve_credit_note_composer,
-    resolve_debit_note_composer)
+    resolve_debit_note_composer, resolve_composer, resolve_identifier)
 from .identifier import InvoiceIdentifier, BlankIdentifier
 from .validator import Validator
 from .signer.resolver import resolve_signer, resolve_verifier
@@ -13,8 +13,8 @@ from .imager import Imager
 
 def build_invoice(invoice_dict, pkcs12_certificate=None,
                   pkcs12_password=None, technical_key=None, kind='invoice'):
-    composer = resolve_invoice_composer()
-    identifier = InvoiceIdentifier(technical_key)
+    composer = resolve_composer(kind)
+    identifier = resolve_identifier(kind, technical_key)
     validator = resolve_validator()
     signer = resolve_signer(pkcs12_certificate, pkcs12_password)
     verifier = resolve_verifier()

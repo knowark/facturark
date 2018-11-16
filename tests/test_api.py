@@ -10,14 +10,16 @@ def test_api_build_invoice(invoice_dict, monkeypatch):
             return MockValidator()
         m.setattr(facturark.api, "resolve_validator", mock_resolve_validator)
 
-        class MockInvoiceIdentifier:
-            def __init__(self, technical_key):
-                self.technical_key = technical_key
+        def mock_resolve_identifier(kind, technical_key=None):
+            class MockInvoiceIdentifier:
+                def __init__(self, technical_key):
+                    self.technical_key = technical_key
 
-            def identify(self, invoice):
-                return ''
+                def identify(self, invoice):
+                    return ''
+            return MockInvoiceIdentifier('ABC123')
 
-        m.setattr(facturark.api, "InvoiceIdentifier", MockInvoiceIdentifier)
+        m.setattr(facturark.api, "resolve_identifier", mock_resolve_identifier)
 
         result = facturark.build_invoice(invoice_dict)
         assert result is not None
