@@ -12,7 +12,7 @@ from .imager import Imager
 
 
 def build_invoice(invoice_dict, pkcs12_certificate=None,
-                  pkcs12_password=None, technical_key=None):
+                  pkcs12_password=None, technical_key=None, kind='invoice'):
     composer = resolve_invoice_composer()
     identifier = InvoiceIdentifier(technical_key)
     validator = resolve_validator()

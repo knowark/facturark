@@ -112,7 +112,7 @@ def resolve_credit_note_composer():
 
 def resolve_debit_note_composer():
     amount_composer = AmountComposer()
-    extension_composer =resolve_extensions_composer()
+    extension_composer = resolve_extensions_composer()
     debit_note_line_composer = DebitNoteLineComposer(amount_composer)
     monetary_total_composer = MonetaryTotalComposer(amount_composer)
     customer_party_composer = resolve_customer_party_composer()
@@ -123,3 +123,12 @@ def resolve_debit_note_composer():
         extension_composer, supplier_party_composer, customer_party_composer,
         payment_composer, tax_total_composer, monetary_total_composer,
         debit_note_line_composer)
+
+
+def resolve_composer(kind):
+    if kind == 'invoice':
+        return resolve_invoice_composer()
+    elif kind == 'credit_note':
+        return resolve_credit_note_composer()
+    else:
+        return resolve_debit_note_composer()

@@ -124,7 +124,7 @@ def test_cli_build_invoice(tmpdir, monkeypatch):
     assert output_pathlocal.read('rb') == b'<Invoice><Id>777</Id><Invoice>'
 
 
-def xtest_cli_build_credit_note(tmpdir, monkeypatch):
+def test_cli_build_credit_note(tmpdir, monkeypatch):
     test_data = {
         'test_credit_note_dict': None,
         'test_pkcs12_certificate': None,
@@ -162,7 +162,7 @@ def xtest_cli_build_credit_note(tmpdir, monkeypatch):
     # Call The Cli
     cli_build_invoice(options_dict)
 
-    assert isinstance(test_data['test_invoice_dict'], dict)
+    assert isinstance(test_data['test_credit_note_dict'], dict)
     assert test_data['test_pkcs12_certificate'] is None
     assert test_data['test_pkcs12_password'] is None
     assert test_data['test_technical_key'] is None
