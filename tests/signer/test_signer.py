@@ -100,12 +100,22 @@ def test_get_certificate_digest_value(signer, certificate_pem):
         b"E4uMmJWCDkPs6tkWAE3rbaIb6palIGsPPOjuetlF5Q==")
 
 
-def test_get_policy_hash(signer):
+def test_signer_get_policy_hash(signer):
     algorithm = "http://www.w3.org/2001/04/xmlenc#sha512"
     result = signer._get_policy_hash(algorithm)
     assert result == (
         b"Zcjw1Z9nGQn2j6NyGx8kAaLbOfJGd/fJxRTCeirlqA"
         b"g7zRG27piJkJOpflGu7XACpMj9hC6dVMcCyzqHxxPZeQ==")
+
+
+def test_signer_prepare_issuer_name(signer, pkcs12_certificate):
+    certificate, password = pkcs12_certificate
+    certificate_object = signer._parse_certificate(certificate, password)
+    certificate = certificate_object.get_certificate()
+    issuer_name = signer._prepare_issuer_name(certificate)
+    assert issuer_name == (
+        b'emailAddress=info@mit-xperts.com,CN=itv.mit-xperts.com,'
+        b'OU=HBBTV-DEMO-CA,O=MIT-xperts GmbH,L=Munich,ST=Bavaria,C=DE')
 
 
 def test_signer_prepare_signed_properties(signer, pkcs12_certificate):

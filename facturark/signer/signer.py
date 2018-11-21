@@ -186,10 +186,7 @@ class Signer:
     def _prepare_signed_properties(self, certificate_object, uid):
         digest_algorithm = self.digest_algorithm
         signing_time = self._get_local_time()
-
-        issuer_name = b','.join(
-            [key + b'=' + value for key, value in
-             certificate_object.get_issuer().get_components()])
+        issuer_name = self._prepare_issuer_name(certificate_object)
         serial_number = str(certificate_object.get_serial_number())
         certificate_pem = crypto.dump_certificate(
             crypto.FILETYPE_PEM, certificate_object)
@@ -255,6 +252,20 @@ class Signer:
                 canonicalized_signed_properties, digest_algorithm))
 
         return signed_properties, signed_properties_digest
+
+    def _prepare_issuer_name(self, certificate_object):
+        """Reverse Distinguished Names.
+
+        Join Distinguished Names in reverse according to
+        https://www.ietf.org/rfc/rfc2253.txt
+        This format is used by the 'getName()' method of
+        javax.security.auth.x500.X500Principal
+        """
+
+        issuer_name = b','.join(
+            [key + b'=' + value for key, value in
+             reversed(certificate_object.get_issuer().get_components())])
+        return issuer_name
 
     def _prepare_signature_value(self, value, uid):
         signature_value = self.signature_value_composer.compose({
