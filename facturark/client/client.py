@@ -49,9 +49,6 @@ class Client:
         creation_date = datetime.strptime(
             creation_date.split('.')[0], '%Y-%m-%dT%H:%M:%S')
 
-        print(creation_date, "<<---")
-        print("NUMBER", document_number)
-
         software_identifier = self.analyzer.get_software_identifier(document)
         uuid = self.analyzer.get_uuid(document)
 
