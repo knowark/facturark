@@ -23,6 +23,7 @@ class Client:
 
     def send(self, document):
         document = fromstring(document)
+        kind = self.analyzer.get_document_type(document)
         vat = self.analyzer.get_supplier_vat(document)
         invoice_number = self.analyzer.get_document_number(document)
         invoice_number_without_prefix = self.analyzer.get_document_number(
@@ -31,7 +32,7 @@ class Client:
         issue_date = datetime.strptime(
             issue_date, '%Y-%m-%dT%H:%M:%S')
 
-        filename = make_document_name(vat, invoice_number_without_prefix)
+        filename = make_document_name(vat, invoice_number_without_prefix, kind)
         zip_file_bytes = make_zip_file_bytes(filename, tostring(document))
 
         response = self.client.service.EnvioFacturaElectronica(
