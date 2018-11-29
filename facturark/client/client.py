@@ -8,6 +8,7 @@ from .username import UsernameToken
 from .transports import SoapTransport
 from .utils import (
     make_zip_file_bytes, make_document_name)
+from .date_plugin import DatePlugin
 
 
 class Client:
@@ -18,7 +19,7 @@ class Client:
             wsdl_url,
             wsse=UsernameToken(username, password),
             transport=SoapTransport(),
-            plugins=plugins)
+            plugins=[DatePlugin()])
 
     def send(self, document):
         document = fromstring(document)
@@ -47,6 +48,10 @@ class Client:
         creation_date = self.analyzer.get_signing_time(document)
         creation_date = datetime.strptime(
             creation_date.split('.')[0], '%Y-%m-%dT%H:%M:%S')
+
+        print(creation_date, "<<---")
+        print("NUMBER", document_number)
+
         software_identifier = self.analyzer.get_software_identifier(document)
         uuid = self.analyzer.get_uuid(document)
 
