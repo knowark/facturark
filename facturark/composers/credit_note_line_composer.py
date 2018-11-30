@@ -6,8 +6,9 @@ from .composer import Composer
 
 class CreditNoteLineComposer(Composer):
 
-    def __init__(self, amount_composer):
+    def __init__(self, amount_composer, billing_reference_composer):
         self.amount_composer = amount_composer
+        self.billing_reference_composer = billing_reference_composer
 
     def compose(self, data_dict, root_name=None):
         root_name = root_name or self.root_name
@@ -27,5 +28,9 @@ class CreditNoteLineComposer(Composer):
                    empty=True)
         make_child(discrepancy_response, QName(NS.cbc, "ResponseCode"),
                    discrepancy_response_dict['response_code'])
+
+        for billing_reference_dict in data_dict.get('billing_references', []):
+            root.append(self.billing_reference_composer.compose(
+                billing_reference_dict))
 
         return root

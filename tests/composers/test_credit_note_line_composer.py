@@ -1,13 +1,15 @@
 from pytest import fixture
 from lxml.etree import QName
 from facturark.namespaces import NS
-from facturark.composers import AmountComposer, CreditNoteLineComposer
+from facturark.composers import (
+    AmountComposer, CreditNoteLineComposer, BillingReferenceComposer)
 
 
 @fixture
 def composer():
     amount_composer = AmountComposer()
-    return CreditNoteLineComposer(amount_composer)
+    billing_reference_composer = BillingReferenceComposer(amount_composer)
+    return CreditNoteLineComposer(amount_composer, billing_reference_composer)
 
 
 @fixture
@@ -30,7 +32,7 @@ def data_dict():
         "discrepancy_response": {
             "response_code": "2"
         },
-        "billing_reference": {
+        "billing_references": [{
             "invoice_document_reference": {
                 "id": "PRUE980000094",
                 "uuid": "3d5a434b014429b551864c49a84164d58b11ea02",
@@ -51,7 +53,7 @@ def data_dict():
                 "xpath": "",
                 "attachment": ""
             }
-        },
+        }],
         "tax_total": {
             "tax_amount": {
                 "@attributes": {
