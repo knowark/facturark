@@ -97,4 +97,11 @@ def test_compose(composer, data_dict, schema):
     assert tax_total.find(QName(NS.cbc, "TaxAmount")
                           ).attrib.get('currencyID') == "COP"
 
+    item = credit_note_line.find(QName(NS.cac, "Item"))
+    assert item.find(QName(NS.cbc, "Description")).text == (
+        "[CARD] Graphics Card")
+    assert item.find(QName(NS.cbc, "AdditionalInformation")).text == (
+        "El sistema de la DIAN señaló que la firma digital "
+        "está fallida")
+
     schema.assertValid(credit_note_line)

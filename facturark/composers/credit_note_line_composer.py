@@ -40,4 +40,13 @@ class CreditNoteLineComposer(Composer):
             tax_total.append(self.amount_composer.compose(
                 tax_total_dict['tax_amount'], 'TaxAmount'))
 
+        item_dict = data_dict.get('item')
+        if item_dict:
+            item = make_child(root, QName(NS.cac, "Item"), empty=True)
+            make_child(item, QName(NS.cbc, "Description"),
+                       item_dict['description'])
+            make_child(item, QName(NS.cbc, "AdditionalInformation"),
+                       item_dict.get('additional_information', ""),
+                       required=False)
+
         return root
