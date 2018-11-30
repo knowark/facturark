@@ -8,7 +8,7 @@ from .composers import (
     DeliveryTermsComposer, MonetaryTotalComposer, ExtensionComposer,
     InvoiceComposer, InvoiceLineComposer, CreditNoteComposer,
     CreditNoteLineComposer, DebitNoteComposer, DebitNoteLineComposer,
-    DianExtensionsComposer)
+    DianExtensionsComposer, BillingReferenceComposer)
 
 
 def resolve_extensions_composer():
@@ -94,6 +94,11 @@ def resolve_invoice_composer():
         delivery_composer, delivery_terms_composer, payment_composer,
         allowance_charge_composer, tax_total_composer, monetary_total_composer,
         invoice_line_composer)
+
+
+def resolve_billing_reference_composer():
+    amount_composer = AmountComposer()
+    return BillingReferenceComposer(amount_composer)
 
 
 def resolve_credit_note_composer():

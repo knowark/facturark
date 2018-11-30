@@ -14,5 +14,18 @@ class CreditNoteLineComposer(Composer):
         root = Element(QName(NS.cac, root_name), nsmap=vars(NS))
 
         make_child(root, QName(NS.cbc, "ID"), data_dict['id'])
+        make_child(root, QName(NS.cbc, "UUID"), data_dict['uuid'])
+
+        root.append(
+            self.amount_composer.compose(data_dict['line_extension_amount'],
+                                         'LineExtensionAmount'))
+
+        discrepancy_response_dict = data_dict['discrepancy_response']
+        discrepancy_response = make_child(
+            root, QName(NS.cac, "DiscrepancyResponse"), empty=True)
+        make_child(discrepancy_response, QName(NS.cbc, "ReferenceID"),
+                   empty=True)
+        make_child(discrepancy_response, QName(NS.cbc, "ResponseCode"),
+                   discrepancy_response_dict['response_code'])
 
         return root
