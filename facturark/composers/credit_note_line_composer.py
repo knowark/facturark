@@ -33,4 +33,11 @@ class CreditNoteLineComposer(Composer):
             root.append(self.billing_reference_composer.compose(
                 billing_reference_dict))
 
+        tax_total_dict = data_dict.get('tax_total')
+        if tax_total_dict:
+            tax_total = make_child(
+                root, QName(NS.cac, "TaxTotal"), empty=True)
+            tax_total.append(self.amount_composer.compose(
+                tax_total_dict['tax_amount'], 'TaxAmount'))
+
         return root

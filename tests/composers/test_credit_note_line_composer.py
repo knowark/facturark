@@ -64,7 +64,9 @@ def data_dict():
         },
         "item": {
             "description": "[CARD] Graphics Card",
-            "additional_information": "El sistema de la DIAN señaló que la firma digital está fallida"
+            "additional_information": (
+                "El sistema de la DIAN señaló que la firma digital "
+                "está fallida")
         }
     }
 
@@ -86,5 +88,13 @@ def test_compose(composer, data_dict, schema):
     response_code = discrepancy_response.find(
         QName(NS.cbc, "ResponseCode"))
     assert response_code.text == "2"
+
+    assert credit_note_line.find(
+        QName(NS.cac, "BillingReference")) is not None
+
+    tax_total = credit_note_line.find(QName(NS.cac, "TaxTotal"))
+    assert tax_total.find(QName(NS.cbc, "TaxAmount")).text == "2856027.75"
+    assert tax_total.find(QName(NS.cbc, "TaxAmount")
+                          ).attrib.get('currencyID') == "COP"
 
     schema.assertValid(credit_note_line)
