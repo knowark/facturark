@@ -121,7 +121,9 @@ def resolve_credit_note_composer():
 def resolve_debit_note_composer():
     amount_composer = AmountComposer()
     extension_composer = resolve_extensions_composer()
-    debit_note_line_composer = DebitNoteLineComposer(amount_composer)
+    billing_reference_composer = resolve_billing_reference_composer()
+    debit_note_line_composer = DebitNoteLineComposer(
+        amount_composer, billing_reference_composer)
     monetary_total_composer = MonetaryTotalComposer(amount_composer)
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
