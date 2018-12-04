@@ -59,7 +59,7 @@ def data_dict():
             "description": "[CARD] Graphics Card",
             "additional_information": (
                 "El sistema de la DIAN indico que la firma digital "
-                "está fallida")
+                "esta fallida")
         }
     }
 
@@ -95,6 +95,6 @@ def test_compose(composer, data_dict, schema):
         "[CARD] Graphics Card")
     assert item.find(QName(NS.cbc, "AdditionalInformation")).text == (
         "El sistema de la DIAN indico que la firma digital "
-        "está fallida")
+        "esta fallida")
 
     schema.assertValid(debit_note_line)

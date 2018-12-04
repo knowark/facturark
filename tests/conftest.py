@@ -310,7 +310,7 @@ def credit_note_dict():
                     "description": "[CARD] Graphics Card",
                     "additional_information": (
                         "El sistema de la DIAN indico "
-                        "que la firma digital está fallida")
+                        "que la firma digital esta fallida")
                 }
             }
         ]
@@ -457,8 +457,8 @@ def debit_note_dict():
                 "item": {
                     "description": "[CARD] Graphics Card",
                     "additional_information": (
-                        u"El sistema de la DIAN indico que la firma digital "
-                        "está fallida")
+                        "El sistema de la DIAN indico que la firma digital "
+                        "esta fallida")
                 }
             }
         ]

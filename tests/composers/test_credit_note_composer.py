@@ -189,8 +189,8 @@ def data_dict():
                 "item": {
                     "description": "[CARD] Graphics Card",
                     "additional_information": (
-                        u"El sistema de la DIAN señaló que la firma "
-                        "digital está fallida")
+                        "El sistema de la DIAN señaló que la firma "
+                        "digital esta fallida")
                 }
             }
         ]
