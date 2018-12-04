@@ -308,7 +308,7 @@ def credit_note_dict():
                 "item": {
                     "description": "[CARD] Graphics Card",
                     "additional_information": (
-                        "El sistema de la DIAN señaló "
+                        "El sistema de la DIAN señalo "
                         "que la firma digital está fallida")
                 }
             }
@@ -440,7 +440,7 @@ def debit_note_dict():
                     "additional_document_reference": {
                         "id": "JD-11-2018",
                         "issue_date": "2018-11-30",
-                        "document_type": "Decisión de la JD",
+                        "document_type": "Decision de la JD",
                         "xpath": "",
                         "attachment": ""
                     }
@@ -456,7 +456,7 @@ def debit_note_dict():
                 "item": {
                     "description": "[CARD] Graphics Card",
                     "additional_information": (
-                        "El sistema de la DIAN señaló que la firma digital "
+                        "El sistema de la DIAN señalo que la firma digital "
                         "está fallida")
                 }
             }
