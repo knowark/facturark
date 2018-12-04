@@ -166,7 +166,7 @@ def data_dict():
                     "additional_document_reference": {
                         "id": "JD-11-2018",
                         "issue_date": "2018-11-30",
-                        "document_type": "Decisión de la JD",
+                        "document_type": "Decision de la JD",
                         "xpath": "",
                         "attachment": ""
                     }

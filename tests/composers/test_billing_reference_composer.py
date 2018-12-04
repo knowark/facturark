@@ -17,7 +17,7 @@ def data_dict():
         "additional_document_reference": {
             "id": "JD-11-2018",
             "issue_date": "2018-11-30",
-            "document_type": "Decisión de la JD"
+            "document_type": "Decision de la JD"
         },
         "billing_reference_line": {
             "amount": {
@@ -47,7 +47,7 @@ def test_compose(composer, data_dict, schema):
     assert additional_document_reference.find(
         QName(NS.cbc, "IssueDate")).text == "2018-11-30"
     assert additional_document_reference.find(
-        QName(NS.cbc, "DocumentType")).text == "Decisión de la JD"
+        QName(NS.cbc, "DocumentType")).text == "Decision de la JD"
 
     billing_reference_line = billing_reference.find(
         QName(NS.cac, "BillingReferenceLine"))

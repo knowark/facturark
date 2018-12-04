@@ -457,7 +457,7 @@ def debit_note_dict():
                 "item": {
                     "description": "[CARD] Graphics Card",
                     "additional_information": (
-                        "El sistema de la DIAN señalo que la firma digital "
+                        u"El sistema de la DIAN señalo que la firma digital "
                         "está fallida")
                 }
             }
