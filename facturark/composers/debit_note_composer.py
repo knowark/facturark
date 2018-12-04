@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from lxml.etree import Element, SubElement, QName, tostring
 from ..utils import make_child
 from ..namespaces import NS
