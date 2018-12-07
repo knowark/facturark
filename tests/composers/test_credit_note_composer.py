@@ -173,7 +173,7 @@ def data_dict():
                     "additional_document_reference": {
                         "id": "JD-11-2018",
                         "issue_date": "2018-11-30",
-                        "document_type": "Decision de la JD",
+                        "document_type": u"Decisión de la JD",
                         "xpath": "",
                         "attachment": ""
                     }
@@ -189,8 +189,8 @@ def data_dict():
                 "item": {
                     "description": "[CARD] Graphics Card",
                     "additional_information": (
-                        "El sistema de la DIAN indico que la firma "
-                        "digital esta fallida")
+                        u"El sistema de la DIAN señaló que la firma "
+                        u"digital está fallida")
                 }
             }
         ]

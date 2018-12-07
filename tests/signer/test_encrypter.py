@@ -59,3 +59,7 @@ def test_enrypter_encode_string(encrypter):
     value = u'VALUE'
     result = encrypter._encode_string(value)
     assert b'VALUE' == result
+
+    value = {}
+    result = encrypter._encode_string(value)
+    assert value == result
