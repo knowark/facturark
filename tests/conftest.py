@@ -294,7 +294,7 @@ def credit_note_dict():
                     "additional_document_reference": {
                         "id": "JD-11-2018",
                         "issue_date": "2018-11-30",
-                        "document_type": "Decisión de la JD",
+                        u"document_type": "Decisión de la JD",
                         "xpath": "",
                         "attachment": ""
                     }
@@ -310,8 +310,8 @@ def credit_note_dict():
                 "item": {
                     "description": "[CARD] Graphics Card",
                     "additional_information": (
-                        "El sistema de la DIAN señaló "
-                        "que la firma digital está fallida")
+                        u"El sistema de la DIAN señaló "
+                        u"que la firma digital está fallida")
                 }
             }
         ]
