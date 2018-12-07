@@ -1,8 +1,15 @@
 import facturark.__main__
+from pytest import raises
 from facturark.__main__ import (
     main, cli_build_document, cli_send_document, cli_verify_document,
     cli_query_document, parse, read_file, write_file, resolve_document,
     cli_qrcode)
+
+
+def test_parse_help():
+    arg_list = []
+    with raises(SystemExit):
+        parse(arg_list)
 
 
 def test_parse_build():

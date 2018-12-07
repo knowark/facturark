@@ -118,7 +118,7 @@ def parse(arg_list):
     query_parser.add_argument('-o', '--output_file')
     query_parser.set_defaults(func=cli_query_document)
 
-    if len(sys.argv[1:]) == 0:
+    if len(arg_list) == 0:
         parser.print_help()
         parser.exit()
 
