@@ -38,11 +38,10 @@ class DianExtensionsComposer(Composer):
             make_child(authorized_invoices, QName(NS.sts, "To"),
                        authorized_invoices_dict['to'])
 
-        if data_dict.get('invoice_source'):
-            invoice_source = make_child(
-                root, QName(NS.sts, "InvoiceSource"), empty=True)
-            make_child(invoice_source, QName(NS.cbc, "IdentificationCode"),
-                       data_dict['invoice_source']['identification_code'])
+        invoice_source = make_child(
+            root, QName(NS.sts, "InvoiceSource"), empty=True)
+        make_child(invoice_source, QName(NS.cbc, "IdentificationCode"),
+                   data_dict['invoice_source']['identification_code'])
 
         software_provider = make_child(
             root, QName(NS.sts, "SoftwareProvider"), empty=True)
