@@ -32,7 +32,7 @@ class DebitNoteLineComposer(Composer):
         for billing_reference_dict in data_dict.get('billing_references', []):
             root.append(self.billing_reference_composer.compose(
                 billing_reference_dict))
-        
+
         tax_total_dict = data_dict.get('tax_total')
         if tax_total_dict:
             tax_total = make_child(

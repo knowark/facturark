@@ -64,6 +64,43 @@ def data_dict():
     }
 
 
+@fixture
+def data_dict_without_some_data():
+    return {
+        'id': '1',
+        'uuid': 'abcd123',
+        'line_extension_amount': {
+            '@attributes': {'currencyID': 'COP'},
+            '#text': "3456788.00"
+        },
+        "discrepancy_response": {
+            "response_code": "2"
+        },
+        "billing_references": [{
+            "invoice_document_reference": {
+                "id": "PRUE980000094",
+                "uuid": "3d5a434b014429b551864c49a84164d58b11ea02",
+                "issue_date": "2018-11-30"
+            },
+            "billing_reference_line": {
+                "amount": {
+                    "@attributes": {
+                        "currencyID": "COP"
+                    },
+                    "#text": "15031725.00"
+                }
+            },
+            "additional_document_reference": {
+                "id": "JD-11-2018",
+                "issue_date": "2018-11-30",
+                "document_type": "Decision de la JD",
+                "xpath": "",
+                "attachment": ""
+            }
+        }]
+    }
+
+
 def test_compose(composer, data_dict, schema):
     debit_note_line = composer.compose(data_dict)
 
@@ -96,5 +133,9 @@ def test_compose(composer, data_dict, schema):
     assert item.find(QName(NS.cbc, "AdditionalInformation")).text == (
         "El sistema de la DIAN indico que la firma digital "
         "esta fallida")
+    schema.assertValid(debit_note_line)
 
+
+def test_compose(composer, data_dict_without_some_data, schema):
+    debit_note_line = composer.compose(data_dict_without_some_data)
     schema.assertValid(debit_note_line)
