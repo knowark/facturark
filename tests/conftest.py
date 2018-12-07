@@ -309,13 +309,8 @@ def credit_note_dict():
                 "item": {
                     "description": "[CARD] Graphics Card",
                     "additional_information": (
-<< << << < HEAD
-                        "El sistema de la DIAN indico "
-                        "que la firma digital esta fallida")
-== == == =
                         u"El sistema de la DIAN señaló "
                         u"que la firma digital está fallida")
->> >>>> > master
                 }
             }
         ]

@@ -147,19 +147,13 @@ def test_compose(composer, data_dict, schema):
     assert item.find(QName(NS.cbc, "Description")).text == (
         "[CARD] Graphics Card")
     assert item.find(QName(NS.cbc, "AdditionalInformation")).text == (
-<< << << < HEAD
-        "El sistema de la DIAN indico que la firma digital "
-        "esta fallida")
+        u"El sistema de la DIAN señaló que la firma digital "
+        u"está fallida")
 
     schema.assertValid(credit_note_line)
 
 
-== == == =
-        u"El sistema de la DIAN señaló que la firma digital "
-        u"está fallida")
->> >>>> > master
-
 def test_compose_without_taxes_items(composer, data_dict_without_taxes_items,
                                      schema):
-    credit_note_line=composer.compose(data_dict_without_taxes_items)
+    credit_note_line = composer.compose(data_dict_without_taxes_items)
     schema.assertValid(credit_note_line)
