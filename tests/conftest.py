@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import io
 from pytest import fixture

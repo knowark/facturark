@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import io
 from pytest import fixture, mark
 from lxml.etree import QName, fromstring, tostring
