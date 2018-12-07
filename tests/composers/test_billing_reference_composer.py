@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import io
 from pytest import fixture, mark
 from lxml.etree import QName, fromstring, tostring
@@ -36,6 +35,12 @@ def data_dict():
     }
 
 
+@fixture
+def data_dict_empty():
+    return {
+    }
+
+
 def test_compose(composer, data_dict, schema):
     billing_reference = composer.compose(data_dict)
 
@@ -69,4 +74,9 @@ def test_compose(composer, data_dict, schema):
     assert invoice_document_reference.find(
         QName(NS.cbc, "IssueDate")).text == "2018-11-30"
 
+    schema.assertValid(billing_reference)
+
+
+def test_compose_empty(composer, data_dict_empty, schema):
+    billing_reference = composer.compose(data_dict_empty)
     schema.assertValid(billing_reference)
