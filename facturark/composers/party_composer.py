@@ -28,9 +28,9 @@ class PartyComposer(Composer):
             self.location_composer.compose(
                 data_dict['physical_location'], 'PhysicalLocation'))
 
-        root.append(
-            self.party_tax_scheme_composer.compose(
-                data_dict['party_tax_scheme']))
+        for party_tax_scheme_dict in data_dict['party_tax_schemes']:
+            root.append(self.party_tax_scheme_composer.compose(
+                party_tax_scheme_dict))
 
         party_legal_entity_dict = data_dict.get('party_legal_entity')
         root.append(self.party_legal_entity_composer.compose(
