@@ -16,10 +16,10 @@ def resolve_extensions_composer():
     return ExtensionComposer(dian_extensions_composer)
 
 
-def resolve_invoice_line_composer():
-    amount_composer = AmountComposer()
+def resolve_invoice_line_composer(document_currency_code):
+    amount_composer_doc_curr = AmountComposer(document_currency_code)
     item_composer = ItemComposer()
-    price_composer = PriceComposer(amount_composer)
+    price_composer = PriceComposer(amount_composer_doc_curr)
     return InvoiceLineComposer(
         amount_composer, item_composer, price_composer)
 
@@ -71,23 +71,24 @@ def resolve_supplier_party_composer():
     return SupplierPartyComposer(party_composer)
 
 
-def resolve_tax_total_composer():
-    amount_composer = AmountComposer()
-    tax_subtotal_composer = TaxSubtotalComposer(amount_composer)
-    return TaxTotalComposer(amount_composer, tax_subtotal_composer)
+def resolve_tax_total_composer(document_currency_code):
+    amount_composer_doc_curr = AmountComposer(document_currency_code)
+    tax_subtotal_composer = TaxSubtotalComposer(amount_composer_doc_curr)
+    return TaxTotalComposer(amount_composer_doc_curr, tax_subtotal_composer)
 
 
-def resolve_invoice_composer():
-    amount_composer = AmountComposer()
+def resolve_invoice_composer(document_currency_code):
+    amount_composer_cop = AmountComposer()
+    amount_composer_doc_curr = AmountComposer(document_currency_code)
     extension_composer = resolve_extensions_composer()
-    invoice_line_composer = resolve_invoice_line_composer()
-    monetary_total_composer = MonetaryTotalComposer(amount_composer)
+    invoice_line_composer = resolve_invoice_line_composer(document_currency_code)
+    monetary_total_composer = MonetaryTotalComposer(amount_composer_cop)
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
-    payment_composer = PaymentComposer(amount_composer)
-    tax_total_composer = resolve_tax_total_composer()
+    payment_composer = PaymentComposer(amount_composer_doc_curr)
+    tax_total_composer = resolve_tax_total_composer(document_currency_code)
     delivery_composer = resolve_delivery_composer()
-    allowance_charge_composer = AllowanceChargeComposer(amount_composer)
+    allowance_charge_composer = AllowanceChargeComposer(amount_composer_doc_curr)
     delivery_terms_composer = DeliveryTermsComposer()
     return InvoiceComposer(
         extension_composer, supplier_party_composer, customer_party_composer,
@@ -97,51 +98,53 @@ def resolve_invoice_composer():
 
 
 def resolve_billing_reference_composer():
-    amount_composer = AmountComposer()
-    return BillingReferenceComposer(amount_composer)
+    amount_composer_doc_curr = AmountComposer(document_currency_code)
+    return BillingReferenceComposer(amount_composer_doc_curr)
 
 
-def resolve_credit_note_composer():
-    amount_composer = AmountComposer()
+def resolve_credit_note_composer(document_currency_code):
+    amount_composer_cop = AmountComposer()
+    amount_composer_doc_curr = AmountComposer(document_currency_code)
     extension_composer = resolve_extensions_composer()
-    billing_reference_composer = resolve_billing_reference_composer()
+    billing_reference_composer = resolve_billing_reference_composer(document_currency_code)
     credit_note_line_composer = CreditNoteLineComposer(
-        amount_composer, billing_reference_composer)
-    monetary_total_composer = MonetaryTotalComposer(amount_composer)
+        amount_composer_doc_curr, billing_reference_composer)
+    monetary_total_composer = MonetaryTotalComposer(amount_composer_cop)
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
-    payment_composer = PaymentComposer(amount_composer)
-    tax_total_composer = resolve_tax_total_composer()
+    payment_composer = PaymentComposer(amount_composer_doc_curr)
+    tax_total_composer = resolve_tax_total_composer(document_currency_code)
     return CreditNoteComposer(
         extension_composer, supplier_party_composer, customer_party_composer,
         payment_composer, tax_total_composer, monetary_total_composer,
         credit_note_line_composer)
 
 
-def resolve_debit_note_composer():
-    amount_composer = AmountComposer()
+def resolve_debit_note_composer(document_currency_code):
+    amount_composer_cop = AmountComposer()
+    amount_composer_doc_curr = AmountComposer(document_currency_code)
     extension_composer = resolve_extensions_composer()
-    billing_reference_composer = resolve_billing_reference_composer()
+    billing_reference_composer = resolve_billing_reference_composer(document_currency_code)
     debit_note_line_composer = DebitNoteLineComposer(
-        amount_composer, billing_reference_composer)
-    monetary_total_composer = MonetaryTotalComposer(amount_composer)
+        amount_composer_doc_curr, billing_reference_composer)
+    monetary_total_composer = MonetaryTotalComposer(amount_composer_cop)
     customer_party_composer = resolve_customer_party_composer()
     supplier_party_composer = resolve_supplier_party_composer()
-    payment_composer = PaymentComposer(amount_composer)
-    tax_total_composer = resolve_tax_total_composer()
+    payment_composer = PaymentComposer(amount_composer_doc_curr)
+    tax_total_composer = resolve_tax_total_composer(document_currency_code)
     return DebitNoteComposer(
         extension_composer, supplier_party_composer, customer_party_composer,
         payment_composer, tax_total_composer, monetary_total_composer,
         debit_note_line_composer)
 
 
-def resolve_composer(kind):
+def resolve_composer(kind, document_currency_code):
     if kind == 'invoice':
-        return resolve_invoice_composer()
+        return resolve_invoice_composer(document_currency_code)
     elif kind == 'credit_note':
-        return resolve_credit_note_composer()
+        return resolve_credit_note_composer(document_currency_code)
     else:
-        return resolve_debit_note_composer()
+        return resolve_debit_note_composer(document_currency_code)
 
 
 def resolve_identifier(kind, technical_key=None):

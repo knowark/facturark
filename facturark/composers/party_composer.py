@@ -4,6 +4,13 @@ from ..namespaces import NS
 from .composer import Composer
 
 
+DIAN_AGENCY_SCHEME_ATTRIBUTES = {
+    "schemeAgencyID": "195",
+    "schemeID": "31",
+    "schemeAgencyName": "CO, DIAN (Direccion de Impuestos y Aduanas Nacionales)"
+}
+
+
 class PartyComposer(Composer):
 
     def __init__(self, party_tax_scheme_composer, party_legal_entity_composer,
@@ -21,8 +28,8 @@ class PartyComposer(Composer):
         party_identification = make_child(
             root, QName(NS.cac, 'PartyIdentification'), empty=True)
         make_child(party_identification, QName(NS.cbc, 'ID'),
-                   party_identification_id['#text'],
-                   party_identification_id['@attributes'])
+                   party_identification_id,
+                   DIAN_AGENCY_SCHEME_ATTRIBUTES)
 
         root.append(
             self.location_composer.compose(

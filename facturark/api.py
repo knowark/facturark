@@ -13,7 +13,8 @@ from .imager import Imager
 
 def build_document(document_dict, pkcs12_certificate=None,
                    pkcs12_password=None, technical_key=None, kind='invoice'):
-    composer = resolve_composer(kind)
+    document_currency_code = document_dict.get("document_currency_code")
+    composer = resolve_composer(kind, document_currency_code)
     identifier = resolve_identifier(kind, technical_key)
     validator = resolve_validator()
     signer = resolve_signer(pkcs12_certificate, pkcs12_password)
