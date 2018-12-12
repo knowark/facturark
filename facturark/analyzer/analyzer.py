@@ -95,15 +95,21 @@ class Analyzer:
             ('.//fe:AccountingCustomerParty/fe:Party/cac:PartyIdentification/'
              'cbc:ID'), vars(NS)).attrib.get('schemeID')
 
-    def get_supplier_tax_scheme(self, document):
-        return document.find(
+    def get_supplier_tax_schemes(self, document):
+        result = []
+        for tax_level_code in document.findall(
             ('.//fe:AccountingSupplierParty/fe:Party/fe:PartyTaxScheme/'
-             'cbc:TaxLevelCode'), vars(NS)).text
+             'cbc:TaxLevelCode'), vars(NS)):
+            result.append(tax_level_code.text)
+        return result
 
-    def get_customer_tax_scheme(self, document):
-        return document.find(
+    def get_customer_tax_schemes(self, document):
+        result = []
+        for tax_level_code in document.findall(
             ('.//fe:AccountingCustomerParty/fe:Party/fe:PartyTaxScheme/'
-             'cbc:TaxLevelCode'), vars(NS)).text
+             'cbc:TaxLevelCode'), vars(NS)):
+            result.append(tax_level_code.text)
+        return result
 
     def get_tax_total_amounts(self, document):
         result = []

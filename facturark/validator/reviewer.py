@@ -1,5 +1,9 @@
 from .values import (INVOICE_TYPES, IDENTITY_DOCUMENT_TYPES, PARTY_TYPES,
-                     COUNTRIES, CURRENCIES, TAX_LEVELS, TAX_TYPES)
+                     COUNTRIES, CURRENCIES, TAX_LEVELS, TAX_TYPES,
+                     REPRESENTATION_TYPES)
+
+TAX_SCHEME_VALUES = (
+    list(TAX_LEVELS) + list(PARTY_TYPES) + list(REPRESENTATION_TYPES))
 
 
 class Reviewer:
@@ -85,12 +89,12 @@ class Reviewer:
         self.check(IDENTITY_DOCUMENT_TYPES, value)
 
     def _review_supplier_tax_scheme(self, element):
-        value = self.analyzer.get_supplier_tax_scheme(element)
-        self.check(TAX_LEVELS, value)
+        for value in self.analyzer.get_supplier_tax_schemes(element):
+            self.check(TAX_SCHEME_VALUES, value)
 
     def _review_customer_tax_scheme(self, element):
-        value = self.analyzer.get_customer_tax_scheme(element)
-        self.check(TAX_LEVELS, value)
+        for value in self.analyzer.get_customer_tax_schemes(element):
+            self.check(TAX_SCHEME_VALUES, value)
 
     def _review_tax_total(self, element):
         values = self.analyzer.get_tax_total_amounts(element)
