@@ -31,9 +31,9 @@ def invoice_dict():
                         '#text':  '900555666'
                     }
                 },
-                'party_tax_scheme': {
+                'party_tax_scheme': [{
                     'tax_level_code': ['0']
-                },
+                }],
                 'party_legal_entity': {
                     'registration_name': '800777555'
                 },
@@ -65,9 +65,9 @@ def invoice_dict():
                         '#text':  '900555666'
                     }
                 },
-                'party_tax_scheme': {
+                'party_tax_scheme': [{
                     'tax_level_code': ['0']
-                },
+                }],
                 'party_legal_entity': {
                     'registration_name': '800777555'
                 },
@@ -188,9 +188,9 @@ def credit_note_dict():
                         '#text':  '900555666'
                     }
                 },
-                'party_tax_scheme': {
+                'party_tax_scheme': [{
                     'tax_level_code': ['0']
-                },
+                }],
                 'party_legal_entity': {
                     'registration_name': '800777555'
                 },
@@ -222,9 +222,9 @@ def credit_note_dict():
                         '#text':  '900555666'
                     }
                 },
-                'party_tax_scheme': {
+                'party_tax_scheme': [{
                     'tax_level_code': ['0']
-                },
+                }],
                 'party_legal_entity': {
                     'registration_name': '800777555'
                 },
@@ -343,9 +343,9 @@ def debit_note_dict():
                         '#text':  '900555666'
                     }
                 },
-                'party_tax_scheme': {
+                'party_tax_scheme': [{
                     'tax_level_code': ['0']
-                },
+                }],
                 'party_legal_entity': {
                     'registration_name': '800777555'
                 },
@@ -377,9 +377,9 @@ def debit_note_dict():
                         '#text':  '900555666'
                     }
                 },
-                'party_tax_scheme': {
+                'party_tax_scheme': [{
                     'tax_level_code': ['0']
-                },
+                }],
                 'party_legal_entity': {
                     'registration_name': '800777555'
                 },
