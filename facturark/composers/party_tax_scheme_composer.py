@@ -10,8 +10,9 @@ class PartyTaxSchemeComposer(Composer):
         root = Element(
             QName(NS.fe, root_name), nsmap=vars(NS))
 
-        make_child(root, QName(NS.cbc, 'TaxLevelCode'),
-                   data_dict.get('tax_level_code'), required=False)
+        for tax_level_code in data_dict.get("tax_level_code"):
+            make_child(root, QName(NS.cbc, 'TaxLevelCode'),
+                       tax_level_code, required=False)
         make_child(root, QName(NS.cac, 'TaxScheme'),
                    required=False, empty=True)
 

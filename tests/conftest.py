@@ -32,7 +32,7 @@ def invoice_dict():
                     }
                 },
                 'party_tax_scheme': {
-                    'tax_level_code': '0'
+                    'tax_level_code': ['0']
                 },
                 'party_legal_entity': {
                     'registration_name': '800777555'
@@ -66,7 +66,7 @@ def invoice_dict():
                     }
                 },
                 'party_tax_scheme': {
-                    'tax_level_code': '0'
+                    'tax_level_code': ['0']
                 },
                 'party_legal_entity': {
                     'registration_name': '800777555'
@@ -189,7 +189,7 @@ def credit_note_dict():
                     }
                 },
                 'party_tax_scheme': {
-                    'tax_level_code': '0'
+                    'tax_level_code': ['0']
                 },
                 'party_legal_entity': {
                     'registration_name': '800777555'
@@ -223,7 +223,7 @@ def credit_note_dict():
                     }
                 },
                 'party_tax_scheme': {
-                    'tax_level_code': '0'
+                    'tax_level_code': ['0']
                 },
                 'party_legal_entity': {
                     'registration_name': '800777555'
@@ -344,7 +344,7 @@ def debit_note_dict():
                     }
                 },
                 'party_tax_scheme': {
-                    'tax_level_code': '0'
+                    'tax_level_code': ['0']
                 },
                 'party_legal_entity': {
                     'registration_name': '800777555'
@@ -378,7 +378,7 @@ def debit_note_dict():
                     }
                 },
                 'party_tax_scheme': {
-                    'tax_level_code': '0'
+                    'tax_level_code': ['0']
                 },
                 'party_legal_entity': {
                     'registration_name': '800777555'

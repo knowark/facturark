@@ -12,7 +12,7 @@ def composer():
 @fixture
 def data_dict():
     return {
-        'tax_level_code': '0'
+        'tax_level_code': ['0']
     }
 
 

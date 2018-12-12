@@ -63,7 +63,7 @@ def data_dict():
                     }
                 },
                 'party_tax_scheme': {
-                    'tax_level_code': '0'
+                    'tax_level_code': ['0']
                 },
                 'party_legal_entity': {
                     'registration_name': '800777555'
@@ -97,7 +97,7 @@ def data_dict():
                     }
                 },
                 'party_tax_scheme': {
-                    'tax_level_code': '0'
+                    'tax_level_code': ['0']
                 },
                 'party_legal_entity': {
                     'registration_name': '800777555'
