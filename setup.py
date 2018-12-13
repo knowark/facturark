@@ -35,7 +35,7 @@ setup(
     description="Librería de Generación de Factura Electrónica en Python",
     entry_points={
         'console_scripts': [
-            'facturark=facturark.cli:main',
+            'facturark=facturark.__main__:main',
         ],
     },
     install_requires=requirements,
