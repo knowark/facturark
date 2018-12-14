@@ -41,7 +41,15 @@ setup(
     install_requires=requirements,
     license="GNU General Public License v3",
     long_description=readme + '\n\n' + history,
-    include_package_data=True,
+    package_data={
+        '': [
+            'XSD/DIAN/*.xsd',
+            'XSD/DIAN/UBL2/common/*.xsd',
+            'XSD/XADES/*.xsd',
+            'XSD/XADES/XMLDSIG/*.xsd',
+            'assets/*'
+            ],
+    },
     keywords='facturark',
     name='facturark',
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
