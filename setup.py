@@ -44,7 +44,7 @@ setup(
     include_package_data=True,
     keywords='facturark',
     name='facturark',
-    packages=find_packages(include=['facturark']),
+    packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
