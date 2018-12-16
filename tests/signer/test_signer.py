@@ -106,8 +106,7 @@ def test_signer_get_policy_hash(signer):
 
 def test_signer_prepare_issuer_name(signer, certificate):
     certificate_object = signer._parse_certificate(certificate)
-    certificate = certificate_object.get_certificate()
-    issuer_name = signer._prepare_issuer_name(certificate)
+    issuer_name = signer._prepare_issuer_name(certificate_object)
     assert issuer_name == (
         b'1.2.840.113549.1.9.1=info@mit-xperts.com,CN=itv.mit-xperts.com,'
         b'OU=HBBTV-DEMO-CA,O=MIT-xperts GmbH,L=Munich,ST=Bavaria,C=DE')

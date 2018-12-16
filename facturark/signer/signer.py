@@ -6,7 +6,6 @@ from datetime import datetime, timedelta, tzinfo
 from ..utils import read_asset
 from lxml.etree import tostring
 
-
 class Signer:
     def __init__(self, canonicalizer, hasher, encoder, identifier, encrypter,
                  signature_composer, key_info_composer, object_composer,
@@ -268,11 +267,58 @@ class Signer:
         This format is used by the 'getName()' method of
         javax.security.auth.x500.X500Principal
         """
+        # cryptography >= 2.5
+        # issuer_name = ', '.join(
+        #     attr.rfc4514_string() for attr
+        #     in reversed(certificate_object.issuer._attributes)
+        # ).encode('ascii')
 
+        # cryptography < 2.5 (backport)
+        from cryptography.x509.oid import NameOID
+        #: Short attribute names from RFC 4514:
+        #: https://tools.ietf.org/html/rfc4514#page-7
+        _NAMEOID_TO_NAME = {
+            NameOID.COMMON_NAME: 'CN',
+            NameOID.LOCALITY_NAME: 'L',
+            NameOID.STATE_OR_PROVINCE_NAME: 'ST',
+            NameOID.ORGANIZATION_NAME: 'O',
+            NameOID.ORGANIZATIONAL_UNIT_NAME: 'OU',
+            NameOID.COUNTRY_NAME: 'C',
+            NameOID.STREET_ADDRESS: 'STREET',
+            NameOID.DOMAIN_COMPONENT: 'DC',
+            NameOID.USER_ID: 'UID',
+        }
+        def _escape_dn_value(val):
+            """Escape special characters in RFC4514 Distinguished Name value."""
+
+            # See https://tools.ietf.org/html/rfc4514#section-2.4
+            val = val.replace('\\', '\\\\')
+            val = val.replace('"', '\\"')
+            val = val.replace('+', '\\+')
+            val = val.replace(',', '\\,')
+            val = val.replace(';', '\\;')
+            val = val.replace('<', '\\<')
+            val = val.replace('>', '\\>')
+            val = val.replace('\0', '\\00')
+
+            if val[0] in ('#', ' '):
+                val = '\\' + val
+            if val[-1] == ' ':
+                val = val[:-1] + '\\ '
+
+            return val
+
+        def attribute_name_to_string(attribute_name):
+            key = _NAMEOID_TO_NAME.get(
+                attribute_name.oid, attribute_name.oid.dotted_string)
+            return '%s=%s' % (key, _escape_dn_value(attribute_name.value))
+        def rdn_to_string(rdn):
+            return '+'.join(attribute_name_to_string(attr) for attr in rdn._attributes)
         issuer_name = ', '.join(
-            attr.rfc4514_string() for attr
+            rdn_to_string(rdn) for rdn
             in reversed(certificate_object.issuer._attributes)
         ).encode('ascii')
+        # cryptography < 2.5 (end backport)
         return issuer_name
 
     def _prepare_signature_value(self, value, uid):
