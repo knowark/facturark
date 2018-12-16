@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" 
-    xmlns:tns="http://www.dian.gov.co/contratos/facturaelectronica/v1/Structures" 
-    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" 
-    xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" 
-    xmlns:ds="http://www.w3.org/2000/09/xmldsig#" 
-    xmlns:Q1="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" 
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="http://www.dian.gov.co/contratos/facturaelectronica/v1/Structures"
+    xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+    xmlns:udt="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xmlns:Q1="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
     xmlns:Q2="http://www.dian.gov.co/contratos/facturaelectronica/v1/Structures" targetNamespace="http://www.dian.gov.co/contratos/facturaelectronica/v1/Structures" elementFormDefault="qualified">
     <import namespace="http://www.w3.org/2000/09/xmldsig#" schemaLocation="xmldsig-core-schema.xsd"/>
-    <import namespace="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" schemaLocation="http://www.dian.gov.co/micrositios/fac_electronica/documentos/common/UnqualifiedDataTypeSchemaModule-2.0.xsd"/>
-    <import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" schemaLocation="http://www.dian.gov.co/micrositios/fac_electronica/documentos/common/UBL-CommonAggregateComponents-2.0.xsd"/>
+    <import namespace="urn:un:unece:uncefact:data:specification:UnqualifiedDataTypesSchemaModule:2" schemaLocation="UBL2/common/UnqualifiedDataTypeSchemaModule-2.0.xsd"/>
+    <import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" schemaLocation="UBL2/common/UBL-CommonAggregateComponents-2.0.xsd"/>
     <complexType name="InvoiceControl">
         <annotation>
             <documentation xml:lang="es">1.3 - Datos Resolución de
