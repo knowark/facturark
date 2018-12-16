@@ -37,6 +37,8 @@ def signer(certificate, private_key):
                     qualifying_properties_composer, signed_properties_composer,
                     signed_info_composer, signature_value_composer,
                     certificate=certificate, private_key=private_key)
+    assert isinstance(certificate, bytes)
+    assert isinstance(private_key, bytes)
     return signer
 
 
@@ -53,6 +55,7 @@ def test_signer_instantiation(signer):
 
 
 def test_signer_parse_certificate(signer, certificate):
+    assert isinstance(certificate, bytes)
     result = signer._parse_certificate(certificate)
 
     assert isinstance(result,
@@ -60,12 +63,14 @@ def test_signer_parse_certificate(signer, certificate):
 
 
 def test_signer_parse_private_key(signer, private_key):
+    assert isinstance(private_key, bytes)
     result = signer._parse_private_key(private_key)
 
     assert isinstance(result,
         cryptography.hazmat.primitives.asymmetric.rsa.RSAPrivateKey)
 
 def test_signer_serialize_certificate(signer, certificate):
+    assert isinstance(certificate, bytes)
     certificate_object = signer._parse_certificate(certificate)
 
     result = signer._serialize_certificate(certificate_object)
@@ -76,6 +81,7 @@ def test_signer_serialize_certificate(signer, certificate):
 
 
 def test_signer_prepare_key_info(signer, certificate):
+    assert isinstance(certificate, bytes)
     algorithm = "http://www.w3.org/2001/04/xmlenc#sha512"
     certificate_object = signer._parse_certificate(certificate)
 
@@ -105,6 +111,7 @@ def test_signer_get_policy_hash(signer):
 
 
 def test_signer_prepare_issuer_name(signer, certificate):
+    assert isinstance(certificate, bytes)
     certificate_object = signer._parse_certificate(certificate)
     issuer_name = signer._prepare_issuer_name(certificate_object)
     assert issuer_name == (
@@ -113,6 +120,7 @@ def test_signer_prepare_issuer_name(signer, certificate):
 
 
 def test_signer_prepare_signed_properties(signer, certificate):
+    assert isinstance(certificate, bytes)
     certificate_object = signer._parse_certificate(certificate)
 
     uid = b"xmldsig-a116f9ea-cbfa-4e45-b026-646e43b86df7-signedprops"
@@ -191,6 +199,8 @@ def test_signer_prepare_signature_value(signer):
 
 
 def test_create_signature_value_digest(signer, certificate, private_key):
+    assert isinstance(certificate, bytes)
+    assert isinstance(private_key, bytes)
     certificate_object = signer._parse_certificate(certificate)
     private_key = signer._parse_private_key(private_key)
     signed_info_digest = (
@@ -207,6 +217,8 @@ def test_create_signature_value_digest(signer, certificate, private_key):
 
 
 def test_signer_sign(signer, unsigned_invoice):
+    assert isinstance(signer.certificate, bytes)
+    assert isinstance(signer.private_key, bytes)
     signed_document = signer.sign(unsigned_invoice)
 
     assert 'Invoice' in signed_document.tag

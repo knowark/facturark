@@ -28,8 +28,8 @@ class Signer:
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")
         self.digest_algorithm = (
             "http://www.w3.org/2001/04/xmlenc#sha256")
-        self.certificate = certificate,
-        self.private_key = private_key,
+        self.certificate = certificate
+        self.private_key = private_key
 
     def sign(self, element):
 
