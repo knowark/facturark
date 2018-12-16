@@ -314,7 +314,7 @@ class Signer:
             return '%s=%s' % (key, _escape_dn_value(attribute_name.value))
         def rdn_to_string(rdn):
             return '+'.join(attribute_name_to_string(attr) for attr in rdn._attributes)
-        issuer_name = ', '.join(
+        issuer_name = ','.join(
             rdn_to_string(rdn) for rdn
             in reversed(certificate_object.issuer._attributes)
         ).encode('ascii')
