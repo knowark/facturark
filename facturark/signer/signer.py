@@ -87,7 +87,10 @@ class Signer:
         return document_element
 
     def _parse_private_key(self, private_key):
-        private_key_object = serialization.load_pem_private_key(private_key, default_backend())
+        private_key_object = serialization.load_pem_private_key(
+            private_key,
+            password=None,  # Password encryption maybe later (why?)
+            backend=default_backend())
         return private_key_object
 
     def _parse_certificate(self, certificate):
