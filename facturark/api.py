@@ -13,6 +13,7 @@ from .imager import Imager
 
 def build_document(document_dict, certificate=None, private_key=None,
                    technical_key=None, kind='invoice'):
+    document_dict = document_dict.copy()
     composer = resolve_composer(kind)
     identifier = resolve_identifier(kind, technical_key)
     validator = resolve_validator()
@@ -25,6 +26,7 @@ def build_document(document_dict, certificate=None, private_key=None,
 
 
 def send_document(request_dict):
+    request_dict = request_dict.copy()
     client = Client(
         Analyzer(),
         request_dict.pop("username"),
@@ -34,16 +36,19 @@ def send_document(request_dict):
 
 
 def generate_qrcode(document):
+    document = document.copy()
     imager = Imager(Analyzer())
     return imager.qrcode(document)
 
 
 def verify_document(document):
+    document = document.copy()
     verifier = resolve_verifier()
     return verifier.verify_bytes(document)
 
 
 def query_document(query_dict):
+    query_dict = query_dict.copy()
     client = Client(
         Analyzer(),
         query_dict.pop("username"),
