@@ -52,11 +52,20 @@ ZXd9YhirV3sZ5bgXtR4Kcn1ughzLrxj8Y5XqGw==
 
 
 @fixture
-def pkcs12_certificate():
-    filename = 'certificate.p12'
+def certificate():
+    filename = 'cert.pem'
     directory = os.path.dirname(os.path.realpath(__file__))
     path = os.path.join(directory, '..', 'data', filename)
     with io.open(path, 'rb') as f:
         certificate = f.read()
-    password = b'test'
-    return (certificate, password)
+    return certificate
+
+@fixture
+def private_key():
+    filename = 'key.pem'
+    directory = os.path.dirname(os.path.realpath(__file__))
+    path = os.path.join(directory, '..', 'data', filename)
+    with io.open(path, 'rb') as f:
+        private_key = f.read()
+    return private_key
+

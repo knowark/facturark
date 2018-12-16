@@ -14,14 +14,13 @@ def test_resolve_signed_info_composer():
     assert isinstance(resolve_signed_info_composer(), SignedInfoComposer)
 
 
-def test_resolve_signer(pkcs12_certificate):
-    certificate, password = pkcs12_certificate
-    assert isinstance(resolve_signer(certificate, password), Signer)
+def test_resolve_signer(certificate, private_key):
+    assert isinstance(resolve_signer(certificate, private_key), Signer)
 
 
-def test_resolve_signer_no_certificate(pkcs12_certificate):
-    certificate, password = None, None
-    assert resolve_signer(certificate, password) is None
+def test_resolve_signer_no_certificate():
+    certificate, private_key = None, None
+    assert resolve_signer(certificate, private_key) is None
 
 
 def test_resolve_verifier():
