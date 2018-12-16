@@ -22,7 +22,7 @@ class Encrypter:
                 'sha256', SHA256)
         }
 
-    def create_signature(self, private_key, digest_b64, algorithm=(
+    def create_signature(self, private_key_object, digest_b64, algorithm=(
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")):
 
         data = b64decode(digest_b64)
@@ -33,15 +33,13 @@ class Encrypter:
         algorithm = algorithm.decode("utf-8")
         hash_algorithm = self.algorithms[algorithm][1]()
 
-        signature = private_key.sign(data, padding, Prehashed(hash_algorithm))
+        signature = private_key_object.sign(data, padding, Prehashed(hash_algorithm))
 
         return signature
 
     def verify_signature(self, certificate_b64, signature_b64,
                          digest_b64, algorithm):
         certificate = self._parse_certificate(certificate_b64)
-        certificate = x509.load_pem_x509_certificate(
-            certificate_b64, default_backend())
         public_key = certificate.public_key()
 
         signature = b64decode(signature_b64)

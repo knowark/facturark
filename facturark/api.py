@@ -11,12 +11,12 @@ from .validator.resolver import resolve_validator
 from .imager import Imager
 
 
-def build_document(document_dict, pkcs12_certificate=None,
-                   pkcs12_password=None, technical_key=None, kind='invoice'):
+def build_document(document_dict, certificate=None, private_key=None,
+                   technical_key=None, kind='invoice'):
     composer = resolve_composer(kind)
     identifier = resolve_identifier(kind, technical_key)
     validator = resolve_validator()
-    signer = resolve_signer(pkcs12_certificate, pkcs12_password)
+    signer = resolve_signer(certificate, private_key)
     verifier = resolve_verifier()
 
     builder = DocumentBuilder(
