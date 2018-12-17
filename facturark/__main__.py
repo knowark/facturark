@@ -30,11 +30,11 @@ def cli_build_document(options_dict):
     invoice_dict = json.loads(invoice_bytes.decode('utf-8'))
     certificate = (read_file(options_dict.get('certificate'))
                    if options_dict.get('certificate') else None)
-    password = options_dict.get('password')
+    private_key = options_dict.get('private_key')
     technical_key = options_dict.get('technical_key')
     kind = options_dict.get('kind')
     invoice_xml, _ = build_document(
-        invoice_dict, certificate, password, technical_key, kind)
+        invoice_dict, certificate, private_key, technical_key, kind)
     output_file = options_dict.get('output_file')
     write_file(output_file, invoice_xml)
 
@@ -91,7 +91,7 @@ def parse(arg_list):
     build_parser = subparsers.add_parser('build')
     build_parser.add_argument('input_file')
     build_parser.add_argument('-c', '--certificate')
-    build_parser.add_argument('-p', '--password')
+    build_parser.add_argument('-p', '--private_key')
     build_parser.add_argument('-o', '--output_file')
     build_parser.add_argument('-t', '--technical_key')
     build_parser.add_argument('-k', '--kind', default='invoice')

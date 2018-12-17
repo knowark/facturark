@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['lxml>=3.7.1', 'zeep>=3.1.0', 'qrcode>=5.3', 'cryptography', 'pyOpenSSL']
+requirements = ['lxml>=3.7.1', 'zeep>=3.1.0', 'qrcode>=5.3', 'cryptography']
 
 setup_requirements = ['pytest-runner', ]
 
@@ -41,7 +41,15 @@ setup(
     install_requires=requirements,
     license="GNU General Public License v3",
     long_description=readme + '\n\n' + history,
-    include_package_data=True,
+    package_data={
+        '': [
+            'XSD/DIAN/*.xsd',
+            'XSD/DIAN/UBL2/common/*.xsd',
+            'XSD/XADES/*.xsd',
+            'XSD/XADES/XMLDSIG/*.xsd',
+            'assets/*'
+            ],
+    },
     keywords='facturark',
     name='facturark',
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),

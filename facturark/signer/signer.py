@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-from OpenSSL import crypto
+from cryptography import x509
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
 from datetime import datetime, timedelta, tzinfo
 from ..utils import read_asset
 from lxml.etree import tostring
-
 
 class Signer:
     def __init__(self, canonicalizer, hasher, encoder, identifier, encrypter,
                  signature_composer, key_info_composer, object_composer,
                  qualifying_properties_composer, signed_properties_composer,
                  signed_info_composer, signature_value_composer,
-                 pkcs12_certificate, pkcs12_password):
+                 certificate, private_key):
         self.canonicalizer = canonicalizer
         self.hasher = hasher
         self.encoder = encoder
@@ -27,30 +28,30 @@ class Signer:
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")
         self.digest_algorithm = (
             "http://www.w3.org/2001/04/xmlenc#sha256")
-        self.pkcs12_certificate = pkcs12_certificate
-        self.pkcs12_password = pkcs12_password
+        self.certificate = certificate
+        self.private_key = private_key
 
     def sign(self, element):
 
         # Create Signature ID
         signature_id = self.identifier.generate_id()
 
-        # Parse PKCS12 Certificate
-        certificate = self._parse_certificate(
-            self.pkcs12_certificate, self.pkcs12_password)
+        # Parse X509 PEM Certificate
+        certificate_object = self._parse_certificate(self.certificate)
+        # Parse RSA PEM Private Key
+        private_key_object = self._parse_private_key(self.private_key)
 
         # Prepare KeyInfo Element
-        x509_certificate = certificate.get_certificate()
         key_info_id = self.identifier.generate_id(suffix='keyinfo')
         key_info_element, key_info_digest = (
-            self._prepare_key_info(x509_certificate, key_info_id,
-                                   self.digest_algorithm))
+            self._prepare_key_info(
+                certificate_object, key_info_id, self.digest_algorithm))
 
         # Prepare Signed Properties Element
         signed_properties_id = signature_id + '-signedprops'
         signed_properties_element, signed_properties_digest = (
             self._prepare_signed_properties(
-                x509_certificate, signed_properties_id))
+                certificate_object, signed_properties_id))
 
         # Prepare Document Element
         document_element, document_digest = (
@@ -64,9 +65,8 @@ class Signer:
         )
 
         # Create Encrypted Signature Digest
-        private_key = certificate.get_privatekey().to_cryptography_key()
         signature_value_digest = self._create_signature_value_digest(
-            private_key, signed_info_digest)
+            private_key_object, signed_info_digest)
 
         # Prepare Signature Value Element
         uid = signature_id + '-sigvalue'
@@ -85,14 +85,20 @@ class Signer:
         # return signed_document_element
         return document_element
 
-    def _parse_certificate(self, pkcs12_certificate, pkcs12_password):
-        certificate = crypto.load_pkcs12(pkcs12_certificate, pkcs12_password)
-        return certificate
+    def _parse_private_key(self, private_key):
+        private_key_object = serialization.load_pem_private_key(
+            private_key,
+            password=None,  # Password encryption maybe later (why?)
+            backend=default_backend())
+        return private_key_object
+
+    def _parse_certificate(self, certificate):
+        certificate_object = x509.load_pem_x509_certificate(certificate, default_backend())
+        return certificate_object
 
     def _serialize_certificate(self, certificate_object):
-        pem_certificate = crypto.dump_certificate(
-            crypto.FILETYPE_PEM, certificate_object)
-
+        pem_certificate = certificate_object.public_bytes(
+            encoding=serialization.Encoding.PEM)
         return self._normalize_certificate(pem_certificate)
 
     def _create_reference_dict(self, digest_value, attributes,
@@ -187,9 +193,9 @@ class Signer:
         digest_algorithm = self.digest_algorithm
         signing_time = self._get_local_time()
         issuer_name = self._prepare_issuer_name(certificate_object)
-        serial_number = str(certificate_object.get_serial_number())
-        certificate_pem = crypto.dump_certificate(
-            crypto.FILETYPE_PEM, certificate_object)
+        serial_number = str(certificate_object.serial_number)
+        certificate_pem = certificate_object.public_bytes(
+            encoding=serialization.Encoding.PEM)
         digest_value = self._get_certificate_digest_value(certificate_pem,
                                                           digest_algorithm)
         policy_identifier, policy_description = self._get_policy()
@@ -261,10 +267,58 @@ class Signer:
         This format is used by the 'getName()' method of
         javax.security.auth.x500.X500Principal
         """
+        # cryptography >= 2.5
+        # issuer_name = ', '.join(
+        #     attr.rfc4514_string() for attr
+        #     in reversed(certificate_object.issuer._attributes)
+        # ).encode('ascii')
 
-        issuer_name = b','.join(
-            [key + b'=' + value for key, value in
-             reversed(certificate_object.get_issuer().get_components())])
+        # cryptography < 2.5 (backport)
+        from cryptography.x509.oid import NameOID
+        #: Short attribute names from RFC 4514:
+        #: https://tools.ietf.org/html/rfc4514#page-7
+        _NAMEOID_TO_NAME = {
+            NameOID.COMMON_NAME: 'CN',
+            NameOID.LOCALITY_NAME: 'L',
+            NameOID.STATE_OR_PROVINCE_NAME: 'ST',
+            NameOID.ORGANIZATION_NAME: 'O',
+            NameOID.ORGANIZATIONAL_UNIT_NAME: 'OU',
+            NameOID.COUNTRY_NAME: 'C',
+            NameOID.STREET_ADDRESS: 'STREET',
+            NameOID.DOMAIN_COMPONENT: 'DC',
+            NameOID.USER_ID: 'UID',
+        }
+        def _escape_dn_value(val):
+            """Escape special characters in RFC4514 Distinguished Name value."""
+
+            # See https://tools.ietf.org/html/rfc4514#section-2.4
+            val = val.replace('\\', '\\\\')
+            val = val.replace('"', '\\"')
+            val = val.replace('+', '\\+')
+            val = val.replace(',', '\\,')
+            val = val.replace(';', '\\;')
+            val = val.replace('<', '\\<')
+            val = val.replace('>', '\\>')
+            val = val.replace('\0', '\\00')
+
+            if val[0] in ('#', ' '):
+                val = '\\' + val
+            if val[-1] == ' ':
+                val = val[:-1] + '\\ '
+
+            return val
+
+        def attribute_name_to_string(attribute_name):
+            key = _NAMEOID_TO_NAME.get(
+                attribute_name.oid, attribute_name.oid.dotted_string)
+            return '%s=%s' % (key, _escape_dn_value(attribute_name.value))
+        def rdn_to_string(rdn):
+            return '+'.join(attribute_name_to_string(attr) for attr in rdn._attributes)
+        issuer_name = ','.join(
+            rdn_to_string(rdn) for rdn
+            in reversed(certificate_object.issuer._attributes)
+        ).encode('ascii')
+        # cryptography < 2.5 (end backport)
         return issuer_name
 
     def _prepare_signature_value(self, value, uid):
@@ -324,9 +378,9 @@ class Signer:
 
         return signed_info, signed_info_digest
 
-    def _create_signature_value_digest(self, private_key, signed_info_digest):
+    def _create_signature_value_digest(self, private_key_object, signed_info_digest):
         encrypted_signature_value = self.encrypter.create_signature(
-            private_key, signed_info_digest, self.signature_algorithm)
+            private_key_object, signed_info_digest, self.signature_algorithm)
 
         signature_value_digest = self.encoder.base64_encode(
             encrypted_signature_value)

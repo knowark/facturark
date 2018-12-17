@@ -13,13 +13,13 @@ def test_parse_help():
 
 
 def test_parse_build():
-    arg_list = ['build', '-o', 'invoice.xml', '-c', 'certificate.p12',
-                '-p', 'pass', '-t', 'tech_key', 'invoice.json']
+    arg_list = ['build', '-o', 'invoice.xml', '-c', 'cert.pem',
+                '-p', 'key.pem', '-t', 'tech_key', 'invoice.json']
     args = parse(arg_list)
     assert args.input_file == 'invoice.json'
     assert args.output_file == 'invoice.xml'
-    assert args.certificate == 'certificate.p12'
-    assert args.password == 'pass'
+    assert args.certificate == 'cert.pem'
+    assert args.private_key == 'key.pem'
     assert args.technical_key == 'tech_key'
 
 
@@ -89,8 +89,8 @@ def test_write_file(tmpdir):
 def test_cli_build_invoice(tmpdir, monkeypatch):
     test_data = {
         'test_invoice_dict': None,
-        'test_pkcs12_certificate': None,
-        'test_pkcs12_password': None,
+        'test_certificate': None,
+        'test_private_key': None,
         'test_technical_key': None
     }
 
@@ -100,14 +100,14 @@ def test_cli_build_invoice(tmpdir, monkeypatch):
     input_pathlocal.write(b'{"name": "Company XYX", "amount": 50}')
 
     def mock_build_document(invoice_dict,
-                            pkcs12_certificate=None,
-                            pkcs12_password=None,
+                            certificate=None,
+                            private_key=None,
                             technical_key=None,
                             kind='invoice'):
 
         test_data['test_invoice_dict'] = invoice_dict
-        test_data['test_pkcs12_certificate'] = pkcs12_certificate
-        test_data['test_pkcs12_password'] = pkcs12_password
+        test_data['test_certificate'] = certificate
+        test_data['test_private_key'] = private_key
         test_data['test_tecnical_key'] = technical_key
 
         return b'<Invoice><Id>777</Id><Invoice>', ''
@@ -126,8 +126,8 @@ def test_cli_build_invoice(tmpdir, monkeypatch):
     cli_build_document(options_dict)
 
     assert isinstance(test_data['test_invoice_dict'], dict)
-    assert test_data['test_pkcs12_certificate'] is None
-    assert test_data['test_pkcs12_password'] is None
+    assert test_data['test_certificate'] is None
+    assert test_data['test_private_key'] is None
     assert test_data['test_technical_key'] is None
     assert output_pathlocal.read('rb') == b'<Invoice><Id>777</Id><Invoice>'
 
@@ -135,8 +135,8 @@ def test_cli_build_invoice(tmpdir, monkeypatch):
 def xtest_cli_build_credit_note(tmpdir, monkeypatch):
     test_data = {
         'test_credit_note_dict': None,
-        'test_pkcs12_certificate': None,
-        'test_pkcs12_password': None,
+        'test_certificate': None,
+        'test_private_key': None,
         'test_technical_key': None
     }
 
@@ -146,13 +146,13 @@ def xtest_cli_build_credit_note(tmpdir, monkeypatch):
     input_pathlocal.write(b'{"name": "Company XYX", "amount": 50}')
 
     def mock_build_invoice(credit_note_dict,
-                           pkcs12_certificate=None,
-                           pkcs12_password=None,
+                           certificate=None,
+                           private_key=None,
                            technical_key=None):
 
         test_data['test_credit_note_dict'] = credit_note_dict
-        test_data['test_pkcs12_certificate'] = pkcs12_certificate
-        test_data['test_pkcs12_password'] = pkcs12_password
+        test_data['test_certificate'] = certificate
+        test_data['test_private_key'] = private_key
         test_data['test_technical_key'] = technical_key
 
         return b'<Invoice><Id>777</Id><Invoice>', ''
@@ -171,8 +171,8 @@ def xtest_cli_build_credit_note(tmpdir, monkeypatch):
     cli_build_invoice(options_dict)
 
     assert isinstance(test_data['test_credit_note_dict'], dict)
-    assert test_data['test_pkcs12_certificate'] is None
-    assert test_data['test_pkcs12_password'] is None
+    assert test_data['test_certificate'] is None
+    assert test_data['test_private_key'] is None
     assert test_data['test_technical_key'] is None
     assert output_pathlocal.read('rb') == b'<Invoice><Id>777</Id><Invoice>'
 
