@@ -60,10 +60,9 @@ test-all: ## run tests on every Python version with tox
 	tox
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source facturark -m pytest -s
-	coverage report -m
-	#coverage html
-	#$(BROWSER) htmlcov/index.html
+	coverage run --source facturark -m pytest -x -s \
+	-W ignore::DeprecationWarning
+	coverage report -m 
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/facturark.rst
@@ -86,3 +85,7 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+upgrade-requirements:
+	pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | \
+	xargs -n1 pip install -U
