@@ -7,7 +7,7 @@ from .composer import Composer
 class AddressComposer(Composer):
 
     def compose(self, data_dict, root_name="Address"):
-        root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
+        root = Element(QName(NS.cac, root_name), nsmap=vars(NS))
 
         make_child(root, QName(NS.cbc, "Department"),
                    data_dict['department'], required=False)

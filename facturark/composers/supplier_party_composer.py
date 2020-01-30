@@ -11,7 +11,7 @@ class SupplierPartyComposer(Composer):
 
     def compose(self, data_dict, root_name=None):
         root_name = root_name or self.root_name
-        root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
+        root = Element(QName(NS.cac, root_name), nsmap=vars(NS))
 
         make_child(root, QName(NS.cbc, 'AdditionalAccountID'),
                    str(int(data_dict['additional_account_id'])))

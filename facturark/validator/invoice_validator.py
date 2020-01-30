@@ -6,7 +6,7 @@ class InvoiceValidator(Validator):
     def __init__(self, reviewer):
         super(InvoiceValidator, self).__init__(reviewer)
         self.schema = parse_xsd(
-            'XSD/DIAN/V18/XSD/maindoc/UBL-Invoice-2.1.xsd')
+            'XSD/DIAN/V18/XSD/DIAN_UBL21_Compiled.xsd')
 
     def validate(self, element):
         self.schema.assertValid(element)

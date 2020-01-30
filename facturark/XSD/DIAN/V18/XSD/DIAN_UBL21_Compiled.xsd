@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:import namespace="dian:gov:co:facturaelectronica:Structures-2-1" schemaLocation="./maindoc/DIAN_UBL_Structures.xsd"/>
+    <xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" schemaLocation="./maindoc/UBL-Invoice-2.1.xsd"/>
+
+</xsd:schema>

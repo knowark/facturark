@@ -8,7 +8,7 @@ class ItemComposer(Composer):
 
     def compose(self, data_dict, root_name='Item'):
         root = Element(
-            QName(NS.fe, root_name), nsmap=vars(NS))
+            QName(NS.cac, root_name), nsmap=vars(NS))
 
         make_child(root, QName(NS.cbc, 'Description'),
                    data_dict.get('description'), required=False)

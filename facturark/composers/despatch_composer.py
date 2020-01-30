@@ -12,7 +12,7 @@ class DespatchComposer(Composer):
 
     def compose(self, data_dict, root_name=None):
         root_name = root_name or self.root_name
-        root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
+        root = Element(QName(NS.cac, root_name), nsmap=vars(NS))
 
         despatch_address_dict = data_dict.get('despatch_address')
         root.append(self.address_composer.compose(

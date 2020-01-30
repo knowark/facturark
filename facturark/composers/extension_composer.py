@@ -19,6 +19,11 @@ class ExtensionComposer(Composer):
         extension_content = make_child(
             root, QName(NS.ext, 'ExtensionContent'), empty=True)
 
+        if not extension_content_dict:
+            extension_content = make_child(
+                extension_content, QName(NS.cbc, 'Title'), text='placeholder')
+            return root
+
         for key, content_dict in extension_content_dict.items():
             content_composer = self.content_composer_dict[key]
             extension_content.append(content_composer.compose(content_dict))

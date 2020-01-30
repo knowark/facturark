@@ -1,6 +1,7 @@
 class NameSpaces:
     def __init__(self):
-        self.fe = "http://www.dian.gov.co/contratos/facturaelectronica/v1"
+        # self.fe = "http://www.dian.gov.co/contratos/facturaelectronica/v1"
+
         self.cac = ("urn:oasis:names:specification:ubl:"
                     "schema:xsd:CommonAggregateComponents-2")
         self.cbc = ("urn:oasis:names:specification:ubl:"

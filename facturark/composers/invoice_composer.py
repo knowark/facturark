@@ -25,7 +25,10 @@ class InvoiceComposer(Composer):
 
     def compose(self, data_dict, root_name=None):
         root_name = root_name or self.root_name
-        root = Element(QName(NS.fe, root_name), nsmap=vars(NS))
+        namespace = "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2"
+        nsmap = vars(NS)
+        nsmap[None] = namespace
+        root = Element(QName(namespace, root_name), nsmap=nsmap)
 
         extensions_list = data_dict['extensions']
         extensions = make_child(
