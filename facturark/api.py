@@ -14,7 +14,7 @@ def build_document(document_dict, pkcs12_certificate=None,
                    pkcs12_password=None, technical_key=None, kind='invoice'):
     composer = resolve_composer(kind)
     identifier = resolve_identifier(kind, technical_key)
-    validator = resolve_validator()
+    validator = resolve_validator(kind)
     signer = resolve_signer(pkcs12_certificate, pkcs12_password)
     verifier = resolve_verifier()
 

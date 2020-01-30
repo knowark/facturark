@@ -1,5 +1,11 @@
 from lxml.etree import DocumentInvalid, fromstring
 from pytest import fixture, raises
+from facturark.validator import Validator
+
+
+@fixture
+def validator(mock_reviewer):
+    return Validator(mock_reviewer)
 
 
 def test_validator_instantiation(validator):

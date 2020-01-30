@@ -3,8 +3,8 @@ from ..utils import parse_xsd
 
 class Validator:
 
-    def __init__(self, reviewer, xsd_file="XSD/DIAN/DIAN_UBL.xsd"):
-        self.schema = parse_xsd(xsd_file)
+    def __init__(self, reviewer):
+        self.schema = parse_xsd("XSD/DIAN/DIAN_UBL.xsd")
         self.reviewer = reviewer
 
     def validate(self, element):

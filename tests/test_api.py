@@ -3,7 +3,7 @@ import facturark
 
 def test_api_build_invoice(invoice_dict, monkeypatch):
     with monkeypatch.context() as m:
-        def mock_resolve_validator():
+        def mock_resolve_validator(kind='invoice'):
             class MockValidator:
                 def validate(self, invoice):
                     return invoice
@@ -27,7 +27,7 @@ def test_api_build_invoice(invoice_dict, monkeypatch):
 
 def test_api_build_credit_note(credit_note_dict, monkeypatch):
     with monkeypatch.context() as m:
-        def mock_resolve_validator():
+        def mock_resolve_validator(kind='invoice'):
             class MockValidator:
                 def validate(self, invoice):
                     return invoice
@@ -40,7 +40,7 @@ def test_api_build_credit_note(credit_note_dict, monkeypatch):
 
 def test_api_build_debit_note(debit_note_dict, monkeypatch):
     with monkeypatch.context() as m:
-        def mock_resolve_validator():
+        def mock_resolve_validator(kind='invoice'):
             class MockValidator:
                 def validate(self, invoice):
                     return invoice

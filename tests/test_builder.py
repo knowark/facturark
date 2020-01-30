@@ -28,6 +28,7 @@ def test_invoice_builder_creation(invoice_builder):
 
 def test_invoice_builder_build(invoice_builder, invoice_dict):
     result = invoice_builder.build(invoice_dict)
+    print('REsult:::', result)
     assert result is not None
 
 

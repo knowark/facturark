@@ -1,4 +1,5 @@
 from .validator import Validator
+from .invoice_validator import InvoiceValidator
 from .reviewer import Reviewer
 from .values import (
     INVOICE_TYPES,
