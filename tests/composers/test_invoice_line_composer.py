@@ -3,7 +3,7 @@ from lxml.etree import QName
 from facturark.namespaces import NS
 from facturark.composers import (
     InvoiceLineComposer, PriceComposer, ItemComposer)
-from facturark.resolver import resolve_invoice_line_composer
+from facturark.composers.resolver import resolve_invoice_line_composer
 
 
 @fixture

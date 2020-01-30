@@ -2,7 +2,7 @@ from pytest import fixture
 from lxml.etree import QName
 from facturark.namespaces import NS
 from facturark.composers import TaxTotalComposer, TaxSubtotalComposer
-from facturark.resolver import resolve_tax_total_composer
+from facturark.composers.resolver import resolve_tax_total_composer
 
 
 @fixture

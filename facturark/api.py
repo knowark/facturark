@@ -1,11 +1,10 @@
 from .analyzer import Analyzer
 from .builder import DocumentBuilder
 from .client import Client
-from .resolver import (
+from .composers.resolver import (
     resolve_invoice_composer, resolve_credit_note_composer,
     resolve_debit_note_composer, resolve_composer)
 from .identifier.resolver import resolve_identifier
-from .validator import Validator
 from .signer.resolver import resolve_signer, resolve_verifier
 from .validator.resolver import resolve_validator
 from .imager import Imager

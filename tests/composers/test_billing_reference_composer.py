@@ -3,7 +3,7 @@ import io
 from pytest import fixture, mark
 from lxml.etree import QName, fromstring, tostring
 from facturark.namespaces import NS
-from facturark.resolver import resolve_billing_reference_composer
+from facturark.composers.resolver import resolve_billing_reference_composer
 
 
 @fixture
