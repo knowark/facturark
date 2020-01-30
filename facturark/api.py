@@ -3,8 +3,8 @@ from .builder import DocumentBuilder
 from .client import Client
 from .resolver import (
     resolve_invoice_composer, resolve_credit_note_composer,
-    resolve_debit_note_composer, resolve_composer, resolve_identifier)
-from .identifier import InvoiceIdentifier, BlankIdentifier
+    resolve_debit_note_composer, resolve_composer)
+from .identifier.resolver import resolve_identifier
 from .validator import Validator
 from .signer.resolver import resolve_signer, resolve_verifier
 from .validator.resolver import resolve_validator

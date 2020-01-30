@@ -142,10 +142,3 @@ def resolve_composer(kind):
         return resolve_credit_note_composer()
     else:
         return resolve_debit_note_composer()
-
-
-def resolve_identifier(kind, technical_key=None):
-    if kind == 'invoice':
-        return InvoiceIdentifier(technical_key)
-    else:
-        return BlankIdentifier()

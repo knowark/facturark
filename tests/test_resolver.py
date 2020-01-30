@@ -7,7 +7,7 @@ from facturark.resolver import (
     resolve_despatch_composer, resolve_delivery_composer,
     resolve_customer_party_composer, resolve_supplier_party_composer,
     resolve_tax_total_composer, resolve_invoice_composer,
-    resolve_credit_note_composer, resolve_composer, resolve_identifier)
+    resolve_credit_note_composer, resolve_composer)
 from facturark.identifier import InvoiceIdentifier, BlankIdentifier
 
 
@@ -54,10 +54,3 @@ def test_resolve_composer():
     assert isinstance(composer, CreditNoteComposer)
     composer = resolve_composer('debit_note')
     assert isinstance(composer, DebitNoteComposer)
-
-
-def test_resolve_identifier():
-    identifier = resolve_identifier('invoice', 'ABC')
-    assert isinstance(identifier, InvoiceIdentifier)
-    identifier = resolve_identifier('other')
-    assert isinstance(identifier, BlankIdentifier)
