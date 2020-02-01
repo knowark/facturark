@@ -47,3 +47,24 @@ def test_composer_list(composer, nested_list_dict):
         b'<InvoiceLine><Amount>20</Amount></InvoiceLine>'
         b'<InvoiceLine><Amount>30</Amount></InvoiceLine>'
         b'</Invoice>')
+
+
+def test_composer_namespaces(composer, nested_namespaces_dict):
+    namespaces = {
+        None: 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2',
+        'cbc': ("urn:oasis:names:specification:ubl:"
+                "schema:xsd:CommonBasicComponents-2"),
+        'cac': ("urn:oasis:names:specification:ubl:"
+                "schema:xsd:CommonAggregateComponents-2")
+    }
+    composer.namespaces = namespaces
+
+    element = composer.compose(nested_namespaces_dict)
+    assert tostring(element) == (
+        b'<Invoice xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:'
+        b'CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:'
+        b'specification:ubl:schema:xsd:CommonBasicComponents-2" '
+        b'xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">'
+        b'<cbc:ID>F0001</cbc:ID><cac:Party><cbc:PartyName>Knowark'
+        b'</cbc:PartyName></cac:Party></Invoice>'
+    )

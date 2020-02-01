@@ -4,12 +4,13 @@ from ..namespaces import NS
 
 
 class Composer:
+    def __init__(self, namespaces=None):
+        self.namespaces = namespaces
 
     def compose(self, obj):
         """Compose XML element from obj dict."""
         tag, content = next(iter(obj.items()))
-        root = self._build(Element(tag), content)
-        return root
+        return self._build(self._make_element(tag), content)
 
     def _build(self, parent, item):
         """Recursively build XML element from item object."""
@@ -33,7 +34,15 @@ class Composer:
                 if not isinstance(content, (list, tuple)):
                     content = [content]
                 for line in content:
-                    element = Element(tag)
+                    element = self._make_element(tag)
                     parent.append(self._build(element, line))
 
         return parent
+
+    def _make_element(self, tag):
+        if self.namespaces and ':' in tag:
+            prefix, name = tag.split(':')
+            tag = "{{{namespace}}}{name}".format(
+                namespace=self.namespaces[prefix], name=name)
+
+        return Element(tag, nsmap=self.namespaces)

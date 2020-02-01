@@ -55,3 +55,15 @@ def nested_list_dict():
             ]
         }
     }
+
+
+@fixture
+def nested_namespaces_dict():
+    return {
+        "Invoice": {
+            "cbc:ID": "F0001",
+            "cac:Party": {
+                "cbc:PartyName": "Knowark"
+            }
+        }
+    }
