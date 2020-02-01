@@ -4,48 +4,49 @@ from facturark.namespaces import NS
 
 def test_analyzer_get_supplier_vat(analyzer, document):
     result = analyzer.get_supplier_vat(document)
-    assert result == '900373115'
+    assert result == '800197268'
 
 
 def test_analyzer_get_document_number(analyzer, document):
     result = analyzer.get_document_number(document)
-    assert result == 'PRUE980007161'
+    assert result == 'SETP990000002'
 
 
 def test_analyzer_get_document_number_without_prefix(analyzer, document):
     result = analyzer.get_document_number(document, without_prefix=True)
-    assert result == '980007161'
+    assert result == '990000002'
 
 
 def test_analyzer_get_issue_date(analyzer, document):
     result = analyzer.get_issue_date(document)
-    assert result == '2016-07-12T00:31:40'
+    assert result == '2019-06-20T09:15:23-05:00'
 
 
 def test_analyzer_get_document_type(analyzer):
     assert analyzer.get_document_type(
-        Element(QName(NS.fe, 'Invoice'), nsmap=vars(NS))) == '1'
+        Element('Invoice', nsmap=vars(NS))) == '1'
     assert analyzer.get_document_type(
-        Element(QName(NS.fe, 'CreditNote'), nsmap=vars(NS))) == '2'
+        Element('CreditNote', nsmap=vars(NS))) == '2'
     assert analyzer.get_document_type(
-        Element(QName(NS.fe, 'DebitNote'), nsmap=vars(NS))) == '3'
+        Element('DebitNote', nsmap=vars(NS))) == '3'
     assert analyzer.get_document_type(
-        Element(QName(NS.fe, 'ApplicationResponse'), nsmap=vars(NS))) == '4'
+        Element('ApplicationResponse', nsmap=vars(NS))) == '4'
 
 
 def test_analyzer_get_signing_date(analyzer, document):
     result = analyzer.get_signing_time(document)
-    assert result == '2016-07-12T11:17:38.639-05:00'
+    assert result == '2019-06-21T19:09:35.993-05:00'
 
 
 def test_analyzer_get_software_identifier(analyzer, document):
     result = analyzer.get_software_identifier(document)
-    assert result == '0d2e2883-eb8d-4237-87fe-28aeb71e961e'
+    assert result == '56f2ae4e-9812-4fad-9255-08fcfcd5ccb0'
 
 
 def test_analyzer_get_uuid(analyzer, document):
     result = analyzer.get_uuid(document)
-    assert result == 'a3d6c86a71cbc066aaa19fd363c0fe4b5778d4a0'
+    assert result == ('941cf36af62dbbc06f105d2a80e9bfe683a90e84960eae'
+                      '4d351cc3afbe8f848c26c39bac4fbc80fa254824c6369ea694')
 
 
 def test_analyzer_get_supplier_type(analyzer, document):
@@ -55,7 +56,7 @@ def test_analyzer_get_supplier_type(analyzer, document):
 
 def test_analyzer_get_customer_type(analyzer, document):
     result = analyzer.get_customer_type(document)
-    assert result == '2'
+    assert result == '1'
 
 
 def test_analyzer_get_supplier_country(analyzer, document):
@@ -75,11 +76,11 @@ def test_analyzer_get_document_currency(analyzer, document):
 
 def test_analyzer_get_invoice_type(analyzer, document):
     result = analyzer.get_invoice_type(document)
-    assert result == '1'
+    assert result == '01'
 
 
 def test_analyzer_get_invoice_type_none(analyzer):
-    document = Element(QName(NS.fe, 'CreditNote'), nsmap=vars(NS))
+    document = Element('CreditNote', nsmap=vars(NS))
     result = analyzer.get_invoice_type(document)
     assert result is None
 
@@ -91,74 +92,81 @@ def test_analyzer_get_supplier_identification_type(analyzer, document):
 
 def test_analyzer_get_customer_identification_type(analyzer, document):
     result = analyzer.get_customer_identification_type(document)
-    assert result == '22'
+    assert result == '31'
 
 
 def test_analyzer_get_supplier_tax_scheme(analyzer, document):
     result = analyzer.get_supplier_tax_schemes(document)
-    assert result == ['0']
+    assert result == ['O-99']
 
 
 def test_analyzer_get_customer_tax_scheme(analyzer, document):
     result = analyzer.get_customer_tax_schemes(document)
-    assert result == ['0']
+    assert result == ['O-99']
 
 
-def test_analyzer_get_tax_total_amount(analyzer, document):
+def test_analyzer_get_tax_total_amounts(analyzer, document):
     result = analyzer.get_tax_total_amounts(document)
-    assert result[0] == '109625.61'
-    assert result[1] == '46982.4'
+    len(result) == 3
+    assert result[0] == '2424.01'
+    assert result[1] == '0.00'
+    assert result[2] == '0.00'
 
 
 def test_analyzer_get_tax_types(analyzer, document):
     result = analyzer.get_tax_types(document)
-    assert isinstance(result, list)
-    assert '02' in result
+    assert len(result) == 3
+    assert '01' in result
     assert '03' in result
+    assert '04' in result
 
 
 def test_analyzer_get_taxable_amount(analyzer, document):
     result = analyzer.get_taxable_amount(document)
-    assert isinstance(result, list)
-    assert result[0] == '1134840.69'
-    assert result[1] == '1134840.69'
+    assert len(result) == 4
+    assert result[0] == '12600.06'
+    assert result[1] == '187.50'
+    assert result[2] == '0.00'
+    assert result[3] == '0.00'
 
 
 def test_analyzer_get_tax_amount(analyzer, document):
     result = analyzer.get_tax_amount(document)
-    assert isinstance(result, list)
-    assert result[0] == '109625.61'
-    assert result[1] == '46982.4'
+    assert len(result) == 4
+    assert result[0] == '2394.01'
+    assert result[1] == '30.00'
+    assert result[2] == '0.00'
+    assert result[3] == '0.00'
 
 
 def test_analyzer_get_id(analyzer, document):
     result = analyzer.get_id(document)
-    assert result == 'PRUE980007161'
+    assert result == 'SETP990000002'
 
 
 def test_analyzer_get_supplier_id(analyzer, document):
     result = analyzer.get_supplier_id(document)
-    assert result == '900373115'
+    assert result == '800197268'
 
 
 def test_analyzer_get_customer_id(analyzer, document):
     result = analyzer.get_customer_id(document)
-    assert result == '11333000'
+    assert result == '900108281'
 
 
 def test_analyzer_get_total_line_extension_amount(analyzer, document):
     result = analyzer.get_total_line_extension_amount(document)
-    assert result == '1134840.69'
+    assert result == '12600.06'
 
 
 def test_analyzer_get_total_tax_exclusive_amount(analyzer, document):
     result = analyzer.get_total_tax_exclusive_amount(document)
-    assert result == '156608.01'
+    assert result == '12787.56'
 
 
 def test_analyzer_get_total_payable_amount(analyzer, document):
     result = analyzer.get_total_payable_amount(document)
-    assert result == '1291448.7'
+    assert result == '14024.07'
 
 
 def test_analyzer_get_software_id(analyzer, document):
@@ -181,9 +189,9 @@ def test_analyzer_get_prefix(analyzer, document):
     assert result == 'PRUE'
 
 
-def test_analyzer_get_tax_vat(analyzer, document_sha512):
-    result = analyzer.get_tax_vat(document_sha512)
-    assert result == '380.00'
+# def test_analyzer_get_tax_vat(analyzer, document_sha512):
+#     result = analyzer.get_tax_vat(document_sha512)
+#     assert result == '380.00'
 
 
 def test_analyzer_get_tax_vat_without(analyzer, document):

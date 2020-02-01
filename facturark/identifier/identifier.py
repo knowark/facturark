@@ -30,25 +30,25 @@ class InvoiceIdentifier(Identifier):
             ':', '').replace('-', '')
 
         invoice_value = invoice.find(
-            'fe:LegalMonetaryTotal/cbc:LineExtensionAmount', vars(NS)).text
+            'cac:LegalMonetaryTotal/cbc:LineExtensionAmount', vars(NS)).text
 
         tax_code_1, tax_value_1 = self._get_tax_values(invoice, '01')
         tax_code_2, tax_value_2 = self._get_tax_values(invoice, '02')
         tax_code_3, tax_value_3 = self._get_tax_values(invoice, '03')
 
         payable_value = invoice.find(
-            'fe:LegalMonetaryTotal/cbc:PayableAmount', vars(NS)).text
+            'cac:LegalMonetaryTotal/cbc:PayableAmount', vars(NS)).text
 
         supplier_vat = invoice.find(
-            ('fe:AccountingSupplierParty/fe:Party/'
+            ('cac:AccountingSupplierParty/cac:Party/'
              'cac:PartyIdentification/cbc:ID'), vars(NS)).text
 
         customer_type = invoice.find(
-            ('fe:AccountingCustomerParty/fe:Party/'
+            ('cac:AccountingCustomerParty/cac:Party/'
              'cac:PartyIdentification/cbc:ID'), vars(NS)).attrib['schemeID']
 
         customer_vat = invoice.find(
-            ('fe:AccountingCustomerParty/fe:Party/'
+            ('cac:AccountingCustomerParty/cac:Party/'
              'cac:PartyIdentification/cbc:ID'), vars(NS)).text
 
         return dict(locals())
@@ -57,12 +57,12 @@ class InvoiceIdentifier(Identifier):
         tax_code = code
         tax_value = '0.00'
         tax_element = invoice.xpath(
-            ('fe:TaxTotal/fe:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/'
+            ('cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/'
              'cbc:ID[text()="{}"]'.format(code)), namespaces=vars(NS))
         if tax_element:
             tax_code = tax_element[0].text
             tax_subtotal = tax_element[0].xpath(
-                'ancestor::fe:TaxSubtotal', namespaces=vars(NS))[0]
+                'ancestor::cac:TaxSubtotal', namespaces=vars(NS))[0]
             tax_value = tax_subtotal.find('cbc:TaxAmount', vars(NS)).text
 
         return tax_code, tax_value

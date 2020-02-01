@@ -16,8 +16,7 @@ class NameSpaces:
                     "schema:xsd:CommonExtensionComponents-2")
         self.qdt = ("urn:oasis:names:specification:ubl:"
                     "schema:xsd:QualifiedDatatypes-2")
-        self.sts = ("http://www.dian.gov.co/contratos"
-                    "/facturaelectronica/v1/Structures")
+        self.sts = "dian:gov:co:facturaelectronica:Structures-2-1"
         self.udt = ("urn:un:unece:uncefact:data:"
                     "specification:UnqualifiedDataTypesSchemaModule:2")
         self.xsi = "http://www.w3.org/2001/XMLSchema-instance"

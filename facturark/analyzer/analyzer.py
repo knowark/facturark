@@ -10,8 +10,8 @@ class Analyzer:
 
     def get_supplier_vat(self, document):
         supplier_vat = document.find(
-            ('fe:AccountingSupplierParty/fe:Party/'
-             'cac:PartyIdentification/cbc:ID'), vars(NS)).text
+            ('cac:AccountingSupplierParty/cac:Party/'
+             'cac:PartyLegalEntity/cbc:CompanyID'), vars(NS)).text
         return supplier_vat
 
     def get_document_number(self, document, without_prefix=False):
@@ -31,11 +31,11 @@ class Analyzer:
         return document_date
 
     def get_document_type(self, document):
-        if document.tag == QName(NS.fe, 'Invoice'):
+        if document.tag == 'Invoice':
             return '1'
-        elif document.tag == QName(NS.fe, 'CreditNote'):
+        elif document.tag == 'CreditNote':
             return '2'
-        elif document.tag == QName(NS.fe, 'DebitNote'):
+        elif document.tag == 'DebitNote':
             return '3'
         return '4'
 
@@ -58,23 +58,23 @@ class Analyzer:
 
     def get_supplier_type(self, document):
         return document.find(
-            ('.//fe:AccountingSupplierParty/'
+            ('.//cac:AccountingSupplierParty/'
              'cbc:AdditionalAccountID'), vars(NS)).text
 
     def get_customer_type(self, document):
         return document.find(
-            ('.//fe:AccountingCustomerParty/'
+            ('.//cac:AccountingCustomerParty/'
              'cbc:AdditionalAccountID'), vars(NS)).text
 
     def get_supplier_country(self, document):
         return document.find(
-            ('.//fe:AccountingSupplierParty/fe:Party/fe:PhysicalLocation/'
-             'fe:Address/cac:Country/cbc:IdentificationCode'), vars(NS)).text
+            ('.//cac:AccountingSupplierParty/cac:Party/cac:PhysicalLocation/'
+             'cac:Address/cac:Country/cbc:IdentificationCode'), vars(NS)).text
 
     def get_customer_country(self, document):
         return document.find(
-            ('.//fe:AccountingCustomerParty/fe:Party/fe:PhysicalLocation/'
-             'fe:Address/cac:Country/cbc:IdentificationCode'), vars(NS)).text
+            ('.//cac:AccountingCustomerParty/cac:Party/cac:PhysicalLocation/'
+             'cac:Address/cac:Country/cbc:IdentificationCode'), vars(NS)).text
 
     def get_document_currency(self, document):
         return document.find(
@@ -87,18 +87,20 @@ class Analyzer:
 
     def get_supplier_identification_type(self, document):
         return document.find(
-            ('.//fe:AccountingSupplierParty/fe:Party/cac:PartyIdentification/'
-             'cbc:ID'), vars(NS)).attrib.get('schemeID')
+            ('.//cac:AccountingSupplierParty/cac:Party/'
+             'cac:PartyLegalEntity/cbc:CompanyID'
+             ), vars(NS)).attrib.get('schemeName')
 
     def get_customer_identification_type(self, document):
         return document.find(
-            ('.//fe:AccountingCustomerParty/fe:Party/cac:PartyIdentification/'
-             'cbc:ID'), vars(NS)).attrib.get('schemeID')
+            ('.//cac:AccountingCustomerParty/cac:Party/'
+             'cac:PartyLegalEntity/cbc:CompanyID'
+             ), vars(NS)).attrib.get('schemeName')
 
     def get_supplier_tax_schemes(self, document):
         result = []
         for tax_level_code in document.findall(
-            ('.//fe:AccountingSupplierParty/fe:Party/fe:PartyTaxScheme/'
+            ('.//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/'
              'cbc:TaxLevelCode'), vars(NS)):
             result.append(tax_level_code.text)
         return result
@@ -106,7 +108,7 @@ class Analyzer:
     def get_customer_tax_schemes(self, document):
         result = []
         for tax_level_code in document.findall(
-            ('.//fe:AccountingCustomerParty/fe:Party/fe:PartyTaxScheme/'
+            ('.//cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/'
              'cbc:TaxLevelCode'), vars(NS)):
             result.append(tax_level_code.text)
         return result
@@ -114,57 +116,58 @@ class Analyzer:
     def get_tax_total_amounts(self, document):
         result = []
         for tax_element in document.findall(
-                ('.//fe:TaxTotal/cbc:TaxAmount'), vars(NS)):
+                ('./cac:TaxTotal/cbc:TaxAmount'), vars(NS)):
             result.append(tax_element.text)
         return result
 
     def get_tax_types(self, document):
-        result = []
+        result = set()
         for tax_element in document.findall(
-                ('.//fe:TaxSubtotal/cac:TaxCategory/'
+                ('./cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory/'
                  'cac:TaxScheme/cbc:ID'), vars(NS)):
-            result.append(tax_element.text)
-        return result
+            result.add(tax_element.text)
+        return list(result)
 
     def get_taxable_amount(self, document):
         result = []
         for tax_element in document.findall(
-                ('.//fe:TaxSubtotal/cbc:TaxableAmount'), vars(NS)):
+                ('./cac:TaxTotal/cac:TaxSubtotal/cbc:TaxableAmount'
+                 ), vars(NS)):
             result.append(tax_element.text)
         return result
 
     def get_tax_amount(self, document):
         result = []
         for tax_element in document.findall(
-                ('.//fe:TaxSubtotal/cbc:TaxAmount'), vars(NS)):
+                ('./cac:TaxTotal/cac:TaxSubtotal/cbc:TaxAmount'), vars(NS)):
             result.append(tax_element.text)
         return result
 
     def get_supplier_id(self, document):
         id = document.find(
-            './/fe:AccountingSupplierParty/fe:Party/'
-            'cac:PartyIdentification/cbc:ID', vars(NS)).text
+            './cac:AccountingSupplierParty/cac:Party/'
+            'cac:PartyLegalEntity/cbc:CompanyID', vars(NS)).text
         return id
 
     def get_customer_id(self, document):
         id = document.find(
-            './/fe:AccountingCustomerParty/fe:Party/'
-            'cac:PartyIdentification/cbc:ID', vars(NS)).text
+            './/cac:AccountingCustomerParty/cac:Party/'
+            'cac:PartyLegalEntity/cbc:CompanyID', vars(NS)).text
         return id
 
     def get_total_line_extension_amount(self, document):
         return document.find(
-            ('.//fe:LegalMonetaryTotal/'
+            ('./cac:LegalMonetaryTotal/'
              'cbc:LineExtensionAmount'), vars(NS)).text
 
     def get_total_tax_exclusive_amount(self, document):
         return document.find(
-            ('.//fe:LegalMonetaryTotal/'
+            ('./cac:LegalMonetaryTotal/'
              'cbc:TaxExclusiveAmount'), vars(NS)).text
 
     def get_total_payable_amount(self, document):
         return document.find(
-            ('.//fe:LegalMonetaryTotal/'
+            ('./cac:LegalMonetaryTotal/'
              'cbc:PayableAmount'), vars(NS)).text
 
     def get_software_id(self, document):
@@ -192,7 +195,7 @@ class Analyzer:
             return element.text
 
     def get_tax_vat(self, document):
-        for tax_element in document.findall('.//fe:TaxSubtotal', vars(NS)):
+        for tax_element in document.findall('.//cac:TaxSubtotal', vars(NS)):
             tax_id = tax_element.find(
                 ('cac:TaxCategory/cac:TaxScheme/cbc:ID'), vars(NS))
             if tax_id is not None and tax_id.text == '01':
@@ -202,7 +205,7 @@ class Analyzer:
 
     def get_tax_other(self, document):
         result = []
-        for tax_element in document.findall('.//fe:TaxSubtotal', vars(NS)):
+        for tax_element in document.findall('.//cac:TaxSubtotal', vars(NS)):
             tax_id = tax_element.find(
                 ('cac:TaxCategory/cac:TaxScheme/cbc:ID'), vars(NS))
             if tax_id is not None and tax_id.text != '01':

@@ -154,8 +154,8 @@ def invoice_dict():
 
 
 @fixture
-def signed_document_sha512():
-    filename = 'signed_invoice_sha512.xml'
+def signed_document_generic():
+    filename = 'V18/Generica.xml'
     directory = os.path.dirname(os.path.realpath(__file__))
     filepath = os.path.join(directory, 'data', filename)
     with io.open(filepath, 'rb') as f:
