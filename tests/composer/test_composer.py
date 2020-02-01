@@ -1,7 +1,7 @@
 from pytest import fixture, raises
 from lxml.etree import QName, fromstring, tostring
 from facturark.namespaces import NS
-from facturark.composer import Composer
+from facturark.composer import Composer, resolve_composer
 
 
 @fixture
@@ -68,3 +68,8 @@ def test_composer_namespaces(composer, nested_namespaces_dict):
         b'<cbc:ID>F0001</cbc:ID><cac:Party><cbc:PartyName>Knowark'
         b'</cbc:PartyName></cac:Party></Invoice>'
     )
+
+
+def test_composer_resolve():
+    composer = resolve_composer()
+    assert isinstance(composer, Composer)
