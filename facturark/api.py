@@ -1,19 +1,21 @@
 from .analyzer import Analyzer
 from .builder import DocumentBuilder
 from .client import Client
-from .composers.resolver import (
-    resolve_invoice_composer, resolve_credit_note_composer,
-    resolve_debit_note_composer, resolve_composer)
+from .composer import resolve_composer
+# from .composers.resolver import (
+#     resolve_invoice_composer, resolve_credit_note_composer,
+#     resolve_debit_note_composer)
 from .identifier.resolver import resolve_identifier
 from .signer.resolver import resolve_signer, resolve_verifier
 from .validator.resolver import resolve_validator
 from .imager import Imager
+from .namespaces import NS
 
 
 def build_document(document_dict, pkcs12_certificate=None,
                    pkcs12_password=None, technical_key=None, kind='invoice'):
-    composer = resolve_composer(kind)
     identifier = resolve_identifier(kind, technical_key)
+    composer = resolve_composer(namespaces=vars(NS))
     validator = resolve_validator(kind)
     signer = resolve_signer(pkcs12_certificate, pkcs12_password)
     verifier = resolve_verifier()
