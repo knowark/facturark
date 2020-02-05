@@ -10,7 +10,7 @@ class Signer:
                  signature_composer, key_info_composer, object_composer,
                  qualifying_properties_composer, signed_properties_composer,
                  signed_info_composer, signature_value_composer,
-                 pkcs12_certificate, pkcs12_password):
+                 pkcs12_keystore, pkcs12_password):
         self.canonicalizer = canonicalizer
         self.hasher = hasher
         self.encoder = encoder
@@ -27,8 +27,9 @@ class Signer:
             "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256")
         self.digest_algorithm = (
             "http://www.w3.org/2001/04/xmlenc#sha256")
-        self.pkcs12_certificate = pkcs12_certificate
+        self.pkcs12_keystore = pkcs12_keystore
         self.pkcs12_password = pkcs12_password
+
 
     def sign(self, element):
 
@@ -37,7 +38,7 @@ class Signer:
 
         # Parse PKCS12 Certificate
         certificate = self._parse_certificate(
-            self.pkcs12_certificate, self.pkcs12_password)
+            self.pkcs12_keystore, self.pkcs12_password)
 
         # Prepare KeyInfo Element
         x509_certificate = certificate.get_certificate()
@@ -85,8 +86,8 @@ class Signer:
         # return signed_document_element
         return document_element
 
-    def _parse_certificate(self, pkcs12_certificate, pkcs12_password):
-        certificate = crypto.load_pkcs12(pkcs12_certificate, pkcs12_password)
+    def _parse_certificate(self, pkcs12_keystore, pkcs12_password):
+        certificate = crypto.load_pkcs12(pkcs12_keystore, pkcs12_password)
         return certificate
 
     def _serialize_certificate(self, certificate_object):

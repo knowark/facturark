@@ -12,12 +12,12 @@ from .imager import Imager
 from .namespaces import NS
 
 
-def build_document(document_dict, pkcs12_certificate=None,
+def build_document(document_dict, pkcs12_keystore=None,
                    pkcs12_password=None, technical_key=None, kind='invoice'):
-    identifier = resolve_identifier(kind, technical_key)
     composer = resolve_composer(namespaces=vars(NS))
+    identifier = resolve_identifier(kind, technical_key)
     validator = resolve_validator(kind)
-    signer = resolve_signer(pkcs12_certificate, pkcs12_password)
+    signer = resolve_signer(pkcs12_keystore, pkcs12_password)
     verifier = resolve_verifier()
 
     builder = DocumentBuilder(
@@ -25,13 +25,14 @@ def build_document(document_dict, pkcs12_certificate=None,
     return builder.build(document_dict)
 
 
-def send_document(request_dict):
+def send_document(document, wsdl_url, pkcs12_keystore=None,
+                  pkcs12_password=None):
     client = Client(
-        Analyzer(),
-        request_dict.pop("username"),
-        request_dict.pop("password"),
-        request_dict.pop("wsdl_url"))
-    return client.send(**request_dict)
+        analyzer=Analyzer(),
+        wsdl_url=wsdl_url,
+        pkcs12_keystore=pkcs12_keystore,
+        pkcs12_password=pkcs12_password)
+    return client.send(document)
 
 
 def generate_qrcode(document):

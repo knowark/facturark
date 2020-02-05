@@ -1,4 +1,5 @@
 import zeep
+from OpenSSL import crypto
 from random import randint
 from base64 import b64encode
 from datetime import datetime
@@ -9,34 +10,50 @@ from .transports import SoapTransport
 from .utils import (
     make_zip_file_bytes, make_document_name)
 from .date_plugin import DatePlugin
+from .signature import Signature
 
 
 class Client:
 
-    def __init__(self, analyzer, username, password, wsdl_url, plugins=[]):
+    def __init__(self, analyzer, wsdl_url,
+                 pkcs12_keystore=None,
+                 pkcs12_password=None,
+                 plugins=[]):
+        key_data, cert_data = self._load_keystore(
+            pkcs12_keystore, pkcs12_password)
+
         self.analyzer = analyzer
         self.client = zeep.Client(
             wsdl_url,
-            wsse=UsernameToken(username, password),
-            transport=SoapTransport(),
-            plugins=[DatePlugin()])
+            wsse=Signature(
+                key_data=key_data,
+                cert_data=cert_data),
+            # transport=SoapTransport(),
+            # plugins=[DatePlugin()]
+        )
 
     def send(self, document):
         document = fromstring(document)
-        kind = self.analyzer.get_document_type(document)
-        vat = self.analyzer.get_supplier_vat(document)
-        invoice_number = self.analyzer.get_document_number(document)
-        invoice_number_without_prefix = self.analyzer.get_document_number(
-            document, without_prefix=True)
-        issue_date = self.analyzer.get_issue_date(document)
-        issue_date = datetime.strptime(
-            issue_date, '%Y-%m-%dT%H:%M:%S')
+        # kind = self.analyzer.get_document_type(document)
+        # vat = self.analyzer.get_supplier_id(document)
+        # invoice_number = self.analyzer.get_document_number(document)
+        # invoice_number_without_prefix = self.analyzer.get_document_number(
+        #     document, without_prefix=True)
+        # issue_date = self.analyzer.get_issue_date(document)
+        # issue_date = datetime.strptime(
+        #     issue_date, '%Y-%m-%dT%H:%M:%S')
 
-        filename = make_document_name(vat, invoice_number_without_prefix, kind)
-        zip_file_bytes = make_zip_file_bytes(filename, tostring(document))
+        # filename = make_document_name(vat, invoice_number_without_prefix, kind)
+        # zip_file_bytes = make_zip_file_bytes(filename, tostring(document))
 
-        response = self.client.service.EnvioFacturaElectronica(
-            vat, invoice_number, issue_date, zip_file_bytes)
+        # response = self.client.service.EnvioFacturaElectronica(
+        #     vat, invoice_number, issue_date, zip_file_bytes)
+
+        response = self.client.service.GetStatus(
+            trackId=123
+        )
+
+        print('Response:::', response)
 
         return zeep.helpers.serialize_object(response)
 
@@ -78,3 +95,13 @@ class Client:
         request_document = tostring(root, pretty_print=True)
 
         return request_document
+
+    def _load_keystore(self, pkcs12_keystore, pkcs12_password):
+        keystore = crypto.load_pkcs12(pkcs12_keystore, pkcs12_password)
+
+        key_data = crypto.dump_privatekey(
+            crypto.FILETYPE_PEM, keystore.get_privatekey())
+        cert_data = crypto.dump_certificate(
+            crypto.FILETYPE_PEM, keystore.get_certificate())
+
+        return key_data, cert_data

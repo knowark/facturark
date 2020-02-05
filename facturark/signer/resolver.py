@@ -38,8 +38,8 @@ def resolve_signed_info_composer():
     return SignedInfoComposer(reference_composer)
 
 
-def resolve_signer(certificate, password):
-    if not certificate:
+def resolve_signer(keystore, password):
+    if not keystore:
         return None
     canonicalizer = Canonicalizer()
     hasher = Hasher()
@@ -58,7 +58,7 @@ def resolve_signer(certificate, password):
         signature_composer, key_info_composer, object_composer,
         qualifying_properties_composer, signed_properties_composer,
         signed_info_composer, signature_value_composer,
-        pkcs12_certificate=certificate, pkcs12_password=password)
+        pkcs12_keystore=keystore, pkcs12_password=password)
     return signer
 
 

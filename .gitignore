@@ -106,3 +106,4 @@ ENV/
 
 # local only data
 tests/local/
+local/

@@ -13,12 +13,12 @@ class DocumentBuilder:
 
     def build(self, document_dict):
         document = self.composer.compose(document_dict)
-        uuid = self.identifier.identify(document)
-        document = self.validator.validate(document)
-        if self.signer and self.verifier:
-            document = self.signer.sign(document)
-            self.verifier.verify(document)
+        # uuid = self.identifier.identify(document)
+        # document = self.validator.validate(document)
+        # if self.signer and self.verifier:
+        #     document = self.signer.sign(document)
+        #     self.verifier.verify(document)
         serialized_document = tostring(
             document, encoding='UTF-8', xml_declaration=True,
-            standalone=False).replace(b'\n', b'')
-        return serialized_document, uuid
+            standalone=False, pretty_print=True)
+        return serialized_document  # , uuid
