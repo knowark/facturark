@@ -10,7 +10,7 @@ from .transports import SoapTransport
 from .utils import (
     make_zip_file_bytes, make_document_name)
 from .date_plugin import DatePlugin
-from .signature import Signature
+from .security import Security
 
 
 class Client:
@@ -25,7 +25,7 @@ class Client:
         self.analyzer = analyzer
         self.client = zeep.Client(
             wsdl_url,
-            wsse=Signature(
+            wsse=Security(
                 key_data=key_data,
                 cert_data=cert_data),
             # transport=SoapTransport(),
