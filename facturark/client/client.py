@@ -31,6 +31,7 @@ class Client:
             # transport=SoapTransport(),
             # plugins=[DatePlugin()]
         )
+        # set_ns_prefix(prefix, namespace)
 
     def send(self, document):
         document = fromstring(document)

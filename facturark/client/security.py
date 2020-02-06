@@ -73,11 +73,14 @@ class Security():
         return envelope
 
     def _get_security_header(self, envelope):
-        header = get_or_create_header(envelope)
+        header = envelope.find("soap-env:Header", namespaces=self.namespaces)
         security = header.find("wsse:Security", namespaces=self.namespaces)
         if security is None:
             security = etree.Element(
-                etree.QName(self.namespaces['wsse'], "Security"))
+                etree.QName(self.namespaces['wsse'], "Security"),
+                # nsmap=self.namespaces
+
+            )
             header.insert(0, security)
         return security
 
