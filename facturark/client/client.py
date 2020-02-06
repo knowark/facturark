@@ -31,9 +31,9 @@ class Client:
             # transport=SoapTransport(),
             # plugins=[DatePlugin()]
         )
+        self.client.set_ns_prefix('wcf', "http://wcf.dian.colombia")
         self.client.set_ns_prefix('soap-env', (
             "http://www.w3.org/2003/05/soap-envelope"))
-        self.client.set_ns_prefix('wcf', "http://wcf.dian.colombia")
         self.client.set_ns_prefix('wsa', (
             "http://www.w3.org/2005/08/addressing"))
         self.client.set_ns_prefix('wsu', (
