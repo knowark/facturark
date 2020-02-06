@@ -53,6 +53,7 @@ class Security():
         }
         self.namespaces.update(namespaces or {})
         self.methods.update(methods or {})
+        self.prefixes = " ".join(self.namespaces.keys())
 
     def apply(self, envelope, headers):
         self._attach_timestamp(envelope)
@@ -78,7 +79,7 @@ class Security():
         if security is None:
             security = etree.Element(
                 etree.QName(self.namespaces['wsse'], "Security"),
-                # nsmap=self.namespaces
+                nsmap=self.namespaces
 
             )
             header.insert(0, security)
@@ -105,7 +106,8 @@ class Security():
         binary_token = etree.Element(
             etree.QName(self.namespaces['wsse'], "BinarySecurityToken"), {
                 "ValueType": self.methods['x509v3'],
-                "EncodingType": self.methods['base64binary']})
+                "EncodingType": self.methods['base64binary']},
+            nsmap=self.namespaces)
         binary_token_id = utils.ensure_id(binary_token)
         binary_token.text = certificate
         security.append(binary_token)
@@ -115,7 +117,8 @@ class Security():
         security = self._get_security_header(envelope)
         signature = etree.SubElement(
             security,
-            etree.QName(self.namespaces['ds'], "Signature"))
+            etree.QName(self.namespaces['ds'], "Signature"),
+            nsmap=self.namespaces)
 
         reference_id, digest = self._process_reference(envelope)
         signed_info = self._set_signed_info(signature, reference_id, digest)
@@ -143,7 +146,7 @@ class Security():
         etree.SubElement(
             canonicalization_method,
             etree.QName(self.namespaces['ec'], "InclusiveNamespaces"), {
-                "PrefixList": "wsa soap-env ns0"}
+                "PrefixList": self.prefixes}
 
         )
         etree.SubElement(
@@ -168,7 +171,7 @@ class Security():
         etree.SubElement(
             transform,
             etree.QName(self.namespaces['ec'], "InclusiveNamespaces"), {
-                "PrefixList": "soap-env ns0"})
+                "PrefixList": self.prefixes})
         etree.SubElement(
             reference,
             etree.QName(self.namespaces['ds'], "DigestMethod"), {
