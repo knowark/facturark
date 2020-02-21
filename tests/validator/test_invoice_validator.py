@@ -19,5 +19,5 @@ def test_invoice_validator_invalid(invoice_validator):
 
 
 def test_invoice_validator_valid(invoice_validator, load):
-    element = load('V18/Generica.xml')
+    element = load('V18/GenericaCorregida.xml')
     assert invoice_validator.validate(element)

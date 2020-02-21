@@ -13,12 +13,12 @@ def mock_reviewer():
     return MockReviewer()
 
 
-@fixture
-def invoice():
-    filename = 'signed_invoice_sha512.xml'
-    directory = os.path.dirname(os.path.realpath(__file__))
-    element = parse(os.path.join(directory, '..', 'data', filename))
-    return element
+# @fixture
+# def invoice():
+#     filename = 'V18/GenericaCorregida.xml'
+#     directory = os.path.dirname(os.path.realpath(__file__))
+#     element = parse(os.path.join(directory, '..', 'data', filename))
+#     return element
 
 
 @fixture
