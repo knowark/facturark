@@ -171,37 +171,32 @@ def test_analyzer_get_total_payable_amount(analyzer, document):
 
 def test_analyzer_get_software_id(analyzer, document):
     result = analyzer.get_software_id(document)
-    assert result == '0d2e2883-eb8d-4237-87fe-28aeb71e961e'
+    assert result == '56f2ae4e-9812-4fad-9255-08fcfcd5ccb0'
 
 
 def test_analyzer_get_software_provider_id(analyzer, document):
     result = analyzer.get_software_provider_id(document)
-    assert result == '900373115'
+    assert result == '800197268'
 
 
 def test_analyzer_get_invoice_authorization(analyzer, document):
     result = analyzer.get_invoice_authorization(document)
-    assert result == '9000000500017960'
+    assert result == '18760000001'
 
 
 def test_analyzer_get_prefix(analyzer, document):
     result = analyzer.get_prefix(document)
-    assert result == 'PRUE'
-
-
-# def test_analyzer_get_tax_vat(analyzer, document_sha512):
-#     result = analyzer.get_tax_vat(document_sha512)
-#     assert result == '380.00'
+    assert result == 'SETP'
 
 
 def test_analyzer_get_tax_vat_without(analyzer, document):
     result = analyzer.get_tax_vat(document)
-    assert result == '0.00'
+    assert result == '2394.01'
 
 
 def test_analyzer_get_tax_other(analyzer, document):
     result = analyzer.get_tax_other(document)
     assert isinstance(result, list)
     assert len(result) == 2
-    assert result[0] == '109625.61'
-    assert result[1] == '46982.4'
+    assert result[0] == '0.00'
+    assert result[1] == '0.00'
