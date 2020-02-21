@@ -27,14 +27,6 @@ def blank_identifier():
 
 
 @fixture
-def invoice():
-    filename = 'signed_invoice_sha512.xml'
-    directory = os.path.dirname(os.path.realpath(__file__))
-    element = parse(os.path.join(directory, '..', 'data', filename))
-    return element
-
-
-@fixture
 def generic_invoice():
     filename = 'V18/Generica.xml'
     directory = os.path.dirname(os.path.realpath(__file__))
