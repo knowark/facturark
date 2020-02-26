@@ -53,3 +53,13 @@ def query_document(query_dict):
         query_dict.pop("wsdl_url"))
     response = client.query(**query_dict)
     return response
+
+
+def query_zip(zip_key, wsdl_url, pkcs12_keystore=None,
+              pkcs12_password=None):
+    client = Client(
+        analyzer=Analyzer(),
+        wsdl_url=wsdl_url,
+        pkcs12_keystore=pkcs12_keystore,
+        pkcs12_password=pkcs12_password)
+    return client.query_zip(zip_key)

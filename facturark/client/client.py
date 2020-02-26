@@ -40,30 +40,60 @@ class Client:
             "http://docs.oasis-open.org/wss/2004/01/"
             "oasis-200401-wss-wssecurity-utility-1.0.xsd"))
 
-    def send(self, document):
-        document = fromstring(document)
-        # kind = self.analyzer.get_document_type(document)
-        # vat = self.analyzer.get_supplier_id(document)
-        # invoice_number = self.analyzer.get_document_number(document)
-        # invoice_number_without_prefix = self.analyzer.get_document_number(
-        #     document, without_prefix=True)
-        # issue_date = self.analyzer.get_issue_date(document)
-        # issue_date = datetime.strptime(
-        #     issue_date, '%Y-%m-%dT%H:%M:%S')
+    def send(self, document, service=None):
+        service = service or 'SendTestSetAsync'
 
-        # filename = make_document_name(vat, invoice_number_without_prefix, kind)
-        # zip_file_bytes = make_zip_file_bytes(filename, tostring(document))
+        filename, content = self._generate_file_name_and_content(document)
 
         # response = self.client.service.EnvioFacturaElectronica(
         #     vat, invoice_number, issue_date, zip_file_bytes)
+        testSetId = "b64f54d7-2e62-490c-9e23-9cae7c182716"
 
-        response = self.client.service.GetStatus(
-            trackId=123
+        response = self.client.service[service](
+            fileName=filename,
+            contentFile=content,
+            testSetId=testSetId
         )
 
         print('Response:::', response)
 
         return zeep.helpers.serialize_object(response)
+
+    def query_zip(self, zip_key):
+        service = 'GetStatusZip'
+
+        response = self.client.service[service](
+            trackId=zip_key
+        )
+
+        print('Response:::', response)
+
+        return zeep.helpers.serialize_object(response)
+
+    # def send(self, document):
+    #     document = fromstring(document)
+    #     # kind = self.analyzer.get_document_type(document)
+    #     # vat = self.analyzer.get_supplier_id(document)
+    #     # invoice_number = self.analyzer.get_document_number(document)
+    #     # invoice_number_without_prefix = self.analyzer.get_document_number(
+    #     #     document, without_prefix=True)
+    #     # issue_date = self.analyzer.get_issue_date(document)
+    #     # issue_date = datetime.strptime(
+    #     #     issue_date, '%Y-%m-%dT%H:%M:%S')
+
+    #     # filename = make_document_name(vat, invoice_number_without_prefix, kind)
+    #     # zip_file_bytes = make_zip_file_bytes(filename, tostring(document))
+
+    #     # response = self.client.service.EnvioFacturaElectronica(
+    #     #     vat, invoice_number, issue_date, zip_file_bytes)
+
+    #     response = self.client.service.SendBillSync(
+    #         trackId=123
+    #     )
+
+    #     print('Response:::', response)
+
+    #     return zeep.helpers.serialize_object(response)
 
     def query(self, document):
         document = fromstring(document)
@@ -113,3 +143,20 @@ class Client:
             crypto.FILETYPE_PEM, keystore.get_certificate())
 
         return key_data, cert_data
+
+    def _generate_file_name_and_content(self, document):
+        document = fromstring(document)
+        kind = self.analyzer.get_document_type(document)
+        print('KIND:::', kind)
+        vat = self.analyzer.get_supplier_id(document)
+        invoice_number = self.analyzer.get_document_number(document)
+        invoice_number_without_prefix = self.analyzer.get_document_number(
+            document, without_prefix=True)
+        issue_date = self.analyzer.get_issue_date(document)
+        issue_date = datetime.strptime(
+            issue_date, '%Y-%m-%dT%H:%M:%S')
+
+        filename = make_document_name(
+            vat, invoice_number_without_prefix, kind)
+        zip_file_bytes = make_zip_file_bytes(filename, tostring(document))
+        return filename, zip_file_bytes
