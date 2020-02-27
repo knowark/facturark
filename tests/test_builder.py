@@ -9,7 +9,7 @@ from facturark.validator.resolver import resolve_validator
 def invoice_builder():
     class MockIdentifier:
         def identify(self, document):
-            return document, ""
+            return ""
 
     class MockReviewer:
         def review(self, document):
