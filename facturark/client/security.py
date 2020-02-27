@@ -9,8 +9,6 @@ from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 from zeep.wsdl.utils import get_or_create_header
 from zeep.wsse import utils
-from zeep.wsse.signature import (
-    MemorySignature, _make_sign_key, _sign_envelope_with_key_binary)
 from datetime import datetime, timedelta
 
 

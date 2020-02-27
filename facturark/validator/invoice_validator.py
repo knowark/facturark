@@ -10,5 +10,5 @@ class InvoiceValidator(Validator):
 
     def validate(self, element):
         self.schema.assertValid(element)
-        self.reviewer.review(element)
+        # self.reviewer.review(element)
         return element
