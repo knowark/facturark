@@ -11,7 +11,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['lxml>=3.7.1', 'zeep>=3.1.0', 'qrcode>=5.3', 'cryptography', 'pyOpenSSL']
+requirements = ['lxml>=3.7.1', 'zeep>=3.1.0',
+                'qrcode>=5.3', 'cryptography', 'pyOpenSSL']
 
 setup_requirements = ['pytest-runner', ]
 
@@ -25,12 +26,8 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.6'
     ],
     description="Librería de Generación de Factura Electrónica en Python",
     entry_points={
@@ -44,7 +41,8 @@ setup(
     include_package_data=True,
     keywords='facturark',
     name='facturark',
-    packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
+    packages=find_packages(
+        exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
