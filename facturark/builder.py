@@ -13,8 +13,8 @@ class DocumentBuilder:
 
     def build(self, document_dict):
         document = self.composer.compose(document_dict)
-        uuid = self.identifier.identify(document)
-        document = self.validator.validate(document)
+        # uuid = self.identifier.identify(document)
+        # document = self.validator.validate(document)
         # if self.signer and self.verifier:
         #     document = self.signer.sign(document)
         #     self.verifier.verify(document)

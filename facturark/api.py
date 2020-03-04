@@ -15,7 +15,7 @@ from .namespaces import NS
 def build_document(document_dict, pkcs12_keystore=None,
                    pkcs12_password=None, technical_key=None, kind='invoice'):
     composer = resolve_composer(namespaces=vars(NS))
-    identifier = resolve_identifier(kind, technical_key)
+    identifier = resolve_identifier(kind, technical_key, namespaces=vars(NS))
     validator = resolve_validator(kind)
     signer = resolve_signer(pkcs12_keystore, pkcs12_password)
     verifier = resolve_verifier()
