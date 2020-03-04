@@ -2,12 +2,19 @@ import os
 import io
 from datetime import date, datetime
 from lxml.etree import parse, XMLSchema, SubElement
+from lxml import isoschematron
 
 
 def parse_xsd(path):
     directory = os.path.dirname(os.path.realpath(__file__))
     xsd_doc = parse(os.path.join(directory, path))
     return XMLSchema(xsd_doc)
+
+
+def parse_schematron(path):
+    directory = os.path.dirname(os.path.realpath(__file__))
+    sch_doc = parse(os.path.join(directory, path))
+    return isoschematron.Schematron(sch_doc)
 
 
 def make_child(parent, tag, text=None, attributes=None,
