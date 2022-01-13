@@ -32,7 +32,7 @@ packaging==17.1
 pathlib2==2.3.2
 pathtools==0.1.2
 pbr==4.2.0
-Pillow==5.3.0
+Pillow==9.0.0
 pkgconfig==1.4.0
 pluggy==0.7.1
 port-for==0.3.1
