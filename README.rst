@@ -3,6 +3,8 @@ FacturArk
 =========
 
 
+**WARNING: This project has been deprecated. Please use alternative libraries or services**
+
 .. image:: https://img.shields.io/travis/nubark/facturark.svg
         :target: https://travis-ci.org/nubark/facturark
 
