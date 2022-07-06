@@ -25,7 +25,7 @@ ipaddress==1.0.22
 isodate==0.6.0
 Jinja2==2.10
 livereload==2.5.2
-lxml==4.2.5
+lxml==4.9.1
 MarkupSafe==1.0
 more-itertools==4.3.0
 packaging==17.1
